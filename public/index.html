@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/crm_favicon.png" />
+    <link rel="stylesheet" href="%PUBLIC_URL%/themes/main.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Sản phẩm kinh doanh cty Mobifone KV9" />
+    <meta name="keywords" content="Mobifone 9" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+      integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+      crossorigin=""
+    />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <noscript id="inject-styles-here"></noscript>
+    <style>
+      body {
+        margin: 0;
+      }
+      #initSpinner {
+        height: 100vh;
+        width: 100vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        z-index: 99999;
+        background: #2d2c3e;
+      }
+      .dashed-loading {
+        position: relative;
+        height: 50px;
+      }
+
+      .dashed-loading:after,
+      .dashed-loading:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+      }
+
+      .dashed-loading:before {
+        z-index: 5;
+        border: 3px dashed #ff6bcb;
+        border-left: 3px solid transparent;
+        border-bottom: 3px solid transparent;
+        -webkit-animation: dashed 1s linear infinite;
+        animation: dashed 1s linear infinite;
+      }
+
+      .dashed-loading:after {
+        z-index: 10;
+        border: 3px solid #ffb86c;
+        border-left: 3px solid transparent;
+        border-bottom: 3px solid transparent;
+        -webkit-animation: dashed 1s ease infinite;
+        animation: dashed 1s ease infinite;
+      }
+
+      @keyframes dashed {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+    <title>Core UI SPKD</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+
+    <div id="root">
+      <div id="initSpinner">
+        <div class="dashed-loading"></div>
+      </div>
+    </div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  </body>
+</html>

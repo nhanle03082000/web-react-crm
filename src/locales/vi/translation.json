@@ -1,0 +1,94 @@
+{
+  "sidebar": {
+    "tiemnang": "Tiềm năng",
+    "khachhang": "Khách hàng",
+    "banhang": "Bán hàng",
+    "baocao-thongke": "Báo cáo - Thống kê",
+    "caidat": "Cài đặt",
+    "danhmucvaitro": "Danh mục vai trò",
+    "thongtintochuc": "Thông tin tổ chức",
+    "danhmucnhomsanpham": "Danh mục nhóm sản phẩm",
+    "danhmucsanpham": "Danh mục sản phẩm",
+    "danhmucloaihinhdoangnhiep": "Danh mục loại hình doanh nghiệp",
+    "danhmuclinhvuc": "Danh mục lĩnh vực",
+    "danhmucnganhnghe": "Danh mục ngành nghề",
+    "danhmucnguongoc": "Danh mục nguồn gốc",
+    "quytrinhbanhang": "Quy trình bán hàng",
+    "nguoidung": "Người dùng",
+    "danhsach": "Danh sách",
+    "baogia": "Báo giá"
+  },
+  "header": {
+    "changeLanguage": "Đổi ngôn ngữ",
+    "changeTheme": "Đổi giao diện",
+    "darkTheme": "Tối",
+    "lightTheme": "Sáng",
+    "logout": "Đăng xuất",
+    "search": "Đăng xuất"
+  },
+  "profile": {
+    "nav": {
+      "notifications": {
+        "actionRequired": "Action required",
+        "activities": "Activities",
+        "allNews": "All news",
+        "description": "Choose for which activities you want to get an email or push notification.",
+        "directMessages": "Direct messages",
+        "importantNews": "Important news and updates",
+        "mentions": "Mentions",
+        "push": "Push",
+        "reminders": "Reminders",
+        "settings": "Notifications settings",
+        "SMS": "SMS",
+        "title": "Notifications"
+      },
+      "personalInfo": {
+        "birthday": "Ngày sinh",
+        "contactInfo": "Thông tin liên hệ",
+        "female": "Nữ",
+        "language": "Ngôn ngữ",
+        "male": "Nam",
+        "nickname": "Nickname",
+        "notValidWebsite": "Please input a valid URL!",
+        "notVerified": "Not verified",
+        "otherInfo": "Thông tin khác",
+        "sex": "Giới tính",
+        "title": "Thông tin cá nhân"
+      },
+      "securitySettings": {
+        "changePassword": "Change Password",
+        "confirmPassword": "Confirm Password",
+        "currentPassword": "Current Password",
+        "dontMatchPassword": "The two passwords that you entered do not match",
+        "newPassword": "New Password",
+        "notValidPassword": "Your password should be minimum eight characters and contain at least one uppercase letter, one lowercase letter and one number",
+        "requiredPassword": "Please input your password!",
+        "samePassword": "Your new password can't be same as previous password",
+        "title": "Security Settings",
+        "twoFactorAuth": "Two–factor authentication",
+        "verify": "Verify"
+      }
+    },
+    "title": "Hồ sơ cá nhân"
+  },
+  "namepage": {
+    "tiemnang": "Tiềm năng",
+    "khachhang": "Khách hàng",
+    "banhang": "Bán hàng",
+    "baocao-thongke": "Báo cáo - Thống kê",
+    "caidat": "Cài đặt",
+    "vaitro": "Vai trò",
+    "thongtintochuc": "Thông tin tổ chức",
+    "nhomsanpham": "Nhóm sản phẩm",
+    "sanpham": "Sản phẩm",
+    "loaihinhdoangnhiep": "Loại hình doanh nghiệp",
+    "linhvuc": "Lĩnh vực",
+    "nganhnghe": "Ngành nghề",
+    "nguongoc": "Nguồn gốc",
+    "quytrinhbanhang": "Quy trình bán hàng",
+    "nguoidung": "Người dùng",
+    "email": "email",
+    "danhsach": "Danh sách",
+    "baogia": "Báo giá"
+  }
+}

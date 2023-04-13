@@ -1,0 +1,99 @@
+import { Card } from '@app/components/common/Card/Card';
+import { PageTitle } from '@app/components/common/PageTitle/PageTitle';
+import { H3 } from '@app/components/common/typography/H3/H3';
+import Show from '@app/components/customs/crud/Show';
+import ExportExcel from '@app/components/customs/exportexcel/ExportExcel';
+import Filter from '@app/components/customs/filter/Filter';
+import { API_URL } from '@app/configs/api-configs';
+import { DataContext } from '@app/contexts/DataContext';
+import { useAppSelector } from '@app/hooks/reduxHooks';
+import { getRoleUser } from '@app/utils/redux.util';
+import { Col, Row } from 'antd';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import UserForm from './components/UserForm';
+import { userColumn } from '@app/components/customs/tables/columns';
+
+const Users: React.FC = () => {
+  const { t } = useTranslation();
+  const path = API_URL.USERS;
+  const page = t('namepage.nguoidung');
+  // const userListPermission = JSON.parse(getRoleUser());
+  // const permission = userListPermission?.filter((item: any) => item.name === path.replace(/\//g, ''))[0].actions;
+  const [isLoad, setIsLoad] = useState<boolean>(false);
+  const [param, setParam] = useState('');
+  const [state, setState] = useState<any>({
+    data: {},
+    rolePermission: [],
+    defaultInputValues: {},
+  });
+
+  const option = [
+    {
+      value: 'username',
+      label: 'Tài khoản',
+      type: 'string',
+    },
+    {
+      value: 'name',
+      label: 'Tên',
+      type: 'string',
+    },
+    {
+      value: 'phone',
+      label: 'Số điện thoại',
+      type: 'string',
+    },
+    {
+      value: 'department',
+      label: 'Đơn vị',
+      type: 'string',
+    },
+    {
+      value: 'role',
+      label: 'Vai trò',
+      type: 'string',
+    },
+  ];
+
+  const initialValue = [
+    { field: 'name', operator: 'contain', value: '' },
+    { field: 'department', operator: 'contain', value: '' },
+  ];
+
+  return (
+    <DataContext.Provider value={{ path, page, state, setState, isLoad, setIsLoad }}>
+      <PageTitle>{page}</PageTitle>
+      <Row gutter={[10, 10]}>
+        <Col span={24}>
+          <Card padding="1rem">
+            <Row justify={'space-between'}>
+              <Col span={12}>
+                <H3 className="typography-title">{page}</H3>
+              </Col>
+              <Col span={12}>
+                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <ExportExcel param={''} /> &nbsp;&nbsp;
+                </div>
+              </Col>
+            </Row>
+            <Row style={{ marginTop: '10px' }}>
+              <Col span={24}>
+                <Filter initialValue={initialValue} option={option} setParam={setParam} />
+              </Col>
+            </Row>
+          </Card>
+        </Col>
+        <Col span={24}>
+          <Card padding="1rem">
+            <Show param={param} colums={userColumn}>
+              <UserForm isEditing={true} />
+            </Show>
+          </Card>
+        </Col>
+      </Row>
+    </DataContext.Provider>
+  );
+};
+
+export default Users;
