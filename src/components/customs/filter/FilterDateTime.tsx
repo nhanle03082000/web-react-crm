@@ -31,7 +31,7 @@ const FilterDateTime: React.FC<IFilterDateTime> = ({ name }) => {
   ];
 
   return (
-    <Row gutter={[10, 10]}>
+    <Row>
       <Col span={12}>
         <Form.Item name={[name, 'operator']}>
           <Select size="small" options={option} />

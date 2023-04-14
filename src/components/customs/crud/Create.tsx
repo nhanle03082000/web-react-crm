@@ -1,10 +1,11 @@
 import { apiInstance } from '@app/api/app/api_core';
 import { Modal } from '@app/components/common/Modal/Modal';
+import { Button } from '@app/components/common/buttons/Button/Button';
 import { API_BASE_URL } from '@app/configs/api-configs';
 import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
-import { Button, Form, Row } from 'antd';
+import { Form, Row } from 'antd';
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 
@@ -82,19 +83,6 @@ const Create: React.FC<IProps> = ({ children }) => {
 };
 
 const CreateStyles = styled.div`
-  .button-create {
-    border-color: var(--ant-primary-color);
-    background: var(--layout-sider-bg-color);
-    border-radius: 8px;
-    padding: 0 12px;
-    font-weight: 400;
-    color: var(--text-secondary-color);
-    height: 32px;
-    :hover {
-      background: var(--layout-sider-bg-color);
-      opacity: 0.8;
-    }
-  }
   .ant-modal-title {
     text-align: left;
     text-transform: uppercase;

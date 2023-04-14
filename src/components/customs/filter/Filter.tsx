@@ -1,6 +1,5 @@
 import { RestOutlined } from '@ant-design/icons';
 import { Button } from '@app/components/common/buttons/Button/Button';
-import { Input } from '@app/components/common/inputs/Input/Input';
 import { Select } from '@app/components/common/selects/Select/Select';
 import { Col, Form, Row } from 'antd';
 import React, { useState } from 'react';
@@ -39,8 +38,7 @@ const Filter: React.FC<IProps> = ({ option, setParam, initialValue }) => {
     const param = Object.entries(f)
       .map(([key, value]: any) => `${key}=${value}`)
       .join('&');
-    console.log(f);
-    // setParam(param);
+    setParam(param);
   };
 
   const onChangeField = (index: number) => (value: any) => {
@@ -53,16 +51,14 @@ const Filter: React.FC<IProps> = ({ option, setParam, initialValue }) => {
     setListFilter([...listFilter]);
   };
 
-  console.log(listFilter[0].field.type);
-
   return (
     <Form onFinish={onFinsh} layout="inline">
       <Form.List name="filter" initialValue={listFilter}>
         {(listFilter, { add, remove }) => (
-          <Row style={{ width: '93%' }}>
+          <Row style={{ width: '93%' }} gutter={[10, 10]}>
             <Col span={24}>
               {listFilter.map(({ key, name }, index) => (
-                <Row key={key}>
+                <Row key={key} style={{ marginTop: '8px' }}>
                   <Col span={4}>
                     <Form.Item
                       initialValue={option[0]}
@@ -76,7 +72,7 @@ const Filter: React.FC<IProps> = ({ option, setParam, initialValue }) => {
                   <Col span={2}>
                     <RestOutlined
                       onClick={() => remove(name)}
-                      style={{ color: '#ff4d4f', fontSize: '24px', marginTop: '13px' }}
+                      style={{ color: '#ff4d4f', fontSize: '24px', marginTop: '4px' }}
                     />
                   </Col>
                 </Row>

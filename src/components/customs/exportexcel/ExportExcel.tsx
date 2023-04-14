@@ -48,7 +48,7 @@ const ExportExcel: React.FC<IProps> = ({ param = '' }) => {
   return (
     <ExportExcelStyles>
       <Tooltip placement="bottom" title="Xuất dữ liệu bảng">
-        <Button onClick={onExport}>
+        <Button onClick={onExport} type="primary">
           <img src={ExcelIcon} alt="xuất file excel" />
         </Button>
       </Tooltip>
@@ -58,9 +58,8 @@ const ExportExcel: React.FC<IProps> = ({ param = '' }) => {
 
 const ExportExcelStyles = styled.div`
   Button {
-    background: none;
     border: none;
-    padding: 0;
+    padding: 0 8px;
     img {
       width: 34px;
       height: 34px;

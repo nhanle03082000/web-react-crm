@@ -122,3 +122,48 @@ export const getProductGroupList = async () => {
     });
   }
 };
+
+export const getProvincesList = async () => {
+  try {
+    const respProvinces: IRespApiSuccess = await apiInstance.get(`${API_BASE_URL}/provinces`);
+    const optionsProvinces = respProvinces.data.collection.map((item: any) => {
+      return { value: item.id, label: item.name };
+    });
+    return optionsProvinces;
+  } catch (error: any) {
+    notificationController.error({
+      message: 'Có lỗi xảy ra vui lòng thử lại sau',
+      description: error.message,
+    });
+  }
+};
+
+export const getDistrictsList = async () => {
+  try {
+    const respDistricts: IRespApiSuccess = await apiInstance.get(`${API_BASE_URL}/districts`);
+    const optionsDistricts = respDistricts.data.collection.map((item: any) => {
+      return { value: item.id, label: item.name };
+    });
+    return optionsDistricts;
+  } catch (error: any) {
+    notificationController.error({
+      message: 'Có lỗi xảy ra vui lòng thử lại sau',
+      description: error.message,
+    });
+  }
+};
+
+export const getAreasList = async () => {
+  try {
+    const respAreas: IRespApiSuccess = await apiInstance.get(`${API_BASE_URL}/areas`);
+    const optionsAreas = respAreas.data.collection.map((item: any) => {
+      return { value: item.id, label: item.name };
+    });
+    return optionsAreas;
+  } catch (error: any) {
+    notificationController.error({
+      message: 'Có lỗi xảy ra vui lòng thử lại sau',
+      description: error.message,
+    });
+  }
+};

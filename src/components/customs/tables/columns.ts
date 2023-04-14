@@ -69,6 +69,49 @@ export const column = [
   },
 ];
 
+export const saleColumn = [
+  {
+    title: 'Mã',
+    dataIndex: 'code',
+    editable: true,
+  },
+  {
+    title: 'Tên',
+    dataIndex: 'name',
+    editable: true,
+  },
+  {
+    title: 'Loại quy trình',
+    dataIndex: 'type',
+    render: (record: string): string => {
+      return record === 'leads' ? 'Tiềm năng' : 'Khách hàng';
+    },
+  },
+  {
+    title: 'Mô tả',
+    dataIndex: 'description',
+    editable: true,
+  },
+  {
+    title: 'Ngày tạo',
+    dataIndex: 'createdAt',
+    editable: false,
+    render: (record: string): string => {
+      const date = new Date(record);
+      return date.toLocaleDateString('en-GB');
+    },
+  },
+  {
+    title: 'Ngày cập nhật',
+    dataIndex: 'updatedAt',
+    editable: false,
+    render: (record: string): string => {
+      const date = new Date(record);
+      return date.toLocaleDateString('en-GB');
+    },
+  },
+];
+
 export const CarrerColumn = [
   {
     title: 'Mã',
@@ -149,50 +192,55 @@ export const columnLead = [
   {
     title: 'Mã số thuế',
     dataIndex: 'tax_code',
-    editable: true,
   },
   {
-    title: 'Nguồn gốc',
-    dataIndex: 'customer_source',
-    editable: true,
+    title: 'Doanh nghiệp',
+    dataIndex: 'company_name',
+  },
+  {
+    title: 'Họ tên',
+    dataIndex: 'name',
+  },
+  {
+    title: 'SĐT di động',
+    dataIndex: 'phone_number',
+  },
+  {
+    title: 'SĐT doanh nghiệp',
+    dataIndex: 'headquarters_phone',
+  },
+  {
+    title: 'Email doanh nghiệp',
+    dataIndex: 'headquarters_email',
+  },
+  {
+    title: 'Email cá nhân',
+    dataIndex: 'email',
+  },
+  {
+    title: 'Nhân viên phụ trách',
+    dataIndex: 'employee',
     render: (record: { id: number; name: string }): string => {
       return record.name;
     },
   },
   {
-    title: 'Doanh nghiệp',
-    dataIndex: 'company_name',
-    editable: true,
-  },
-  {
-    title: 'Họ tên',
-    dataIndex: 'name',
-    editable: true,
-  },
-  {
-    title: 'SĐT di động',
-    dataIndex: 'phone_number',
-    editable: true,
-  },
-  {
-    title: 'SĐT doanh nghiệp',
-    dataIndex: 'headquarters_phone',
-    editable: true,
-  },
-  {
-    title: 'Email doanh nghiệp',
-    dataIndex: 'headquarters_email',
-    editable: true,
-  },
-  {
-    title: 'Email cá nhân',
-    dataIndex: 'email',
-    editable: true,
+    title: 'Nguồn gốc',
+    dataIndex: 'customer_source',
+    render: (record: { id: number; name: string }): string => {
+      return record.name;
+    },
   },
   {
     title: 'Lĩnh vực hoạt động',
     dataIndex: 'company_field',
-    editable: true,
+    render: (record: { id: number; name: string }): string => {
+      return record.name;
+    },
+  },
+  {
+    title: 'Quy trình bán hàng',
+    dataIndex: 'sale_process',
     render: (record: { id: number; name: string }): string => {
       return record.name;
     },
@@ -200,12 +248,10 @@ export const columnLead = [
   {
     title: 'Địa chỉ trụ sở chính',
     dataIndex: 'headquarters_address',
-    editable: true,
   },
   {
     title: 'Tỉnh/Thành phố',
     dataIndex: 'province',
-    editable: true,
     render: (record: { id: number; name: string }): string => {
       return record.name;
     },
@@ -213,7 +259,6 @@ export const columnLead = [
   {
     title: 'Quận/Huyện',
     dataIndex: 'district',
-    editable: true,
     render: (record: { id: number; name: string }): string => {
       return record.name;
     },
@@ -221,7 +266,6 @@ export const columnLead = [
   {
     title: 'Phường/Xã',
     dataIndex: 'area',
-    editable: true,
     render: (record: { id: number; name: string }): string => {
       return record.name;
     },

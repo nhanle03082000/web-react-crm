@@ -12,7 +12,7 @@ import { getRoleUser } from '@app/utils/redux.util';
 import { Col, Row } from 'antd';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { column, roleColumn } from '@app/components/customs/tables/columns';
+import { column, roleColumn, saleColumn } from '@app/components/customs/tables/columns';
 import SaleForm from './SaleForm';
 
 const SaleProcesses: React.FC = () => {
@@ -90,7 +90,7 @@ const SaleProcesses: React.FC = () => {
         </Col>
         <Col span={24}>
           <Card padding="1rem">
-            <Show param={param} colums={column}>
+            <Show param={param} colums={saleColumn}>
               <SaleForm isEditing={true} />
             </Show>
           </Card>
