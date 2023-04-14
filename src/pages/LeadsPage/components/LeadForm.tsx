@@ -169,7 +169,11 @@ const LeadForm: React.FC<IProps> = ({ isEditing }) => {
       </Row>
       <Row gutter={[16, 16]}>
         <Col span={12}>
-          <Form.Item name="customer_source_id" label="Nguồn gốc">
+          <Form.Item
+            name="customer_source_id"
+            label="Nguồn gốc"
+            rules={[{ required: true, message: 'Nguồn gốc không được bỏ trống!' }]}
+          >
             <Select options={customerSources} placeholder="Chọn nguồn gốc" />
           </Form.Item>
         </Col>
@@ -177,7 +181,7 @@ const LeadForm: React.FC<IProps> = ({ isEditing }) => {
           <Form.Item
             name="company_field_id"
             label="Lĩnh vực"
-            rules={[{ required: true, message: 'Lĩnh vực DN không được bỏ trống!' }]}
+            rules={[{ required: true, message: 'Lĩnh vực không được bỏ trống!' }]}
           >
             <Select options={companyFields} placeholder="Chọn lĩnh vực" />
           </Form.Item>

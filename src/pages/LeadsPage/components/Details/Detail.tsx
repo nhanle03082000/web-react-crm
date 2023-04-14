@@ -42,6 +42,7 @@ const Detail: React.FC = () => {
       if (respUsers.code === 200) {
         setDataNote(respUsers.data.collection);
       }
+      console.log('duy');
     } catch (error: any) {
       notificationController.error({
         message: 'Có lỗi xảy ra vui lòng thử lại sau',
@@ -52,9 +53,8 @@ const Detail: React.FC = () => {
   useEffect(() => {
     if (!state) {
       navigate('/leads1', { replace: true });
-    } else {
-      getListNote();
     }
+    getListNote();
   }, []);
 
   const createNote = async (value: any) => {

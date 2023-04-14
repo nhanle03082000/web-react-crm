@@ -42,6 +42,7 @@ const DetailModal: React.FC<IProps> = ({ id }) => {
   const showModal = async () => {
     onDataById();
     setIsModalOpen(true);
+    getListNote();
   };
 
   const handleCancel = () => {
@@ -76,9 +77,6 @@ const DetailModal: React.FC<IProps> = ({ id }) => {
       });
     }
   };
-  useEffect(() => {
-    getListNote();
-  }, []);
 
   const navigate = useNavigate();
 

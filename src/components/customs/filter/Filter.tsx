@@ -52,14 +52,14 @@ const Filter: React.FC<IProps> = ({ option, setParam, initialValue }) => {
   };
 
   return (
-    <Form onFinish={onFinsh} layout="inline">
+    <Form onFinish={onFinsh} layout="inline" style={{ justifyContent: 'space-between' }}>
       <Form.List name="filter" initialValue={listFilter}>
         {(listFilter, { add, remove }) => (
-          <Row style={{ width: '93%' }} gutter={[10, 10]}>
+          <Row gutter={[10, 10]}>
             <Col span={24}>
               {listFilter.map(({ key, name }, index) => (
                 <Row key={key} style={{ marginTop: '8px' }}>
-                  <Col span={4}>
+                  <Col span={8}>
                     <Form.Item
                       initialValue={option[0]}
                       name={[name, 'field']}
@@ -68,8 +68,8 @@ const Filter: React.FC<IProps> = ({ option, setParam, initialValue }) => {
                       <Select options={option} placeholder="Lọc theo trường" onChange={onChangeField(index)} />
                     </Form.Item>
                   </Col>
-                  <Col span={10}>{renderFilter(name, index)}</Col>
-                  <Col span={2}>
+                  <Col span={12}>{renderFilter(name, index)}</Col>
+                  <Col span={4}>
                     <RestOutlined
                       onClick={() => remove(name)}
                       style={{ color: '#ff4d4f', fontSize: '24px', marginTop: '4px' }}
@@ -88,7 +88,7 @@ const Filter: React.FC<IProps> = ({ option, setParam, initialValue }) => {
           </Row>
         )}
       </Form.List>
-      <Row style={{ width: '7%' }}>
+      <Row>
         <Col span={24}>
           <Button type="primary" htmlType="submit" block>
             Lọc

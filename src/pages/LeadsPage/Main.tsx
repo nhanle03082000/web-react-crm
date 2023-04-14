@@ -55,7 +55,7 @@ const Main: React.FC = () => {
     },
     {
       value: 'company_name',
-      label: 'Tên DN',
+      label: 'Tên doanh nghiệp',
       type: 'string',
     },
     {
@@ -65,12 +65,12 @@ const Main: React.FC = () => {
     },
     {
       value: 'headquarters_phone',
-      label: 'Số điện thoại DN',
+      label: 'Số điện thoại doanh nghiệp',
       type: 'string',
     },
     {
       value: 'headquarters_email',
-      label: 'Email DN',
+      label: 'Email doanh nghiệp',
       type: 'string',
     },
     {
@@ -121,8 +121,12 @@ const Main: React.FC = () => {
   ];
 
   const onFilterChange = (id: number) => {
-    const listFilter = [{ field: '', operator: '', value: '' }];
     const f: any = {};
+    if (id === 0) {
+      setParam('');
+      return;
+    }
+    const listFilter = [{ field: '', operator: '', value: '' }];
     listFilter.forEach((filter: any, i: any) => {
       f[`f[${i}][field]`] = 'sale_process.id';
       f[`f[${i}][operator]`] = 'equal';
@@ -137,9 +141,7 @@ const Main: React.FC = () => {
   useEffect(() => {
     const getSaleProcessesList = async () => {
       try {
-        const respSaleProcesses: IRespApiSuccess = await apiInstance.get(
-          `${API_BASE_URL}${API_URL.SALEPROCESSES}?f[0][field]=type&f[0][operator]=contain&f[0][value]=leads&page=1&limit=10&sort_direction=asc&sort_column=sale_process_index`,
-        );
+        const respSaleProcesses: IRespApiSuccess = await apiInstance.get(`${API_BASE_URL}${API_URL.SALEPROCESSES}`);
         setSaleProcesses(respSaleProcesses.data.collection);
       } catch (error: any) {}
     };
@@ -186,11 +188,16 @@ const Main: React.FC = () => {
               <Col>
                 <Space>Bước bán hàng: &nbsp;</Space>
                 <Space>
-                  {saleProcesses.map((item: any, index: number) => {
+                  <Button onClick={() => onFilterChange(0)} style={{ borderRadius: '20px', marginRight: '8px' }}>
+                    Tất cả
+                  </Button>
+                </Space>
+                <Space>
+                  {saleProcesses.map((item: any) => {
                     return (
                       <Button
-                        key={index}
-                        style={{ backgroundColor: item.color, color: '#fff' }}
+                        key={item.id}
+                        style={{ backgroundColor: item.color, color: '#fff', borderRadius: '20px', border: 'none' }}
                         onClick={() => onFilterChange(item.id)}
                       >
                         {item.name}
