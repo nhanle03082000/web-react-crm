@@ -28,10 +28,9 @@ interface ISelectOption {
 
 interface Iprops {
   setIsEdit: any;
-  initialValues: any;
 }
 
-const EditDetail: React.FC<Iprops> = ({ setIsEdit, initialValues }) => {
+const EditDetail: React.FC<Iprops> = ({ setIsEdit }) => {
   const [form] = Form.useForm();
   const { state, path } = useContext(DataContext);
   const [provinces, setProvinces] = useState<ISelectOption[]>([{ value: '', label: '' }]);
@@ -40,6 +39,23 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, initialValues }) => {
   const [companyFields, setCompanyFields] = useState<ISelectOption[]>([{ value: '', label: '' }]);
   const [customerSources, setCustomerSources] = useState<ISelectOption[]>([{ value: '', label: '' }]);
   const [saleProcesses, setSaleProcesses] = useState<ISelectOption[]>([{ value: '', label: '' }]);
+
+  const initialValues = {
+    tax_code: state.tax_code,
+    company_name: state.company_name,
+    name: state.name,
+    headquarters_address: state.headquarters_address,
+    headquarters_province_id: state.province.id,
+    headquarters_district_id: state.district.id,
+    headquarters_area_id: state.area.id,
+    headquarters_email: state.headquarters_email,
+    headquarters_phone: state.headquarters_phone,
+    email: state.email,
+    phone_number: state.phone_number,
+    company_field_id: state.company_field.id,
+    customer_source_id: state.customer_source.id,
+    sale_process: state.sale_process.id,
+  };
 
   const onChangeProvinces = (values: any) => {
     provinces.map((item: ISelectOption) => {
@@ -278,7 +294,13 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, initialValues }) => {
                     <Input placeholder="Nhập địa chỉ trụ sở chính" size="small" />
                   </Form.Item>
                 </Col>
-                <Col>
+                <Col style={{ display: 'flex' }}>
+                  <Form.Item>
+                    <Button type="ghost" onClick={() => setIsEdit(false)}>
+                      Huỷ
+                    </Button>
+                  </Form.Item>
+                  &nbsp;
                   <Form.Item>
                     <Button type="primary" htmlType="submit">
                       Lưu

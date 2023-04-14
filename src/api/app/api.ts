@@ -167,3 +167,19 @@ export const getAreasList = async () => {
     });
   }
 };
+
+export const onDeleteById = async (path: string, id: number) => {
+  try {
+    const respUsers: IRespApiSuccess = await apiInstance.delete(`${API_BASE_URL}/${path}/${id}`);
+    if (respUsers.code === 200) {
+      notificationController.success({
+        message: 'Xoá thành công',
+      });
+    }
+  } catch (error: any) {
+    notificationController.error({
+      message: 'Có lỗi xảy ra vui lòng thử lại sau',
+      description: error.message,
+    });
+  }
+};

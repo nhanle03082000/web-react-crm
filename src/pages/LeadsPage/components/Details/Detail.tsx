@@ -1,4 +1,4 @@
-import { EditOutlined, RestOutlined, SendOutlined } from '@ant-design/icons';
+import { EditOutlined, LeftOutlined, RestOutlined, SendOutlined } from '@ant-design/icons';
 import { apiInstance } from '@app/api/app/api_core';
 import { onCreateNote } from '@app/api/app/api_create';
 import { Card } from '@app/components/common/Card/Card';
@@ -13,19 +13,25 @@ import { IRespApiSuccess } from '@app/interfaces/interfaces';
 import { Button, Col, Form, Row, Typography } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useContext, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import EditDetail from './EditDetail';
+import { onDeleteById } from '@app/api/app/api';
 
 const Detail: React.FC = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [form] = Form.useForm();
   const { state } = useContext(DataContext);
-  const [dataNote, setDataNote] = useState([]);
+  const [dataNote, setDataNote] = useState<any>([]);
   const [isEdit, setIsEdit] = useState(false);
 
   const onEdit = () => {
     setIsEdit(true);
+  };
+
+  const onBack = () => {
+    navigate('/leads1');
   };
 
   const getListNote = async () => {
@@ -44,7 +50,11 @@ const Detail: React.FC = () => {
     }
   };
   useEffect(() => {
-    getListNote();
+    if (!state) {
+      navigate('/leads1', { replace: true });
+    } else {
+      getListNote();
+    }
   }, []);
 
   const createNote = async (value: any) => {
@@ -52,6 +62,11 @@ const Detail: React.FC = () => {
       lead_id: state.id,
       ...value,
     });
+    getListNote();
+  };
+
+  const onDelete = async (id: number) => {
+    await onDeleteById('lead_notes', id);
     getListNote();
   };
 
@@ -83,33 +98,18 @@ const Detail: React.FC = () => {
   //   form.resetFields();
   // };
 
-  console.log(state);
-  const initialValues = {
-    tax_code: state.tax_code,
-    company_name: state.company_name,
-    name: state.name,
-    headquarters_address: state.headquarters_address,
-    headquarters_province_id: state.province.id,
-    headquarters_district_id: state.district.id,
-    headquarters_area_id: state.area.id,
-    headquarters_email: state.headquarters_email,
-    headquarters_phone: state.headquarters_phone,
-    email: state.email,
-    phone_number: state.phone_number,
-    company_field_id: state.company_field.id,
-    customer_source_id: state.customer_source.id,
-    sale_process: state.sale_process.id,
-  };
-
   return (
     <DetailStyles>
       <Row>
         <Col span={24}>
-          <Button>&#60; CHI TIẾT LỊCH SỬ BÁO GIÁ</Button>
+          <Button className="button-back" onClick={onBack}>
+            <LeftOutlined />
+            CHI TIẾT TIỀM NĂNG
+          </Button>
         </Col>
         {isEdit ? (
           <Col span={24}>
-            <EditDetail setIsEdit={setIsEdit} initialValues={initialValues} />
+            <EditDetail setIsEdit={setIsEdit} />
           </Col>
         ) : (
           <Col span={24}>
@@ -120,28 +120,28 @@ const Detail: React.FC = () => {
                 </Col>
                 <Col span={8}>
                   <H5>Tên DN</H5>
-                  <div>{state.company_name}</div>
+                  <div>{state?.company_name}</div>
                 </Col>
                 <Col span={8}>
                   <H5>Mã số thuế</H5>
-                  <div>{state.tax_code}</div>
+                  <div>{state?.tax_code}</div>
                 </Col>
                 <Col span={8}>
                   <Button className="button-edit" onClick={onEdit}>
-                    <EditOutlined />
+                    <EditOutlined style={{ fontSize: '24px', color: 'var(--primary-color)' }} />
                   </Button>
                 </Col>
                 <Col span={8}>
                   <H5>Họ tên người đại diện</H5>
-                  <div>{state.name}</div>
+                  <div>{state?.name}</div>
                 </Col>
                 <Col span={8}>
                   <H5>SĐT di động</H5>
-                  <div>{state.phone_number}</div>
+                  <div>{state?.phone_number}</div>
                 </Col>
                 <Col span={8}>
                   <H5>Email cá nhân</H5>
-                  <div>{state.email}</div>
+                  <div>{state?.email}</div>
                 </Col>
               </Row>
               <Row gutter={[4, 4]} style={{ marginTop: '24px' }}>
@@ -150,24 +150,24 @@ const Detail: React.FC = () => {
                 </Col>
                 <Col span={8}>
                   <H5>Số điện thoại doanh nhiệp</H5>
-                  <div>{state.headquarters_phone}</div>
+                  <div>{state?.headquarters_phone}</div>
                 </Col>
                 <Col span={8}>
                   <H5>Email doanh nhiệp</H5>
-                  <div>{state.headquarters_email}</div>
+                  <div>{state?.headquarters_email}</div>
                 </Col>
                 <Col span={8}></Col>
                 <Col span={8}>
                   <H5>Lĩnh vực doanh nghiệp</H5>
-                  <div>{state.company_field?.name}</div>
+                  <div>{state?.company_field?.name}</div>
                 </Col>
                 <Col span={8}>
                   <H5>Nguồn gốc</H5>
-                  <div>{state.customer_source?.name}</div>
+                  <div>{state?.customer_source?.name}</div>
                 </Col>
                 <Col span={8}>
                   <H5>Quy trình bán hàng</H5>
-                  <div>{state.sale_process?.name}</div>
+                  <div>{state?.sale_process?.name}</div>
                 </Col>
               </Row>
               <Row gutter={[4, 4]} style={{ marginTop: '24px' }}>
@@ -176,19 +176,19 @@ const Detail: React.FC = () => {
                 </Col>
                 <Col span={8}>
                   <H5>Tỉnh/TP</H5>
-                  <div>{state.province?.name}</div>
+                  <div>{state?.province?.name}</div>
                 </Col>
                 <Col span={8}>
                   <H5>Quận/Huyện</H5>
-                  <div>{state.district?.name}</div>
+                  <div>{state?.district?.name}</div>
                 </Col>
                 <Col span={8}>
                   <H5>Phường/Xã</H5>
-                  <div>{state.area?.name}</div>
+                  <div>{state?.area?.name}</div>
                 </Col>
                 <Col span={24}>
                   <H5>Địa chỉ</H5>
-                  <div>{state.headquarters_address}</div>
+                  <div>{state?.headquarters_address}</div>
                 </Col>
               </Row>
               <Row>
@@ -197,7 +197,7 @@ const Detail: React.FC = () => {
                   <div>
                     <H5>Nội dung</H5>
                   </div>
-                  {dataNote.map((item: any) => {
+                  {dataNote?.map((item: any) => {
                     return (
                       <Fragment key={item.id}>
                         <Row justify="space-between" align="middle" style={{ padding: '0 5px' }}>
@@ -212,7 +212,7 @@ const Detail: React.FC = () => {
                               title="Bạn có muốn xoá không?"
                               okText="Có"
                               cancelText="Không"
-                              // onConfirm={onDelete}
+                              onConfirm={() => onDelete(item.id)}
                             >
                               <Typography.Link>
                                 <RestOutlined style={{ fontSize: '20px', cursor: 'pointer', color: '#FF5B5B' }} />
@@ -235,13 +235,13 @@ const Detail: React.FC = () => {
                   <Form form={form} onFinish={createNote} className="form-note">
                     <Row>
                       <Col span={23}>
-                        <Form.Item>
+                        <Form.Item name="note">
                           <TextArea rows={4} placeholder="Thêm ghi chú" />
                         </Form.Item>
                       </Col>
                       <Col span={1}>
                         <Form.Item>
-                          <Button className="button-send">
+                          <Button className="button-send" htmlType="submit">
                             <SendOutlined />
                           </Button>
                         </Form.Item>
@@ -249,17 +249,14 @@ const Detail: React.FC = () => {
                     </Row>
                   </Form>
                 </Col>
-                <Col span={24}>
-                  <br />
-                  <Button type="primary">
-                    <Link to="/customer">Chuyển sang khách hàng</Link>
-                  </Button>
-                </Col>
               </Row>
             </Card>
           </Col>
         )}
       </Row>
+      <Button type="primary" style={{ margin: '20px 0' }}>
+        <Link to="/customer">Chuyển sang khách hàng</Link>
+      </Button>
     </DetailStyles>
   );
 };
@@ -292,7 +289,8 @@ const DetailStyles = styled.div`
   }
   .button-send {
     border: none;
-    margin-left: 24px;
+    background: none;
+    box-shadow: none;
   }
   .form-note {
     border: 2px solid #ccc;

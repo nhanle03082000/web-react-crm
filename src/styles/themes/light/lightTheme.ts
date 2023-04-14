@@ -93,7 +93,7 @@ export const lightColorsTheme: ITheme = {
   borderBase: '#bec0c6',
   disable: 'rgba(0, 0, 0, 0.25)',
   disabledBg: '#c5d3e0',
-  layoutBodyBg: '#f8fbff',
+  layoutBodyBg: '#d7d7d7',
   layoutHeaderBg: 'transparent',
   layoutSiderBg: 'linear-gradient(261.31deg, #006ccf -29.57%, #00509a 121.11%)',
   inputPlaceholder: '#404040',

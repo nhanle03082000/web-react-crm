@@ -20,7 +20,7 @@ import Sell from '@app/pages/SellPages/Sell';
 import { roleCheckRoute } from '@app/utils/check';
 import { SettingList } from './list-route/SettingList';
 import { CustomerList } from './list-route/CustomerList';
-import Main from '@app/pages/LeadsPage/components/pages/Main';
+import Main from '@app/pages/LeadsPage/Main';
 import Detail from '@app/pages/LeadsPage/components/Details/Detail';
 
 const NewsFeedPage = React.lazy(() => import('@app/pages/Templates/NewsFeedPage'));

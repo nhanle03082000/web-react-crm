@@ -10,11 +10,7 @@ const Leads: React.FC = () => {
   const path = API_URL.LEAD;
   const page = t('namepage.tiemnang');
   const [isLoad, setIsLoad] = useState<boolean>(false);
-  const [state, setState] = useState<any>({
-    data: {},
-    rolePermission: [],
-    defaultInputValues: {},
-  });
+  const [state, setState] = useState<any>();
   return (
     <DataContext.Provider value={{ path, page, state, setState, isLoad, setIsLoad }}>
       <PageTitle>{page}</PageTitle>

@@ -14,10 +14,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import { columnLead } from '@app/components/customs/tables/columns';
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
 import { apiInstance } from '@app/api/app/api_core';
-import CustomColumns from '../CustomColumns';
-import AssignOverlay from '../AssignOverlay';
-import LeadForm from '../LeadForm';
-import Show from '../Show';
+import CustomColumns from './components/CustomColumns';
+import AssignOverlay from './components/AssignOverlay';
+import LeadForm from './components/LeadForm';
+import Show from './components/Show';
 
 const Main: React.FC = () => {
   // const userListPermission = JSON.parse(getRoleUser());

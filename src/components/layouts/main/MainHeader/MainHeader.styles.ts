@@ -9,10 +9,12 @@ interface Header {
 
 export const Header = styled(Layout.Header)<Header>`
   line-height: 1.5;
+  background: #fff;
 
   @media only screen and ${media.md} {
-    padding: ${LAYOUT.desktop.paddingVertical} ${LAYOUT.desktop.paddingHorizontal};
+    padding-top: ${LAYOUT.desktop.paddingVertical};
     height: unset;
+    margin-bottom: 10px;
   }
 
   @media only screen and ${media.md} {

@@ -1,4 +1,5 @@
 import { EyeOutlined, RestOutlined, SendOutlined } from '@ant-design/icons';
+import { onDeleteById } from '@app/api/app/api';
 import { apiInstance } from '@app/api/app/api_core';
 import { onCreateNote } from '@app/api/app/api_create';
 import { getDataById } from '@app/api/app/api_getDataById';
@@ -47,6 +48,11 @@ const DetailModal: React.FC<IProps> = ({ id }) => {
     setIsModalOpen(false);
   };
 
+  const onDelete = async (id: number) => {
+    await onDeleteById('lead_notes', id);
+    getListNote();
+  };
+
   const createNote = async (value: any) => {
     await onCreateNote({
       lead_id: state.id,
@@ -91,6 +97,7 @@ const DetailModal: React.FC<IProps> = ({ id }) => {
         onCancel={handleCancel}
         maskClosable={false}
         size="large"
+        centered
         footer={null}
       >
         <Row gutter={10}>
@@ -99,35 +106,35 @@ const DetailModal: React.FC<IProps> = ({ id }) => {
           </Col>
           <Col span={12}>
             <H5>Họ tên</H5>
-            <div>{state.name}</div>
+            <div>{state?.name}</div>
           </Col>
           <Col span={12}>
             <H5>Mã số thuế</H5>
-            <div>{state.tax_code}</div>
+            <div>{state?.tax_code}</div>
           </Col>
           <Col span={12}>
             <H5>Tên doanh nghiệp</H5>
-            <div>{state.company_name}</div>
+            <div>{state?.company_name}</div>
           </Col>
           <Col span={12}>
             <H5>Địa chỉ doanh nghiệp</H5>
-            <div>{state.headquarters_address}</div>
+            <div>{state?.headquarters_address}</div>
           </Col>
           <Col span={12}>
             <H5>SĐT di động</H5>
-            <div>{state.phone_number || 'chưa có'}</div>
+            <div>{state?.phone_number || 'chưa có'}</div>
           </Col>
           <Col span={12}>
             <H5>SĐT doanh nhiệp</H5>
-            <div>{state.headquarters_phone || 'chưa có'}</div>
+            <div>{state?.headquarters_phone || 'chưa có'}</div>
           </Col>
           <Col span={12}>
             <H5>Email cá nhân</H5>
-            <div>{state.email || 'chưa có'}</div>
+            <div>{state?.email || 'chưa có'}</div>
           </Col>
           <Col span={12}>
             <H5>Email doanh nhiệp</H5>
-            <div>{state.headquarters_email || 'chưa có'}</div>
+            <div>{state?.headquarters_email || 'chưa có'}</div>
           </Col>
           <Col span={12}>
             <H5>Nguồn gốc</H5>
@@ -153,7 +160,7 @@ const DetailModal: React.FC<IProps> = ({ id }) => {
                         title="Bạn có muốn xoá không?"
                         okText="Có"
                         cancelText="Không"
-                        // onConfirm={onDelete}
+                        onConfirm={() => onDelete(item.id)}
                       >
                         <Typography.Link>
                           <RestOutlined style={{ fontSize: '20px', cursor: 'pointer', color: '#FF5B5B' }} />
@@ -176,13 +183,13 @@ const DetailModal: React.FC<IProps> = ({ id }) => {
             <Form form={form} onFinish={createNote} className="form-note">
               <Row>
                 <Col span={22}>
-                  <Form.Item>
+                  <Form.Item name="note">
                     <TextArea rows={4} placeholder="Thêm ghi chú" />
                   </Form.Item>
                 </Col>
                 <Col span={2}>
                   <Form.Item>
-                    <Button className="button-send">
+                    <Button className="button-send" htmlType="submit">
                       <SendOutlined />
                     </Button>
                   </Form.Item>
