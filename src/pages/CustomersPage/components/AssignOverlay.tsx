@@ -1,10 +1,11 @@
 import { apiInstance } from '@app/api/app/api_core';
+import { Button } from '@app/components/common/buttons/Button/Button';
 import { Select } from '@app/components/common/selects/Select/Select';
 import { API_BASE_URL } from '@app/configs/api-configs';
 import { notificationController } from '@app/controllers/notificationController';
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
+import { Form } from 'antd';
 import React, { useEffect, useState } from 'react';
-import * as S from '../../Leads.styles';
 
 interface ISelectOption {
   value: any;
@@ -17,17 +18,11 @@ interface IProp {
 
 const AssignOverlay: React.FC<IProp> = ({ listIdLead }) => {
   const [data, setData] = useState<ISelectOption[]>([{ value: '', label: '' }]);
-  const [value, setValue] = useState<number>(1);
 
-  const onChangeValue = (values: any) => {
-    console.log(values);
-    setValue(values);
-  };
-
-  const onAssign = async () => {
+  const onAssign = async (value: any) => {
     const data = {
+      ...value,
       id: listIdLead,
-      employee_id: value,
     };
     try {
       const respUsers: IRespApiSuccess = await apiInstance.post(`${API_BASE_URL}/leads/assign`, data);
@@ -65,15 +60,16 @@ const AssignOverlay: React.FC<IProp> = ({ listIdLead }) => {
   }, []);
 
   return (
-    <div style={{ minWidth: '200px' }}>
-      <Select
-        options={data}
-        defaultValue="Chọn người cần phân công"
-        onChange={onChangeValue}
-        style={{ marginBottom: '10px' }}
-      />
-      <S.ButtonCustomColumns onClick={onAssign}>Phân công</S.ButtonCustomColumns>
-    </div>
+    <Form style={{ minWidth: '200px' }} onFinish={onAssign}>
+      <Form.Item name="employee_id" rules={[{ required: true, message: 'Vui lòng chọn nhân viên để phân công' }]}>
+        <Select options={data} placeholder="Chọn người cần phân công" />
+      </Form.Item>
+      <Form.Item>
+        <Button type="primary" htmlType="submit">
+          Phân công
+        </Button>
+      </Form.Item>
+    </Form>
   );
 };
 

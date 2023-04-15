@@ -22,6 +22,10 @@ import { SettingList } from './list-route/SettingList';
 import { CustomerList } from './list-route/CustomerList';
 import Main from '@app/pages/LeadsPage/Main';
 import Detail from '@app/pages/LeadsPage/components/Details/Detail';
+import CustomersDetail from '@app/pages/CustomersPage/components/Details/Detail';
+import { CustomerList1 } from './list-route/CustomerList1';
+import CustomersList from '@app/pages/CustomersPage/CustomersList';
+import CustomersMain from '@app/pages/CustomersPage/CustomersMain';
 
 const NewsFeedPage = React.lazy(() => import('@app/pages/Templates/NewsFeedPage'));
 const KanbanPage = React.lazy(() => import('@app/pages/Templates/KanbanPage'));
@@ -71,8 +75,7 @@ const ReactSimpleMaps = React.lazy(() => import('@app/pages/Templates/maps/React
 const PigeonsMaps = React.lazy(() => import('@app/pages/Templates/maps/PigeonsMapsPage/PigeonsMapsPage'));
 const Logout = React.lazy(() => import('./Logout'));
 
-const LeadsPage = React.lazy(() => import('@app/pages/LeadsPages/Leads'));
-const Leads1Page = React.lazy(() => import('@app/pages/LeadsPage/Leads'));
+const LeadsPage = React.lazy(() => import('@app/pages/LeadsPage/Leads'));
 
 export const DASHBOARD = '/';
 export const MEDICAL_DASHBOARD_PATH = '/medical-dashboard';
@@ -117,7 +120,6 @@ const DataTables = withLoading(DataTablesPage);
 const Charts = withLoading(ChartsPage);
 
 const Lead = withLoading(LeadsPage);
-const Lead1 = withLoading(Leads1Page);
 
 // Maps
 const Google = withLoading(GoogleMaps);
@@ -153,10 +155,13 @@ export const AppRouter: React.FC = () => {
             <Route path="feed" element={<NewsFeed />} />
             <Route path="kanban" element={<Kanban />} />
           </Route>
-          <Route path="leads" element={<Lead />} />
-          <Route element={<Lead1 />}>
-            <Route path="leads1" element={<Main />} />
-            <Route path="/leads1/:id" element={<Detail />} />
+          <Route element={<Lead />}>
+            <Route path="leads" element={<Main />} />
+            <Route path="/leads/:id" element={<Detail />} />
+          </Route>
+          <Route element={<CustomersList />}>
+            <Route path="customers" element={<CustomersMain />} />
+            <Route path="/customers/:id" element={<CustomersDetail />} />
           </Route>
           <Route path="report" element={<Report />} />
           <Route path="sell" element={<Sell />} />

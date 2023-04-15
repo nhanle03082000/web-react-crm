@@ -19,12 +19,6 @@ export const sidebarNavigation: SidebarNavigationItem[] = [
     icon: <StarOutlined />,
   },
   {
-    title: 'sidebar.tiemnang',
-    key: 'leads1',
-    url: '/leads1',
-    icon: <StarOutlined />,
-  },
-  {
     title: 'sidebar.khachhang',
     key: 'customer',
     url: '/customer',
@@ -41,6 +35,12 @@ export const sidebarNavigation: SidebarNavigationItem[] = [
         url: '/customer/price',
       },
     ],
+  },
+  {
+    title: 'sidebar.khachhang',
+    key: 'customer1',
+    url: '/customers',
+    icon: <CustomerIcon />,
   },
   {
     title: 'sidebar.banhang',

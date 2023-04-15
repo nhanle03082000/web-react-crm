@@ -3,14 +3,16 @@ import { API_BASE_URL } from '@app/configs/api-configs';
 import { notificationController } from '@app/controllers/notificationController';
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
 
-export const onDeleteById = async (id: number) => {
+export const getDistrictsList = async (idProvinces: string) => {
+  const districtsList: { value: any; label: any }[] = [];
   try {
-    const respUsers: IRespApiSuccess = await apiInstance.delete(`${API_BASE_URL}/leads/${id}`);
-    if (respUsers.code === 200) {
-      notificationController.success({
-        message: 'Xoá thành công',
-      });
-    }
+    const respDistricts: IRespApiSuccess = await apiInstance.get(`${API_BASE_URL}/districts`);
+    respDistricts.data.collection.map((item: any) => {
+      if (item.province_id === idProvinces) {
+        districtsList.push({ value: item.id, label: item.name });
+      }
+    });
+    return districtsList;
   } catch (error: any) {
     notificationController.error({
       message: 'Có lỗi xảy ra vui lòng thử lại sau',

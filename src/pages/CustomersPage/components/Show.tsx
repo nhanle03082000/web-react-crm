@@ -8,7 +8,7 @@ import { notificationController } from '@app/controllers/notificationController'
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
 import { Popconfirm, Space, Tooltip } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
-import DetailModal from '../../LeadsPage/components/Details/DetailModal';
+import DetailModal from './Details/DetailModal';
 
 interface IProps {
   param: string | null;

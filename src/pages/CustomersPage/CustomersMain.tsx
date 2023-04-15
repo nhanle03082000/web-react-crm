@@ -16,10 +16,10 @@ import { IRespApiSuccess } from '@app/interfaces/interfaces';
 import { apiInstance } from '@app/api/app/api_core';
 import CustomColumns from './components/CustomColumns';
 import AssignOverlay from './components/AssignOverlay';
-import LeadForm from './components/LeadForm';
-import Show from '../CustomersPage/components/Show';
+import CustomersForm from './components/CustomersForm';
+import Show from './components/Show';
 
-const Main: React.FC = () => {
+const CustomersMain: React.FC = () => {
   // const userListPermission = JSON.parse(getRoleUser());
   // const permission = userListPermission?.filter((item: any) => item.name === path.replace(/\//g, ''))[0].actions;
   const [saleProcesses, setSaleProcesses] = useState<any>([]);
@@ -172,7 +172,7 @@ const Main: React.FC = () => {
                   <Button type="primary">Phân công</Button>
                 </Popover>
                 <Create>
-                  <LeadForm isEditing={false} />
+                  <CustomersForm isEditing={false} />
                 </Create>
                 <ExportExcel param={param} />
               </div>
@@ -213,7 +213,7 @@ const Main: React.FC = () => {
       <Col span={24}>
         <Card padding="1rem">
           <Show param={param} colums={columnLead} setListIdLead={setListIdLead} visibleColumns={visibleColumns}>
-            <LeadForm isEditing={true} />
+            <CustomersForm isEditing={true} />
           </Show>
         </Card>
       </Col>
@@ -221,4 +221,4 @@ const Main: React.FC = () => {
   );
 };
 
-export default Main;
+export default CustomersMain;

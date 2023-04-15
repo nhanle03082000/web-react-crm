@@ -1,7 +1,7 @@
 import React from 'react';
 import { Popover } from '@app/components/common/Popover/Popover';
-import * as S from '../Leads.styles';
 import { Col, Row, Space, Switch } from 'antd';
+import { Button } from '@app/components/common/buttons/Button/Button';
 
 interface ICustomColumns {
   columns: any;
@@ -16,6 +16,8 @@ const visibleColumns = [
   'Doanh nghiệp',
   'Họ tên',
   'SĐT di động',
+  'Nhân viên phụ trách',
+  'Quy trình bán hàng',
   'SĐT doanh nghiệp',
   'Email doanh nghiệp',
   'Email cá nhân',
@@ -24,7 +26,6 @@ const visibleColumns = [
   'Tỉnh/Thành phố',
   'Quận/Huyện',
   'Phường/Xã',
-  'Quy trình bán hàng',
 ];
 
 const CustomColumns: React.FC<ICustomColumns> = ({ columns, setColumns }) => {
@@ -34,7 +35,7 @@ const CustomColumns: React.FC<ICustomColumns> = ({ columns, setColumns }) => {
       trigger="click"
       placement="rightTop"
     >
-      <S.ButtonCustomColumns>Tuỳ chỉnh cột</S.ButtonCustomColumns>
+      <Button type="primary">Tuỳ chỉnh cột</Button>
     </Popover>
   );
 };
