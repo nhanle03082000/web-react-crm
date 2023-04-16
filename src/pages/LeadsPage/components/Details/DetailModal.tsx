@@ -15,7 +15,7 @@ import { notificationController } from '@app/controllers/notificationController'
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
 import { Col, Form, Row, Tooltip, Typography } from 'antd';
 import moment from 'moment';
-import React, { Fragment, useContext, useEffect, useState } from 'react';
+import React, { Fragment, useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -31,11 +31,7 @@ const DetailModal: React.FC<IProps> = ({ id }) => {
 
   const onDataById = async () => {
     const dataById = await getDataById(id, path);
-    if (path === '/roles') {
-      setState({ data: dataById, rolePermission: JSON.parse(dataById.permission) });
-    } else {
-      setState(dataById);
-    }
+    setState(dataById);
     form.setFieldsValue(dataById);
   };
 
@@ -81,7 +77,7 @@ const DetailModal: React.FC<IProps> = ({ id }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/leads1/${id}`);
+    navigate(`/leads/${id}`);
   };
 
   return (
@@ -200,7 +196,7 @@ const DetailModal: React.FC<IProps> = ({ id }) => {
             <Row align={'middle'}>
               <Col span={18}>
                 <Button type="primary">
-                  <Link to="/customer">Chuyển sang khách hàng</Link>
+                  <Link to="/customers">Chuyển sang khách hàng</Link>
                 </Button>
               </Col>
               <Col span={6}>

@@ -1,22 +1,13 @@
-import { EyeOutlined, RestOutlined, SendOutlined } from '@ant-design/icons';
-import { onDeleteById } from '@app/api/app/api';
-import { apiInstance } from '@app/api/app/api_core';
-import { onCreateNote } from '@app/api/app/api_create';
+import { EyeOutlined } from '@ant-design/icons';
 import { getDataById } from '@app/api/app/api_getDataById';
 import { Modal } from '@app/components/common/Modal/Modal';
-import { Popconfirm } from '@app/components/common/Popconfirm/Popconfirm';
 import { Button } from '@app/components/common/buttons/Button/Button';
-import { TextArea } from '@app/components/common/inputs/Input/Input';
 import { H4 } from '@app/components/common/typography/H4/H4';
 import { H5 } from '@app/components/common/typography/H5/H5';
-import { API_BASE_URL } from '@app/configs/api-configs';
 import { DataContext } from '@app/contexts/DataContext';
-import { notificationController } from '@app/controllers/notificationController';
-import { IRespApiSuccess } from '@app/interfaces/interfaces';
-import { Col, Form, Row, Tooltip, Typography } from 'antd';
-import moment from 'moment';
-import React, { Fragment, useContext, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Col, Form, Row, Tooltip } from 'antd';
+import React, { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 interface IProps {
@@ -27,55 +18,20 @@ const DetailModal: React.FC<IProps> = ({ id }) => {
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { path, page, state, setState } = useContext(DataContext);
-  const [dataNote, setDataNote] = useState([]);
 
   const onDataById = async () => {
     const dataById = await getDataById(id, path);
-    if (path === '/roles') {
-      setState({ data: dataById, rolePermission: JSON.parse(dataById.permission) });
-    } else {
-      setState(dataById);
-    }
+    setState(dataById);
     form.setFieldsValue(dataById);
   };
 
   const showModal = async () => {
     onDataById();
     setIsModalOpen(true);
-    getListNote();
   };
 
   const handleCancel = () => {
     setIsModalOpen(false);
-  };
-
-  const onDelete = async (id: number) => {
-    await onDeleteById('lead_notes', id);
-    getListNote();
-  };
-
-  const createNote = async (value: any) => {
-    await onCreateNote({
-      lead_id: state.id,
-      ...value,
-    });
-    getListNote();
-  };
-
-  const getListNote = async () => {
-    try {
-      const respUsers: IRespApiSuccess = await apiInstance.get(
-        `${API_BASE_URL}/lead_notes?f[0][field]=lead_id&f[0][operator]=contain&f[0][value]=${id}`,
-      );
-      if (respUsers.code === 200) {
-        setDataNote(respUsers.data.collection);
-      }
-    } catch (error: any) {
-      notificationController.error({
-        message: 'Có lỗi xảy ra vui lòng thử lại sau',
-        description: error.message,
-      });
-    }
   };
 
   const navigate = useNavigate();
@@ -137,63 +93,6 @@ const DetailModal: React.FC<IProps> = ({ id }) => {
           <Col span={12}>
             <H5>Nguồn gốc</H5>
             <div>{state?.customer_source?.name || 'chưa có'}</div>
-          </Col>
-          <Col span={24} style={{ marginTop: '12px' }}>
-            <H4>Ghi chú</H4>
-            <div>
-              <H5>Nội dung</H5>
-            </div>
-            {dataNote.map((item: any) => {
-              return (
-                <Fragment key={item.id}>
-                  <Row justify="space-between" align="middle" style={{ padding: '0 5px' }}>
-                    <Col span={23}>
-                      <div>
-                        <div>{item.note}</div>
-                      </div>
-                    </Col>
-                    <Col span={1}>
-                      <Popconfirm
-                        placement="leftTop"
-                        title="Bạn có muốn xoá không?"
-                        okText="Có"
-                        cancelText="Không"
-                        onConfirm={() => onDelete(item.id)}
-                      >
-                        <Typography.Link>
-                          <RestOutlined style={{ fontSize: '20px', cursor: 'pointer', color: '#FF5B5B' }} />
-                        </Typography.Link>
-                      </Popconfirm>
-                    </Col>
-                  </Row>
-                  <Row justify="space-between" align="middle" style={{ padding: '5px', color: '#bbb' }}>
-                    <Col span={12}>{item?.user?.name}</Col>
-                    <Col span={12} style={{ textAlign: 'right' }}>
-                      {moment(item?.createdAt).format('DD/MM/YYYY, HH:mm:ss')}
-                    </Col>
-                  </Row>
-                </Fragment>
-              );
-            })}
-          </Col>
-          <Col span={24}>
-            <H5>Thêm ghi chú</H5>
-            <Form form={form} onFinish={createNote} className="form-note">
-              <Row>
-                <Col span={22}>
-                  <Form.Item name="note">
-                    <TextArea rows={4} placeholder="Thêm ghi chú" />
-                  </Form.Item>
-                </Col>
-                <Col span={2}>
-                  <Form.Item>
-                    <Button className="button-send" htmlType="submit">
-                      <SendOutlined />
-                    </Button>
-                  </Form.Item>
-                </Col>
-              </Row>
-            </Form>
           </Col>
           <Col span={24}>
             <br />

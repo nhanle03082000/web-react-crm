@@ -23,7 +23,6 @@ import { CustomerList } from './list-route/CustomerList';
 import Main from '@app/pages/LeadsPage/Main';
 import Detail from '@app/pages/LeadsPage/components/Details/Detail';
 import CustomersDetail from '@app/pages/CustomersPage/components/Details/Detail';
-import { CustomerList1 } from './list-route/CustomerList1';
 import CustomersList from '@app/pages/CustomersPage/CustomersList';
 import CustomersMain from '@app/pages/CustomersPage/CustomersMain';
 

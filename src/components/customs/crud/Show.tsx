@@ -5,7 +5,6 @@ import { API_BASE_URL } from '@app/configs/api-configs';
 import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
-import RoleForm from '@app/pages/SettingPages/Roles/components/RoleForm';
 import { Popconfirm, Space, Tooltip } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import CustomPagination from '../CustomPagination';

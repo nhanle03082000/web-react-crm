@@ -17,7 +17,7 @@ import { apiInstance } from '@app/api/app/api_core';
 import CustomColumns from './components/CustomColumns';
 import AssignOverlay from './components/AssignOverlay';
 import LeadForm from './components/LeadForm';
-import Show from '../CustomersPage/components/Show';
+import Show from './components/Show';
 
 const Main: React.FC = () => {
   // const userListPermission = JSON.parse(getRoleUser());

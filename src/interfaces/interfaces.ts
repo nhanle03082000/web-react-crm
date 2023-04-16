@@ -15,6 +15,14 @@ export interface ITableData {
   data: BasicTableRow[];
 }
 
+export interface IFilter {
+  page: number;
+  limit: number;
+  sortBy: string;
+  sort: string;
+  total: number;
+}
+
 export interface IRespApiSuccess {
   code: number;
   data: any;
