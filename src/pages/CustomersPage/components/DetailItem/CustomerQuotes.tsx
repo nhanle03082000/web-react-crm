@@ -4,7 +4,7 @@ import { Table } from '@app/components/common/Table/Table';
 import { API_BASE_URL, API_URL } from '@app/configs/api-configs';
 import { notificationController } from '@app/controllers/notificationController';
 import { IFilter, IRespApiSuccess } from '@app/interfaces/interfaces';
-import { Space, Typography } from 'antd';
+import { Space, Tooltip, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { ReactComponent as MailIcon } from '@app/assets/icons/mail.svg';
 import { ColumnsType } from 'antd/es/table';
@@ -18,6 +18,7 @@ interface IProps {
 const CustomerQuotes: React.FC<IProps> = ({ id, handleDetailsQuotes }) => {
   const path = API_URL.QUOTES;
   const [dataContacts, setDataContacts] = useState<any>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [filter, setFilter] = useState<IFilter>({
     page: 1,
     limit: 20,
@@ -66,18 +67,22 @@ const CustomerQuotes: React.FC<IProps> = ({ id, handleDetailsQuotes }) => {
       render: (record: number) => {
         return (
           <Space>
-            <Typography.Link
-              onClick={() => sendMail(record)}
-              // style={checkPermission?.edit ? { display: 'unset' } : { display: 'none' }}
-            >
-              <MailIcon />
-            </Typography.Link>
-            <Typography.Link
-              onClick={() => handleDetailsQuotes(record)}
-              // style={checkPermission?.edit ? { display: 'unset' } : { display: 'none' }}
-            >
-              <EyeOutlined style={{ color: '#000' }} />
-            </Typography.Link>
+            <Tooltip placement="bottom" title="Gởi email">
+              <Typography.Link
+                onClick={() => sendMail(record)}
+                // style={checkPermission?.edit ? { display: 'unset' } : { display: 'none' }}
+              >
+                <MailIcon />
+              </Typography.Link>
+            </Tooltip>
+            <Tooltip placement="bottom" title="Xem chi tiết">
+              <Typography.Link
+                onClick={() => handleDetailsQuotes(record)}
+                // style={checkPermission?.edit ? { display: 'unset' } : { display: 'none' }}
+              >
+                <EyeOutlined style={{ color: '#000' }} />
+              </Typography.Link>
+            </Tooltip>
           </Space>
         );
       },
@@ -111,6 +116,7 @@ const CustomerQuotes: React.FC<IProps> = ({ id, handleDetailsQuotes }) => {
   ];
 
   const getCustomerContactsList = async () => {
+    setIsLoading(true);
     try {
       const respContacts: IRespApiSuccess = await apiInstance.get(`${API_BASE_URL}${path}?${f}`);
       if (respContacts.code === 200) {
@@ -125,6 +131,7 @@ const CustomerQuotes: React.FC<IProps> = ({ id, handleDetailsQuotes }) => {
         description: error.message,
       });
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -135,13 +142,23 @@ const CustomerQuotes: React.FC<IProps> = ({ id, handleDetailsQuotes }) => {
 
   return (
     <>
-      <Table columns={columns} dataSource={dataContacts} scroll={{ x: 800 }} rowKey="id" bordered pagination={false} />
-      <CustomPagination
-        totalItems={filter.total}
-        itemsPerPage={filter.limit}
-        currentPage={filter.page}
-        onPageChange={handlePageChange}
+      <Table
+        columns={columns}
+        loading={isLoading}
+        dataSource={dataContacts}
+        scroll={{ x: 800 }}
+        rowKey="id"
+        bordered
+        pagination={false}
       />
+      {dataContacts.length > 0 && (
+        <CustomPagination
+          totalItems={filter.total}
+          itemsPerPage={filter.limit}
+          currentPage={filter.page}
+          onPageChange={handlePageChange}
+        />
+      )}
     </>
   );
 };

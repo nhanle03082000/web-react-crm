@@ -9,7 +9,7 @@ import CustomPagination from '@app/components/customs/CustomPagination';
 import { API_BASE_URL, API_URL } from '@app/configs/api-configs';
 import { notificationController } from '@app/controllers/notificationController';
 import { IFilter, IRespApiSuccess } from '@app/interfaces/interfaces';
-import { Col, Form, Row, Typography } from 'antd';
+import { Col, Form, Row, Tooltip, Typography } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import React, { useEffect, useState } from 'react';
 
@@ -22,7 +22,7 @@ const CustomerContacts: React.FC<IProps> = ({ id }) => {
   const path = API_URL.CUSTOMERCONTACTS;
   const [dataContacts, setDataContacts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(false);
   const [filter, setFilter] = useState<IFilter>({
     page: 1,
     limit: 20,
@@ -109,18 +109,20 @@ const CustomerContacts: React.FC<IProps> = ({ id }) => {
       align: 'center',
       render: (_: any, record: any) => {
         return (
-          <Popconfirm
-            title="Bạn có muốn xoá không?"
-            okText="Có"
-            cancelText="Không"
-            onConfirm={() => onDelete(record.id)}
-          >
-            <Typography.Link
-            //  style={checkPermission?.delete ? { display: 'unset' } : { display: 'none' }}
+          <Tooltip placement="bottom" title="Xoá dữ liệu">
+            <Popconfirm
+              title="Bạn có muốn xoá không?"
+              okText="Có"
+              cancelText="Không"
+              onConfirm={() => onDelete(record.id)}
             >
-              <RestOutlined style={{ color: 'red' }} />
-            </Typography.Link>
-          </Popconfirm>
+              <Typography.Link
+              //  style={checkPermission?.delete ? { display: 'unset' } : { display: 'none' }}
+              >
+                <RestOutlined style={{ color: 'red' }} />
+              </Typography.Link>
+            </Popconfirm>
+          </Tooltip>
         );
       },
     },
@@ -157,6 +159,7 @@ const CustomerContacts: React.FC<IProps> = ({ id }) => {
   ];
 
   const getCustomerContactsList = async () => {
+    setIsLoading(true);
     try {
       const respContacts: IRespApiSuccess = await apiInstance.get(
         `${API_BASE_URL}${path}?f[0][field]=customer_id&f[0][operator]=contain&f[0][value]=${id}&${f}`,
@@ -173,6 +176,7 @@ const CustomerContacts: React.FC<IProps> = ({ id }) => {
         description: error.message,
       });
     }
+    setIsLoading(false);
   };
   useEffect(() => {
     getCustomerContactsList();
@@ -180,13 +184,23 @@ const CustomerContacts: React.FC<IProps> = ({ id }) => {
 
   return (
     <>
-      <Table columns={columns} dataSource={dataContacts} scroll={{ x: 800 }} rowKey="id" bordered pagination={false} />
-      <CustomPagination
-        totalItems={filter.total}
-        itemsPerPage={filter.limit}
-        currentPage={filter.page}
-        onPageChange={handlePageChange}
+      <Table
+        columns={columns}
+        loading={isLoading}
+        dataSource={dataContacts}
+        scroll={{ x: 800 }}
+        rowKey="id"
+        bordered
+        pagination={false}
       />
+      {dataContacts.length > 0 && (
+        <CustomPagination
+          totalItems={filter.total}
+          itemsPerPage={filter.limit}
+          currentPage={filter.page}
+          onPageChange={handlePageChange}
+        />
+      )}
       <Button type="primary" onClick={showModal} icon={<PlusOutlined />}>
         Thêm
       </Button>

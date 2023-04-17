@@ -20,4 +20,18 @@ export const customStyle = css`
   .button-back:active {
     background: none;
   }
+  .sale-button {
+    position: relative;
+  }
+  .sale-total {
+    position: absolute;
+    top: -8px;
+    right: -6px;
+    border: 1px solid #ff0044;
+    background-color: #fff;
+    padding: 0 6px;
+    font-size: 10px;
+    border-radius: 50%;
+    color: #ff0044;
+  }
 `;

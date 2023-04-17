@@ -13,7 +13,6 @@ import { IFilter, IRespApiSuccess } from '@app/interfaces/interfaces';
 import { Col, Form, Row, Typography } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import moment from 'moment';
-import type { DatePickerProps, RangePickerProps } from 'antd/es/date-picker';
 import React, { useEffect, useState } from 'react';
 
 interface IProps {
@@ -26,6 +25,7 @@ const CustomerTask: React.FC<IProps> = ({ employee_id, customer_id }) => {
   const path = API_URL.CUSTOMERTASK;
   const [dataContacts, setDataContacts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [filter, setFilter] = useState<IFilter>({
     page: 1,
@@ -159,6 +159,8 @@ const CustomerTask: React.FC<IProps> = ({ employee_id, customer_id }) => {
   ];
 
   const getCustomerContactsList = async () => {
+    setIsLoading(true);
+
     try {
       const respContacts: IRespApiSuccess = await apiInstance.get(`${API_BASE_URL}${path}?${f}`);
       if (respContacts.code === 200) {
@@ -173,6 +175,7 @@ const CustomerTask: React.FC<IProps> = ({ employee_id, customer_id }) => {
         description: error.message,
       });
     }
+    setIsLoading(false);
   };
   useEffect(() => {
     if (employee_id != 0) {
@@ -193,13 +196,23 @@ const CustomerTask: React.FC<IProps> = ({ employee_id, customer_id }) => {
 
   return (
     <>
-      <Table columns={columns} dataSource={dataContacts} scroll={{ x: 800 }} rowKey="id" bordered pagination={false} />
-      <CustomPagination
-        totalItems={filter.total}
-        itemsPerPage={filter.limit}
-        currentPage={filter.page}
-        onPageChange={handlePageChange}
+      <Table
+        columns={columns}
+        loading={isLoading}
+        dataSource={dataContacts}
+        scroll={{ x: 800 }}
+        rowKey="id"
+        bordered
+        pagination={false}
       />
+      {dataContacts.length > 0 && (
+        <CustomPagination
+          totalItems={filter.total}
+          itemsPerPage={filter.limit}
+          currentPage={filter.page}
+          onPageChange={handlePageChange}
+        />
+      )}
       <Button type="primary" onClick={showModal} icon={<PlusOutlined />}>
         Thêm
       </Button>

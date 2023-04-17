@@ -28,11 +28,12 @@ interface ISelectOption {
 
 interface Iprops {
   setIsEdit: any;
+  data: any;
 }
 
-const EditDetail: React.FC<Iprops> = ({ setIsEdit }) => {
+const EditDetail: React.FC<Iprops> = ({ setIsEdit, data }) => {
   const [form] = Form.useForm();
-  const { state, path } = useContext(DataContext);
+  const { path } = useContext(DataContext);
   const [provinces, setProvinces] = useState<ISelectOption[]>([{ value: '', label: '' }]);
   const [districts, setDistricts] = useState<ISelectOption[]>([{ value: '', label: '' }]);
   const [areas, setAreas] = useState<ISelectOption[]>([{ value: '', label: '' }]);
@@ -41,20 +42,20 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit }) => {
   const [saleProcesses, setSaleProcesses] = useState<ISelectOption[]>([{ value: '', label: '' }]);
 
   const initialValues = {
-    tax_code: state.tax_code,
-    company_name: state.company_name,
-    name: state.name,
-    headquarters_address: state.headquarters_address,
-    headquarters_province_id: state.province.id,
-    headquarters_district_id: state.district.id,
-    headquarters_area_id: state.area.id,
-    headquarters_email: state.headquarters_email,
-    headquarters_phone: state.headquarters_phone,
-    email: state.email,
-    phone_number: state.phone_number,
-    company_field_id: state.company_field.id,
-    customer_source_id: state.customer_source.id,
-    sale_process: state.sale_process.id,
+    tax_code: data.tax_code,
+    company_name: data.company_name,
+    name: data.name,
+    headquarters_address: data.headquarters_address,
+    headquarters_province_id: data.province.id,
+    headquarters_district_id: data.district.id,
+    headquarters_area_id: data.area.id,
+    headquarters_email: data.headquarters_email,
+    headquarters_phone: data.headquarters_phone,
+    email: data.email,
+    phone_number: data.phone_number,
+    company_field_id: data.company_field.id,
+    customer_source_id: data.customer_source.id,
+    sale_process: data.sale_process.id,
   };
 
   const onChangeProvinces = (values: any) => {
@@ -143,14 +144,13 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit }) => {
   }, []);
 
   const onUpdate = async (values: any) => {
-    const data = {
+    const data1 = {
       ...values,
       customer_source_id: 2,
       is_active: true,
     };
-    console.log(data);
     try {
-      const respUpdate: IRespApiSuccess = await apiInstance.put(`${API_BASE_URL}${path}/${state.id}`, data);
+      const respUpdate: IRespApiSuccess = await apiInstance.put(`${API_BASE_URL}${path}/${data.id}`, data1);
       if (respUpdate.code === 200) {
         notificationController.success({
           message: 'Cập nhật thành công',

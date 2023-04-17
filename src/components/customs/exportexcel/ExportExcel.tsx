@@ -47,7 +47,7 @@ const ExportExcel: React.FC<IProps> = ({ param = '' }) => {
 
   return (
     <ExportExcelStyles>
-      <Tooltip placement="bottom" title="Xuất dữ liệu bảng">
+      <Tooltip placement="bottomRight" title="Xuất dữ liệu bảng">
         <Button onClick={onExport} type="primary">
           <img src={ExcelIcon} alt="xuất file excel" />
         </Button>

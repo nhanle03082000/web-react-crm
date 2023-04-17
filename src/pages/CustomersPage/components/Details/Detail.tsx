@@ -16,12 +16,15 @@ import CustomerQuotes from '../DetailItem/CustomerQuotes';
 import CustomerReminder from '../DetailItem/CustomerReminder';
 import CustomerTask from '../DetailItem/CustomerTask';
 import EditDetail from './EditDetail';
+import DetailsQuotes from './DetailsQuotes';
 
 const Detail: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [isEdit, setIsEdit] = useState(false);
   const [data, setData] = useState<any>([]);
+  const [isDetailQuotes, setIsDetailQuotes] = useState(false);
+  const [isIdQuotes, setIsIdQuotes] = useState<number>(0);
 
   const onEdit = () => {
     setIsEdit(true);
@@ -29,6 +32,11 @@ const Detail: React.FC = () => {
 
   const onBack = () => {
     navigate('/customers');
+  };
+
+  const handleDetailsQuotes = (id: number) => {
+    setIsDetailQuotes(true);
+    setIsIdQuotes(id);
   };
 
   useEffect(() => {
@@ -79,7 +87,7 @@ const Detail: React.FC = () => {
     {
       label: 'Lịch sử báo giá',
       key: '2',
-      children: <CustomerQuotes id={data?.id} handleDetailsQuotes={''} />,
+      children: <CustomerQuotes id={data?.id} handleDetailsQuotes={handleDetailsQuotes} />,
     },
     {
       label: 'Giải pháp quan tâm',
@@ -101,11 +109,11 @@ const Detail: React.FC = () => {
       key: '6',
       children: <CustomerReminder id={data?.id} />,
     },
-    // {
-    //   label: 'Đơn hàng',
-    //   key: '7',
-    //   children: `Content of Tab Pane 3`,
-    // },
+    {
+      label: 'Đơn hàng',
+      key: '7',
+      children: `Content of Tab Pane 3`,
+    },
     {
       label: 'Ghi chú',
       key: '8',
@@ -113,7 +121,9 @@ const Detail: React.FC = () => {
     },
   ];
 
-  return (
+  return isDetailQuotes ? (
+    <DetailsQuotes id={isIdQuotes} setIsDetailQuotes={setIsDetailQuotes} />
+  ) : (
     <DetailStyles>
       <Row>
         <Col span={24}>
@@ -124,7 +134,7 @@ const Detail: React.FC = () => {
         </Col>
         {isEdit ? (
           <Col span={24}>
-            <EditDetail setIsEdit={setIsEdit} />
+            <EditDetail data={data} setIsEdit={setIsEdit} />
           </Col>
         ) : (
           <Col span={24}>

@@ -109,7 +109,7 @@ const Detail: React.FC = () => {
         </Col>
         {isEdit ? (
           <Col span={24}>
-            <EditDetail setIsEdit={setIsEdit} />
+            <EditDetail data={data} setIsEdit={setIsEdit} />
           </Col>
         ) : (
           <Col span={24}>

@@ -6,9 +6,10 @@ import { Table } from '@app/components/common/Table/Table';
 import { Button } from '@app/components/common/buttons/Button/Button';
 import { Input } from '@app/components/common/inputs/Input/Input';
 import { DatePicker } from '@app/components/common/pickers/DatePicker';
+import CustomPagination from '@app/components/customs/CustomPagination';
 import { API_BASE_URL, API_URL } from '@app/configs/api-configs';
 import { notificationController } from '@app/controllers/notificationController';
-import { IRespApiSuccess } from '@app/interfaces/interfaces';
+import { IFilter, IRespApiSuccess } from '@app/interfaces/interfaces';
 import { Col, Form, Row, Typography } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
@@ -22,6 +23,22 @@ const CustomerReminder: React.FC<IProps> = ({ id }) => {
   const path = API_URL.CUSTOMERREMINDERS;
   const [dataContacts, setDataContacts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [filter, setFilter] = useState<IFilter>({
+    page: 1,
+    limit: 20,
+    sortBy: '',
+    total: 0,
+    sort: 'asc',
+  });
+
+  const handlePageChange = (page: number) => {
+    setFilter({ ...filter, page: page });
+  };
+
+  const f = Object.entries(filter)
+    .map(([key, value]: any) => `${key}=${value}`)
+    .join('&');
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -127,9 +144,11 @@ const CustomerReminder: React.FC<IProps> = ({ id }) => {
   ];
 
   const getCustomerContactsList = async () => {
+    setIsLoading(true);
+
     try {
       const respContacts: IRespApiSuccess = await apiInstance.get(
-        `${API_BASE_URL}${path}?f[0][field]=customer_id&f[0][operator]=contain&f[0][value]=${id}`,
+        `${API_BASE_URL}${path}?f[0][field]=customer_id&f[0][operator]=contain&f[0][value]=${id}&${f}`,
       );
       if (respContacts.code === 200) {
         respContacts.data.collection.map((item: any, index: number) => {
@@ -143,6 +162,7 @@ const CustomerReminder: React.FC<IProps> = ({ id }) => {
         description: error.message,
       });
     }
+    setIsLoading(false);
   };
   useEffect(() => {
     if (id != 0) {
@@ -152,7 +172,23 @@ const CustomerReminder: React.FC<IProps> = ({ id }) => {
 
   return (
     <>
-      <Table columns={columns} dataSource={dataContacts} scroll={{ x: 800 }} rowKey="id" />
+      <Table
+        columns={columns}
+        loading={isLoading}
+        dataSource={dataContacts}
+        scroll={{ x: 800 }}
+        rowKey="id"
+        bordered
+        pagination={false}
+      />
+      {dataContacts.length > 0 && (
+        <CustomPagination
+          totalItems={filter.total}
+          itemsPerPage={filter.limit}
+          currentPage={filter.page}
+          onPageChange={handlePageChange}
+        />
+      )}
       <Button type="primary" onClick={showModal} icon={<PlusOutlined />}>
         Thêm
       </Button>

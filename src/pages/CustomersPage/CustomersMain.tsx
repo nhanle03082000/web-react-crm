@@ -141,7 +141,9 @@ const CustomersMain: React.FC = () => {
   useEffect(() => {
     const getSaleProcessesList = async () => {
       try {
-        const respSaleProcesses: IRespApiSuccess = await apiInstance.get(`${API_BASE_URL}${API_URL.SALEPROCESSES}`);
+        const respSaleProcesses: IRespApiSuccess = await apiInstance.get(
+          `${API_BASE_URL}${API_URL.SALEPROCESSES}?f[0][field]=type&f[0][operator]=contain&f[0][value]=customer&page=1&limit=10&sort_direction=asc&sort_column=sale_process_index`,
+        );
         setSaleProcesses(respSaleProcesses.data.collection);
       } catch (error: any) {}
     };
@@ -196,10 +198,12 @@ const CustomersMain: React.FC = () => {
                   {saleProcesses.map((item: any) => {
                     return (
                       <Button
+                        className="sale-button"
                         key={item.id}
                         style={{ backgroundColor: item.color, color: '#fff', borderRadius: '20px', border: 'none' }}
                         onClick={() => onFilterChange(item.id)}
                       >
+                        <div className="sale-total">{item.total}</div>
                         {item.name}
                       </Button>
                     );

@@ -5,10 +5,12 @@ import { Popconfirm } from '@app/components/common/Popconfirm/Popconfirm';
 import { Table } from '@app/components/common/Table/Table';
 import { Button } from '@app/components/common/buttons/Button/Button';
 import { Input } from '@app/components/common/inputs/Input/Input';
+import CustomPagination from '@app/components/customs/CustomPagination';
 import { API_BASE_URL, API_URL } from '@app/configs/api-configs';
 import { notificationController } from '@app/controllers/notificationController';
-import { IRespApiSuccess } from '@app/interfaces/interfaces';
-import { Col, Form, Row, Typography } from 'antd';
+import { IFilter, IRespApiSuccess } from '@app/interfaces/interfaces';
+import { Col, Form, Row, Tooltip, Typography } from 'antd';
+import { ColumnsType } from 'antd/es/table';
 import React, { useEffect, useState } from 'react';
 
 interface IProps {
@@ -20,6 +22,23 @@ const CustomerNote: React.FC<IProps> = ({ id }) => {
   const path = API_URL.CUSTOMERNOTES;
   const [dataContacts, setDataContacts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [filter, setFilter] = useState<IFilter>({
+    page: 1,
+    limit: 20,
+    sortBy: '',
+    total: 0,
+    sort: 'asc',
+  });
+
+  const handlePageChange = (page: number) => {
+    setFilter({ ...filter, page: page });
+  };
+
+  const f = Object.entries(filter)
+    .map(([key, value]: any) => `${key}=${value}`)
+    .join('&');
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -79,29 +98,32 @@ const CustomerNote: React.FC<IProps> = ({ id }) => {
     // }
   };
 
-  const columns = [
+  const columns: ColumnsType = [
     {
       title: 'STT',
       dataIndex: 'stt',
     },
     {
       // title: t('tables.actions'),
+      align: 'center',
       title: 'Thao tác',
       dataIndex: 'actions',
       render: (_: any, record: any) => {
         return (
-          <Popconfirm
-            title="Bạn có muốn xoá không?"
-            okText="Có"
-            cancelText="Không"
-            onConfirm={() => onDelete(record.id)}
-          >
-            <Typography.Link
-            //  style={checkPermission?.delete ? { display: 'unset' } : { display: 'none' }}
+          <Tooltip placement="bottom" title="Xoá dữ liệu">
+            <Popconfirm
+              title="Bạn có muốn xoá không?"
+              okText="Có"
+              cancelText="Không"
+              onConfirm={() => onDelete(record.id)}
             >
-              <RestOutlined style={{ color: 'red' }} />
-            </Typography.Link>
-          </Popconfirm>
+              <Typography.Link
+              //  style={checkPermission?.delete ? { display: 'unset' } : { display: 'none' }}
+              >
+                <RestOutlined style={{ color: 'red' }} />
+              </Typography.Link>
+            </Popconfirm>
+          </Tooltip>
         );
       },
     },
@@ -112,16 +134,7 @@ const CustomerNote: React.FC<IProps> = ({ id }) => {
     {
       title: 'Ngày tạo',
       dataIndex: 'createdAt',
-      editable: false,
-      render: (record: string): string => {
-        const date = new Date(record);
-        return date.toLocaleDateString('en-GB');
-      },
-    },
-    {
-      title: 'Người cập nhật',
-      dataIndex: 'updatedAt',
-      editable: false,
+      align: 'right',
       render: (record: string): string => {
         const date = new Date(record);
         return date.toLocaleDateString('en-GB');
@@ -130,9 +143,10 @@ const CustomerNote: React.FC<IProps> = ({ id }) => {
   ];
 
   const getCustomerContactsList = async () => {
+    setIsLoading(true);
     try {
       const respContacts: IRespApiSuccess = await apiInstance.get(
-        `${API_BASE_URL}${path}?f[0][field]=customer_id&f[0][operator]=contain&f[0][value]=${id}`,
+        `${API_BASE_URL}${path}?f[0][field]=customer_id&f[0][operator]=contain&f[0][value]=${id}&${f}`,
       );
       if (respContacts.code === 200) {
         respContacts.data.collection.map((item: any, index: number) => {
@@ -146,6 +160,7 @@ const CustomerNote: React.FC<IProps> = ({ id }) => {
         description: error.message,
       });
     }
+    setIsLoading(false);
   };
   useEffect(() => {
     if (id != 0) {
@@ -155,7 +170,23 @@ const CustomerNote: React.FC<IProps> = ({ id }) => {
 
   return (
     <>
-      <Table columns={columns} dataSource={dataContacts} scroll={{ x: 800 }} rowKey="id" />
+      <Table
+        columns={columns}
+        loading={isLoading}
+        dataSource={dataContacts}
+        scroll={{ x: 800 }}
+        rowKey="id"
+        bordered
+        pagination={false}
+      />
+      {dataContacts.length > 0 && (
+        <CustomPagination
+          totalItems={filter.total}
+          itemsPerPage={filter.limit}
+          currentPage={filter.page}
+          onPageChange={handlePageChange}
+        />
+      )}
       <Button type="primary" onClick={showModal} icon={<PlusOutlined />}>
         Thêm
       </Button>
