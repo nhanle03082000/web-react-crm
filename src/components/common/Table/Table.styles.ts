@@ -10,9 +10,9 @@ export const Table = styled(AntdTable)`
   }
   & thead .ant-table-cell {
     font-size: ${FONT_SIZE.md};
-    line-height: 1.25rem;
+    line-height: 1rem;
     padding: 12px;
-    font-weight: ${FONT_WEIGHT.bold};
+    font-weight: ${FONT_WEIGHT.light};
     white-space: nowrap;
     text-align: center !important;
 

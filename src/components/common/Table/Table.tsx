@@ -5,5 +5,5 @@ import './Table.less';
 
 // TODO make generic!
 export const Table: React.FC<TableProps<any>> = (props) => {
-  return <S.Table {...props} size="small" />;
+  return <S.Table {...props} bordered size="small" />;
 };

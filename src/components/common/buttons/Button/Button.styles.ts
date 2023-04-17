@@ -15,6 +15,8 @@ export const Button = styled(AntButton)<BtnProps>`
   height: unset;
   padding: 4px 10px;
   box-shadow: none;
+  font-size: 15px;
+  font-weight: 300;
   ${(props) =>
     props.$noStyle &&
     css`

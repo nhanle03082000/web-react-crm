@@ -58,7 +58,10 @@ export const SiderContent = styled.div`
   overflow-x: hidden;
   height: calc(100vh - ${LAYOUT.mobile.headerHeight});
   max-height: calc(100vh - ${LAYOUT.mobile.headerHeight});
-
+  a,
+  span {
+    font-weight: 300;
+  }
   @media only screen and ${media.md} {
     max-height: calc(100vh - ${LAYOUT.desktop.headerHeight});
     height: calc(100vh - ${LAYOUT.desktop.headerHeight});

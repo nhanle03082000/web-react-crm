@@ -78,8 +78,8 @@ const Roles: React.FC = () => {
                 <H3 className="typography-title">{page}</H3>
               </Col>
               <Col span={3}>
-                <div style={{ display: 'flex', width: '100%' }}>
-                  <ExportExcel param={''} /> &nbsp;&nbsp;
+                <div style={{ display: 'flex', width: '100%', gap: '10px', justifyContent: 'flex-end' }}>
+                  <ExportExcel param={param} />
                   <Create>
                     <RoleForm isEditing={false} />
                   </Create>

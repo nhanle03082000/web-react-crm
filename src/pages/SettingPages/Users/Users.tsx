@@ -74,7 +74,7 @@ const Users: React.FC = () => {
               </Col>
               <Col span={12}>
                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <ExportExcel param={''} /> &nbsp;&nbsp;
+                  <ExportExcel param={param} />
                 </div>
               </Col>
             </Row>
