@@ -27,7 +27,6 @@ const Update: React.FC<IProps> = ({ children, id, onShow }) => {
       setState({ data: dataById, rolePermission: JSON.parse(dataById.permission) });
     } else {
       setState(dataById);
-      console.log(dataById);
     }
     form.setFieldsValue(dataById);
   };
@@ -75,14 +74,7 @@ const Update: React.FC<IProps> = ({ children, id, onShow }) => {
       <Tooltip placement="bottom" title="Sửa dữ liệu">
         <EditOutlined onClick={showModal} style={{ fontSize: '20px', cursor: 'pointer' }} />
       </Tooltip>
-      <Modal
-        title={`Sửa ${page}`}
-        open={isModalOpen}
-        onCancel={handleCancel}
-        maskClosable={false}
-        size="large"
-        footer={null}
-      >
+      <Modal title={`Sửa ${page}`} open={isModalOpen} onCancel={handleCancel} maskClosable={false} footer={null}>
         <Form form={form} onFinish={onUpdate} layout="vertical">
           {children}
           <Row gutter={[10, 0]} justify="end">

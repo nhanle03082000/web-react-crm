@@ -18,6 +18,18 @@ export const ConvertTextCheckBox = (key: string): string => {
     case 'delete':
       return 'Xóa';
       break;
+    case 'import':
+      return 'Thêm bằng file';
+      break;
+    case 'assign':
+      return 'Phân quyền';
+      break;
+    case 'admin_system':
+      return 'Quản trị hệ thống';
+      break;
+    case 'admin_department':
+      return 'Ban quản trị';
+      break;
     default:
       return key;
       break;
@@ -58,6 +70,54 @@ export const ConvertTextRoles = (key: string): string => {
       break;
     case 'sale_processes':
       return 'Bán hàng';
+      break;
+    case 'provinces':
+      return 'Tỉnh/Thành phố';
+      break;
+    case 'districts':
+      return 'Quận/Huyện';
+      break;
+    case 'areas':
+      return 'Phường/Xã';
+      break;
+    case 'lead_notes':
+      return 'Ghi chú - tiềm năng';
+      break;
+    case 'customers':
+      return 'Khách hàng';
+      break;
+    case 'products':
+      return 'Sản phẩm';
+      break;
+    case 'customer_notes':
+      return 'Ghi chú - khách hàng';
+      break;
+    case 'customer_products':
+      return 'Giải pháp - khách hàng';
+      break;
+    case 'customer_contacts':
+      return 'Thông tin liên hệ - Khách hàng';
+      break;
+    case 'customer_reminders':
+      return 'Nhắc nhỡ - Khách hàng';
+      break;
+    case 'tasks':
+      return 'Công việc - Khách hàng';
+      break;
+    case 'quotes':
+      return 'Lịch sử báo giá - Khách hàng';
+      break;
+    case 'quotes_details':
+      return 'Chi tiết lịch sử báo giá - Khách hàng';
+      break;
+    case 'notifications':
+      return 'Thông báo';
+      break;
+    case 'orders':
+      return 'Đơn hàng - Khách hàng';
+      break;
+    case 'order_details':
+      return 'Chi tiết đơn hàng - Khách hàng';
       break;
     default:
       return key;
