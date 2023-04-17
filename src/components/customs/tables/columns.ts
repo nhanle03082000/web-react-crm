@@ -179,16 +179,16 @@ export const userColumn = [
     title: 'Đơn vị',
     dataIndex: 'department',
     editable: false,
-    render: (record: Department): string => {
-      return record.name;
+    render: (record: Department): string | null => {
+      return record?.name || null;
     },
   },
   {
     title: 'Vai trò',
     dataIndex: 'role',
     editable: false,
-    render: (record: Role): string => {
-      return record.name;
+    render: (record: Role): string | null => {
+      return record?.name || null;
     },
   },
 ];
@@ -225,29 +225,29 @@ export const columnLead = [
   {
     title: 'Nhân viên phụ trách',
     dataIndex: 'employee',
-    render: (record: { id: number; name: string }): string => {
-      return record.name;
+    render: (record: { id: number; name: string }): string | null => {
+      return record?.name || null;
     },
   },
   {
     title: 'Nguồn gốc',
     dataIndex: 'customer_source',
-    render: (record: { id: number; name: string }): string => {
-      return record.name;
+    render: (record: { id: number; name: string }): string | null => {
+      return record?.name || null;
     },
   },
   {
     title: 'Lĩnh vực hoạt động',
     dataIndex: 'company_field',
-    render: (record: { id: number; name: string }): string => {
-      return record.name;
+    render: (record: { id: number; name: string }): string | null => {
+      return record?.name || null;
     },
   },
   {
     title: 'Quy trình bán hàng',
     dataIndex: 'sale_process',
-    render: (record: { id: number; name: string }): string => {
-      return record.name;
+    render: (record: { id: number; name: string }): string | null => {
+      return record?.name || null;
     },
   },
   {
@@ -257,22 +257,22 @@ export const columnLead = [
   {
     title: 'Tỉnh/Thành phố',
     dataIndex: 'province',
-    render: (record: { id: number; name: string }): string => {
-      return record.name;
+    render: (record: { id: number; name: string }): string | null => {
+      return record?.name || null;
     },
   },
   {
     title: 'Quận/Huyện',
     dataIndex: 'district',
-    render: (record: { id: number; name: string }): string => {
-      return record.name;
+    render: (record: { id: number; name: string }): string | null => {
+      return record?.name || null;
     },
   },
   {
     title: 'Phường/Xã',
     dataIndex: 'area',
-    render: (record: { id: number; name: string }): string => {
-      return record.name;
+    render: (record: { id: number; name: string }): string | null => {
+      return record?.name || null;
     },
   },
 ];

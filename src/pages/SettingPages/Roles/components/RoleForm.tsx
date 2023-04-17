@@ -1,5 +1,5 @@
 import { Input, TextArea } from '@app/components/common/inputs/Input/Input';
-import { Col, Form, Row, Space } from 'antd';
+import { Col, Form, Row, Space, Typography } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import { IMyObject } from '../RoleInterface';
 import { ConvertTextCheckBox, ConvertTextRoles } from '@app/utils/converts';
@@ -74,16 +74,20 @@ const RoleForm: React.FC<IProps> = ({ isEditing }) => {
             state.rolePermission.map((item: IMyObject, index: number) => {
               return (
                 <Row key={index} justify="space-between" className="row-role">
-                  <Col>{ConvertTextRoles(item.name)}</Col>
-                  <div style={{ display: 'flex' }}>
-                    {Object.entries(item.actions).map(([key, value]: any) => (
-                      <div key={key}>
-                        <Checkbox checked={value} onChange={onChange(item, key)}>
-                          {ConvertTextCheckBox(key)}
-                        </Checkbox>
-                      </div>
-                    ))}
-                  </div>
+                  <Col span={6} style={{ textAlign: 'left' }}>
+                    <Typography.Text style={{ fontSize: '14px' }}>{ConvertTextRoles(item.name)}</Typography.Text>
+                  </Col>
+                  <Col span={18}>
+                    <Row>
+                      {Object.entries(item.actions).map(([key, value]: any) => (
+                        <Col span={4} key={key} style={{ textAlign: 'left' }}>
+                          <Checkbox checked={value} onChange={onChange(item, key)}>
+                            <Typography.Text style={{ fontSize: '13px' }}>{ConvertTextCheckBox(key)}</Typography.Text>
+                          </Checkbox>
+                        </Col>
+                      ))}
+                    </Row>
+                  </Col>
                 </Row>
               );
             })}

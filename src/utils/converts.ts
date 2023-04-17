@@ -19,16 +19,16 @@ export const ConvertTextCheckBox = (key: string): string => {
       return 'Xóa';
       break;
     case 'import':
-      return 'Thêm bằng file';
+      return 'Nhập file';
       break;
     case 'assign':
       return 'Phân quyền';
       break;
     case 'admin_system':
-      return 'Quản trị hệ thống';
+      return 'Quản trị bộ phận';
       break;
     case 'admin_department':
-      return 'Ban quản trị';
+      return 'Quản trị phòng ban';
       break;
     default:
       return key;
@@ -83,6 +83,15 @@ export const ConvertTextRoles = (key: string): string => {
     case 'lead_notes':
       return 'Ghi chú - tiềm năng';
       break;
+    case 'lead':
+      return 'Tiềm năng';
+      break;
+    case 'email_config':
+      return 'Cấu hình mail';
+      break;
+    case 'logs':
+      return 'Nhật ký';
+      break;
     case 'customers':
       return 'Khách hàng';
       break;
@@ -107,7 +116,7 @@ export const ConvertTextRoles = (key: string): string => {
     case 'quotes':
       return 'Lịch sử báo giá - Khách hàng';
       break;
-    case 'quotes_details':
+    case 'quote_details':
       return 'Chi tiết lịch sử báo giá - Khách hàng';
       break;
     case 'notifications':
