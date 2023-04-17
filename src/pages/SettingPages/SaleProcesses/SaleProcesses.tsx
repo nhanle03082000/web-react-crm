@@ -31,7 +31,7 @@ const SaleProcesses: React.FC = () => {
 
   const option = [
     {
-      value: 'id',
+      value: 'code',
       label: 'Mã',
       type: 'string',
     },
@@ -58,7 +58,7 @@ const SaleProcesses: React.FC = () => {
   ];
 
   const initialValue = [
-    { field: 'id', operator: 'contain', value: '' },
+    { field: 'code', operator: 'contain', value: '' },
     { field: 'name', operator: 'contain', value: '' },
   ];
 

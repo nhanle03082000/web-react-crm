@@ -1,120 +1,103 @@
-import { apiInstance } from '@app/api/app/api_core';
-import { TextArea } from '@app/components/common/inputs/Input/Input';
+import { Card } from '@app/components/common/Card/Card';
 import { PageTitle } from '@app/components/common/PageTitle/PageTitle';
-import Crud from '@app/components/customs/crudv1/Crud';
-import CustomLoading from '@app/components/customs/CustomLoading';
-import { column } from '@app/components/customs/tables/columns';
-import { API_BASE_URL, API_URL } from '@app/configs/api-configs';
-import { notificationController } from '@app/controllers/notificationController';
+import { H3 } from '@app/components/common/typography/H3/H3';
+import Show from '@app/components/customs/crud/Show';
+import ExportExcel from '@app/components/customs/exportexcel/ExportExcel';
+import Filter from '@app/components/customs/filter/Filter';
+import { API_URL } from '@app/configs/api-configs';
+import { DataContext } from '@app/contexts/DataContext';
 import { useAppSelector } from '@app/hooks/reduxHooks';
-import { IRespApiSuccess } from '@app/interfaces/interfaces';
 import { getRoleUser } from '@app/utils/redux.util';
-import { Form, Input } from 'antd';
+import { Col, Row } from 'antd';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import CustomerSourceForm from './components/CustomerSourceForm';
+import { column } from '@app/components/customs/tables/columns';
+import Create from '@app/components/customs/crud/Create';
 
 const CustomerSources: React.FC = () => {
-  const path = API_URL.CUSTOMERSOURCES;
-  const userListPermission = JSON.parse(getRoleUser());
-  const permission = userListPermission?.filter((item: any) => item.name === path.replace(/\//g, ''))[0].actions;
-  const isEditing = useAppSelector((state) => state.app.editing);
-
   const { t } = useTranslation();
-  const [loading, setLoading] = useState<boolean>(false);
+  const path = API_URL.CUSTOMERSOURCES;
+  const page = t('namepage.nguongoc');
+  // const userListPermission = JSON.parse(getRoleUser());
+  // const permission = userListPermission?.filter((item: any) => item.name === path.replace(/\//g, ''))[0].actions;
+  const [isLoad, setIsLoad] = useState<boolean>(false);
+  const [param, setParam] = useState('');
   const [state, setState] = useState<any>({
-    data: {
-      id: 0,
-      code: '',
-      name: '',
-      description: '',
-      is_active: false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    defaultInputValues: { name: '', code: '', description: '' },
+    data: {},
+    rolePermission: [],
+    defaultInputValues: {},
   });
 
   const option = [
     {
-      value: 'filter',
-      label: 'Lọc theo trường',
-      disabled: true,
-    },
-    {
       value: 'code',
       label: 'Mã',
-    },
-    {
-      value: 'create_at',
-      label: 'Ngày tạo',
-    },
-    {
-      value: 'update_at',
-      label: 'Ngày cập nhật',
+      type: 'string',
     },
     {
       value: 'name',
       label: 'Tên',
+      type: 'string',
     },
     {
       value: 'description',
       label: 'Mô tả',
+      type: 'string',
+    },
+    {
+      value: 'createdAt',
+      label: 'Ngày tạo',
+      type: 'datetime',
+    },
+    {
+      value: 'updatedAt',
+      label: 'Ngày cập nhật',
+      type: 'datetime',
     },
   ];
 
-  const getDataByID = async (idData: number) => {
-    setLoading(true);
-    try {
-      const respDataById: IRespApiSuccess = await apiInstance.get(`${API_BASE_URL}${path}/${idData}`);
-      if (respDataById.code === 200) {
-        setState({
-          ...state,
-          data: respDataById?.data,
-          defaultInputValues: {
-            name: respDataById?.data?.name,
-            code: respDataById?.data?.code,
-            description: respDataById?.data?.description,
-          },
-        });
-      }
-    } catch (error: any) {
-      notificationController.error({
-        message: 'Có lỗi xảy ra vui lòng thử lại sau',
-        description: error.message,
-      });
-    }
-    setLoading(false);
-  };
+  const initialValue = [
+    { field: 'code', operator: 'contain', value: '' },
+    { field: 'name', operator: 'contain', value: '' },
+  ];
+
   return (
-    <>
-      <PageTitle>{t('namepage.nguongoc')}</PageTitle>
-      <Crud
-        checkPermission={permission}
-        column={column}
-        path={path}
-        option={option}
-        getDataByID={getDataByID}
-        state={state}
-        getDataModal={''}
-        namePage={t('namepage.nguongoc')}
-      >
-        {loading ? (
-          <CustomLoading />
-        ) : (
-          <>
-            <Form.Item name="code" label="Mã nhóm">
-              <Input placeholder="Nhập mã nhóm" size="small" disabled={isEditing} />
-            </Form.Item>
-            <Form.Item name="name" label="Tên nhóm">
-              <TextArea rows={4} placeholder="Nhập tên nhóm" size="small" />
-            </Form.Item>
-            <Form.Item name="description" label="Mô tả">
-              <TextArea rows={4} placeholder="Viết mô tả" size="small" />
-            </Form.Item>
-          </>
-        )}
-      </Crud>
-    </>
+    <DataContext.Provider value={{ path, page, state, setState, isLoad, setIsLoad }}>
+      <PageTitle>{page}</PageTitle>
+      <Row gutter={[10, 10]}>
+        <Col span={24}>
+          <Card padding="1rem">
+            <Row justify={'space-between'}>
+              <Col span={12}>
+                <H3 className="typography-title">{page}</H3>
+              </Col>
+              <Col span={12}>
+                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <ExportExcel param={param} />
+                  &nbsp;&nbsp;
+                  <Create>
+                    <CustomerSourceForm isEditing={false} />
+                  </Create>
+                </div>
+              </Col>
+            </Row>
+            <Row style={{ marginTop: '10px' }}>
+              <Col span={24}>
+                <Filter initialValue={initialValue} option={option} setParam={setParam} />
+              </Col>
+            </Row>
+          </Card>
+        </Col>
+        <Col span={24}>
+          <Card padding="1rem">
+            <Show param={param} colums={column}>
+              <CustomerSourceForm isEditing={true} />
+            </Show>
+          </Card>
+        </Col>
+      </Row>
+    </DataContext.Provider>
   );
 };
 

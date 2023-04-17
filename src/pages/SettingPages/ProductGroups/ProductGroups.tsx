@@ -13,12 +13,12 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { column } from '@app/components/customs/tables/columns';
 import Create from '@app/components/customs/crud/Create';
-import CompanyFieldsForm from './components/CompanyFieldsForm';
+import ProductGroupsForm from './components/ProductGroupsForm';
 
-const CompanyFields: React.FC = () => {
+const ProductGroups: React.FC = () => {
   const { t } = useTranslation();
-  const path = API_URL.COMPANYFIELDS;
-  const page = t('namepage.linhvuc');
+  const path = API_URL.PRODUCTGROUPS;
+  const page = t('namepage.nhomsanpham');
   // const userListPermission = JSON.parse(getRoleUser());
   // const permission = userListPermission?.filter((item: any) => item.name === path.replace(/\//g, ''))[0].actions;
   const [isLoad, setIsLoad] = useState<boolean>(false);
@@ -77,7 +77,7 @@ const CompanyFields: React.FC = () => {
                   <ExportExcel param={param} />
                   &nbsp;&nbsp;
                   <Create>
-                    <CompanyFieldsForm isEditing={false} />
+                    <ProductGroupsForm isEditing={false} />
                   </Create>
                 </div>
               </Col>
@@ -92,7 +92,7 @@ const CompanyFields: React.FC = () => {
         <Col span={24}>
           <Card padding="1rem">
             <Show param={param} colums={column}>
-              <CompanyFieldsForm isEditing={true} />
+              <ProductGroupsForm isEditing={true} />
             </Show>
           </Card>
         </Col>
@@ -101,4 +101,4 @@ const CompanyFields: React.FC = () => {
   );
 };
 
-export default CompanyFields;
+export default ProductGroups;
