@@ -1,4 +1,4 @@
-import { RestOutlined } from '@ant-design/icons';
+import { EyeOutlined, RestOutlined } from '@ant-design/icons';
 import { apiInstance } from '@app/api/app/api_core';
 import { Table } from '@app/components/common/Table/Table';
 import CustomPagination from '@app/components/customs/CustomPagination';
@@ -6,9 +6,11 @@ import { API_BASE_URL } from '@app/configs/api-configs';
 import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
-import { Popconfirm, Space, Tooltip } from 'antd';
+import { Popconfirm, Space, Tooltip, Typography } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import DetailModal from '../../LeadsPage/components/Details/DetailModal';
+import { Button } from '@app/components/common/buttons/Button/Button';
+import { H4 } from '@app/components/common/typography/H4/H4';
 
 interface IProps {
   param: string | null;
@@ -117,9 +119,24 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns }
                 </Popconfirm>
               </Tooltip>
             )}
-            <DetailModal id={record.id} />
+            <Tooltip placement="bottom" title="Xoá dữ liệu">
+              <Popconfirm
+                title="Bạn có muốn xoá không?"
+                okText="Có"
+                cancelText="Không"
+                onConfirm={() => onDelete(record.id)}
+              >
+                <EyeOutlined style={{ fontSize: '20px', cursor: 'pointer' }} />
+              </Popconfirm>
+            </Tooltip>
           </Space>
         );
+      },
+    },
+    {
+      title: 'Mã số thuế',
+      render: (record: any) => {
+        return <DetailModal id={record.id} contentButton={record.tax_code} />;
       },
     },
   ];

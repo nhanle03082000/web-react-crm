@@ -77,7 +77,7 @@ const CustomerInteractions: React.FC<IProps> = ({ id }) => {
         return (
           <Tooltip placement="bottom" title="Xem nội dung">
             <Typography.Link onClick={() => getContent(JSON.parse(record))}>
-              <EyeOutlined />
+              <EyeOutlined style={{ color: '#000' }} />
             </Typography.Link>
           </Tooltip>
         );

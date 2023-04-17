@@ -22,7 +22,7 @@ export const ConvertTextCheckBox = (key: string): string => {
       return 'Nhập file';
       break;
     case 'assign':
-      return 'Phân quyền';
+      return 'Phân công';
       break;
     case 'admin_system':
       return 'Quản trị bộ phận';
@@ -127,6 +127,12 @@ export const ConvertTextRoles = (key: string): string => {
       break;
     case 'order_details':
       return 'Chi tiết đơn hàng - Khách hàng';
+      break;
+    case 'product_subs':
+      return 'Gói sản phẩm';
+      break;
+    case 'leads':
+      return 'Tiềm năng';
       break;
     default:
       return key;

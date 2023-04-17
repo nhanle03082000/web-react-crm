@@ -9,6 +9,7 @@ import React, { useEffect, useState } from 'react';
 import { ReactComponent as MailIcon } from '@app/assets/icons/mail.svg';
 import { ColumnsType } from 'antd/es/table';
 import CustomPagination from '@app/components/customs/CustomPagination';
+import numeral from 'numeral';
 
 interface IProps {
   id: number;
@@ -110,7 +111,14 @@ const CustomerQuotes: React.FC<IProps> = ({ id, handleDetailsQuotes }) => {
       align: 'right',
       dataIndex: 'total_amount',
       render: (record: number): string => {
-        return `${record} đ`;
+        return `${numeral(record).format('0,0 đ')}đ`;
+      },
+    },
+    {
+      title: 'Trạng thái',
+      dataIndex: 'is_sent',
+      render: (record: boolean): string => {
+        return record ? 'Đã gửi' : 'Chưa gửi';
       },
     },
   ];

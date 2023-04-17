@@ -34,4 +34,11 @@ export const customStyle = css`
     border-radius: 50%;
     color: #ff0044;
   }
+  .row-role {
+    border-bottom: solid;
+    border-width: 1px;
+    padding: 4px 0;
+  }
+  .select-product {
+  }
 `;

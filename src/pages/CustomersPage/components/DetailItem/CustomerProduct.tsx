@@ -1,15 +1,16 @@
 import { PlusOutlined, RestOutlined } from '@ant-design/icons';
-import { getProductGroupList } from '@app/api/app/api';
+import { getProductGroupList, getProductList } from '@app/api/app/api';
 import { apiInstance } from '@app/api/app/api_core';
 import { Modal } from '@app/components/common/Modal/Modal';
 import { Popconfirm } from '@app/components/common/Popconfirm/Popconfirm';
 import { Table } from '@app/components/common/Table/Table';
 import { Button } from '@app/components/common/buttons/Button/Button';
+import { Select } from '@app/components/common/selects/Select/Select';
 import CustomPagination from '@app/components/customs/CustomPagination';
 import { API_BASE_URL, API_URL } from '@app/configs/api-configs';
 import { notificationController } from '@app/controllers/notificationController';
 import { IFilter, IRespApiSuccess } from '@app/interfaces/interfaces';
-import { Col, Form, Input, Row, Select, Tooltip, Typography } from 'antd';
+import { Col, Form, Input, Row, Tooltip, Typography } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import React, { useEffect, useState } from 'react';
 
@@ -43,7 +44,7 @@ const CustomerProduct: React.FC<IProps> = ({ id }) => {
 
   const showModal = async () => {
     setIsModalOpen(true);
-    const productList = await getProductGroupList();
+    const productList = await getProductList();
     setProduct(productList);
   };
 
@@ -219,7 +220,7 @@ const CustomerProduct: React.FC<IProps> = ({ id }) => {
                 name="product_id"
                 rules={[{ required: true, message: 'Giải pháp không được để trống' }]}
               >
-                <Select options={product} placeholder="Chọn giải pháp" />
+                <Select className="select-product" options={product} placeholder="Chọn giải pháp" />
               </Form.Item>
               <Form.Item label="Mô tả" name="description">
                 <Input placeholder="Nhập mô tả" defaultValue={''} />

@@ -123,6 +123,21 @@ export const getProductGroupList = async () => {
   }
 };
 
+export const getProductList = async () => {
+  try {
+    const respProductGroup: IRespApiSuccess = await apiInstance.get(`${API_BASE_URL}${API_URL.PRODUCTS}`);
+    const optionsProductGroup = respProductGroup.data.collection.map((item: any) => {
+      return { value: item.id, label: item.name };
+    });
+    return optionsProductGroup;
+  } catch (error: any) {
+    notificationController.error({
+      message: 'Có lỗi xảy ra vui lòng thử lại sau',
+      description: error.message,
+    });
+  }
+};
+
 export const getProvincesList = async () => {
   try {
     const respProvinces: IRespApiSuccess = await apiInstance.get(`${API_BASE_URL}/provinces`);

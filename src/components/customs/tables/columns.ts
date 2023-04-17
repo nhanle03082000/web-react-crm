@@ -194,10 +194,10 @@ export const userColumn = [
 ];
 
 export const columnLead = [
-  {
-    title: 'Mã số thuế',
-    dataIndex: 'tax_code',
-  },
+  // {
+  //   title: 'Mã số thuế',
+  //   dataIndex: 'tax_code',
+  // },
   {
     title: 'Doanh nghiệp',
     dataIndex: 'company_name',

@@ -1,5 +1,5 @@
 import { Input, TextArea } from '@app/components/common/inputs/Input/Input';
-import { Col, Form, Row, Space, Typography } from 'antd';
+import { Col, Form, Row, Typography } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import { IMyObject } from '../RoleInterface';
 import { ConvertTextCheckBox, ConvertTextRoles } from '@app/utils/converts';
@@ -11,6 +11,7 @@ import { notificationController } from '@app/controllers/notificationController'
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { DataContext } from '@app/contexts/DataContext';
 import CustomLoading from '@app/components/customs/CustomLoading';
+import { H4 } from '@app/components/common/typography/H4/H4';
 
 interface IProps {
   isEditing: boolean;
@@ -69,7 +70,12 @@ const RoleForm: React.FC<IProps> = ({ isEditing }) => {
           <Form.Item name="description" label="Mô tả" initialValue="">
             <TextArea rows={4} placeholder="Viết mô tả" size="small" />
           </Form.Item>
-          <Space>Phân quyền quan hệ</Space>
+          <Typography.Title
+            level={4}
+            style={{ color: 'var(--primary-color)', textTransform: 'uppercase', lineHeight: 2 }}
+          >
+            Phân quyền tính năng
+          </Typography.Title>
           {state.rolePermission &&
             state.rolePermission.map((item: IMyObject, index: number) => {
               return (
@@ -78,12 +84,13 @@ const RoleForm: React.FC<IProps> = ({ isEditing }) => {
                     <Typography.Text style={{ fontSize: '14px' }}>{ConvertTextRoles(item.name)}</Typography.Text>
                   </Col>
                   <Col span={18}>
-                    <Row>
+                    <Row gutter={10}>
                       {Object.entries(item.actions).map(([key, value]: any) => (
-                        <Col span={4} key={key} style={{ textAlign: 'left' }}>
+                        <Col span={6} key={key} style={{ textAlign: 'left' }}>
                           <Checkbox checked={value} onChange={onChange(item, key)}>
                             <Typography.Text style={{ fontSize: '13px' }}>{ConvertTextCheckBox(key)}</Typography.Text>
                           </Checkbox>
+                          <div className="role-line"></div>
                         </Col>
                       ))}
                     </Row>
