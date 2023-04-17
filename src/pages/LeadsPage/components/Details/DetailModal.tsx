@@ -16,7 +16,7 @@ import { IRespApiSuccess } from '@app/interfaces/interfaces';
 import { Col, Form, Row, Tooltip, Typography } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useContext, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 interface IProps {
@@ -29,8 +29,6 @@ const DetailModal: React.FC<IProps> = ({ id, contentButton }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { path, page, state, setState } = useContext(DataContext);
   const [dataNote, setDataNote] = useState([]);
-
-  console.log(id);
 
   const onDataById = async () => {
     const dataById = await getDataById(id, path);
@@ -75,12 +73,6 @@ const DetailModal: React.FC<IProps> = ({ id, contentButton }) => {
         description: error.message,
       });
     }
-  };
-
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate(`/leads/${id}`);
   };
 
   return (
@@ -205,11 +197,6 @@ const DetailModal: React.FC<IProps> = ({ id, contentButton }) => {
               <Col span={18}>
                 <Button type="primary">
                   <Link to="/customers">Chuyển sang khách hàng</Link>
-                </Button>
-              </Col>
-              <Col span={6}>
-                <Button onClick={handleClick} className="detail-watch">
-                  Xem chi tiết
                 </Button>
               </Col>
             </Row>

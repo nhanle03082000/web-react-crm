@@ -1,4 +1,4 @@
-import { RestOutlined } from '@ant-design/icons';
+import { EyeOutlined, RestOutlined } from '@ant-design/icons';
 import { apiInstance } from '@app/api/app/api_core';
 import { Table } from '@app/components/common/Table/Table';
 import CustomPagination from '@app/components/customs/CustomPagination';
@@ -9,6 +9,7 @@ import { IRespApiSuccess } from '@app/interfaces/interfaces';
 import { Popconfirm, Space, Tooltip } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import DetailModal from './Details/DetailModal';
+import { useNavigate } from 'react-router-dom';
 
 interface IProps {
   param: string | null;
@@ -94,6 +95,12 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns }
     setFilter({ ...filter, page: page });
   };
 
+  const navigate = useNavigate();
+
+  const handleClick = (id: number) => {
+    navigate(`/customers/${id}`);
+  };
+
   const columns: any = [
     {
       title: 'STT',
@@ -105,21 +112,27 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns }
       render: (record: any) => {
         return (
           <Space>
-            {path != '/users' && (
-              <Tooltip placement="bottom" title="Xoá dữ liệu">
-                <Popconfirm
-                  title="Bạn có muốn xoá không?"
-                  okText="Có"
-                  cancelText="Không"
-                  onConfirm={() => onDelete(record.id)}
-                >
-                  <RestOutlined style={{ fontSize: '20px', cursor: 'pointer' }} />
-                </Popconfirm>
-              </Tooltip>
-            )}
-            <DetailModal id={record.id} />
+            <Tooltip placement="bottom" title="Xoá dữ liệu">
+              <Popconfirm
+                title="Bạn có muốn xoá không?"
+                okText="Có"
+                cancelText="Không"
+                onConfirm={() => onDelete(record.id)}
+              >
+                <RestOutlined style={{ fontSize: '20px', cursor: 'pointer' }} />
+              </Popconfirm>
+            </Tooltip>
+            <Tooltip placement="bottom" title="Xem chi tiết">
+              <EyeOutlined style={{ fontSize: '20px', cursor: 'pointer' }} onClick={() => handleClick(record.id)} />
+            </Tooltip>
           </Space>
         );
+      },
+    },
+    {
+      title: 'Mã số thuế',
+      render: (record: any) => {
+        return <DetailModal id={record.id} contentButton={record.tax_code} />;
       },
     },
   ];

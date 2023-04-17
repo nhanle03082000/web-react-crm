@@ -6,11 +6,10 @@ import { API_BASE_URL } from '@app/configs/api-configs';
 import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
-import { Popconfirm, Space, Tooltip, Typography } from 'antd';
+import { Popconfirm, Space, Tooltip } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import DetailModal from '../../LeadsPage/components/Details/DetailModal';
-import { Button } from '@app/components/common/buttons/Button/Button';
-import { H4 } from '@app/components/common/typography/H4/H4';
+import { useNavigate } from 'react-router-dom';
 
 interface IProps {
   param: string | null;
@@ -96,6 +95,12 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns }
     setFilter({ ...filter, page: page });
   };
 
+  const navigate = useNavigate();
+
+  const handleClick = (id: number) => {
+    navigate(`/leads/${id}`);
+  };
+
   const columns: any = [
     {
       title: 'STT',
@@ -107,18 +112,6 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns }
       render: (record: any) => {
         return (
           <Space>
-            {path != '/users' && (
-              <Tooltip placement="bottom" title="Xoá dữ liệu">
-                <Popconfirm
-                  title="Bạn có muốn xoá không?"
-                  okText="Có"
-                  cancelText="Không"
-                  onConfirm={() => onDelete(record.id)}
-                >
-                  <RestOutlined style={{ fontSize: '20px', cursor: 'pointer' }} />
-                </Popconfirm>
-              </Tooltip>
-            )}
             <Tooltip placement="bottom" title="Xoá dữ liệu">
               <Popconfirm
                 title="Bạn có muốn xoá không?"
@@ -126,8 +119,11 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns }
                 cancelText="Không"
                 onConfirm={() => onDelete(record.id)}
               >
-                <EyeOutlined style={{ fontSize: '20px', cursor: 'pointer' }} />
+                <RestOutlined style={{ fontSize: '20px', cursor: 'pointer' }} />
               </Popconfirm>
+            </Tooltip>
+            <Tooltip placement="bottom" title="Xem chi tiết">
+              <EyeOutlined style={{ fontSize: '20px', cursor: 'pointer' }} onClick={() => handleClick(record.id)} />
             </Tooltip>
           </Space>
         );

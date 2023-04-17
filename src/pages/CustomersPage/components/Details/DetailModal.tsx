@@ -1,20 +1,20 @@
-import { EyeOutlined } from '@ant-design/icons';
 import { getDataById } from '@app/api/app/api_getDataById';
 import { Modal } from '@app/components/common/Modal/Modal';
 import { Button } from '@app/components/common/buttons/Button/Button';
 import { H4 } from '@app/components/common/typography/H4/H4';
 import { H5 } from '@app/components/common/typography/H5/H5';
 import { DataContext } from '@app/contexts/DataContext';
-import { Col, Form, Row, Tooltip } from 'antd';
+import { Col, Form, Row, Tooltip, Typography } from 'antd';
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 interface IProps {
   id: number;
+  contentButton: any;
 }
 
-const DetailModal: React.FC<IProps> = ({ id }) => {
+const DetailModal: React.FC<IProps> = ({ id, contentButton }) => {
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { path, page, state, setState } = useContext(DataContext);
@@ -43,7 +43,12 @@ const DetailModal: React.FC<IProps> = ({ id }) => {
   return (
     <DetailModalStyles>
       <Tooltip placement="bottom" title="Xem thông tin">
-        <EyeOutlined onClick={showModal} style={{ fontSize: '20px', cursor: 'pointer' }} />
+        <Typography.Text
+          style={{ color: 'var(--ant-primary-color)', textDecoration: 'underline', cursor: 'pointer' }}
+          onClick={showModal}
+        >
+          {contentButton}
+        </Typography.Text>
       </Tooltip>
       <Modal
         title={`Xem ${page}`}
