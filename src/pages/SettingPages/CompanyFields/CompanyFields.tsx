@@ -6,7 +6,6 @@ import ExportExcel from '@app/components/customs/exportexcel/ExportExcel';
 import Filter from '@app/components/customs/filter/Filter';
 import { API_URL } from '@app/configs/api-configs';
 import { DataContext } from '@app/contexts/DataContext';
-import { useAppSelector } from '@app/hooks/reduxHooks';
 import { getRoleUser } from '@app/utils/redux.util';
 import { Col, Row } from 'antd';
 import React, { useState } from 'react';
@@ -19,8 +18,8 @@ const CompanyFields: React.FC = () => {
   const { t } = useTranslation();
   const path = API_URL.COMPANYFIELDS;
   const page = t('namepage.linhvuc');
-  // const userListPermission = JSON.parse(getRoleUser());
-  // const permission = userListPermission?.filter((item: any) => item.name === path.replace(/\//g, ''))[0].actions;
+  const userListPermission = JSON.parse(getRoleUser());
+  const permission = userListPermission?.filter((item: any) => item.name === path.replace(/\//g, ''))[0].actions;
   const [isLoad, setIsLoad] = useState<boolean>(false);
   const [param, setParam] = useState('');
   const [state, setState] = useState<any>({
@@ -74,11 +73,13 @@ const CompanyFields: React.FC = () => {
               </Col>
               <Col span={12}>
                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <ExportExcel param={param} />
+                  {permission.export && <ExportExcel param={param} />}
                   &nbsp;&nbsp;
-                  <Create>
-                    <CompanyFieldsForm isEditing={false} />
-                  </Create>
+                  {permission.create && (
+                    <Create>
+                      <CompanyFieldsForm isEditing={false} />
+                    </Create>
+                  )}
                 </div>
               </Col>
             </Row>
@@ -91,9 +92,11 @@ const CompanyFields: React.FC = () => {
         </Col>
         <Col span={24}>
           <Card padding="1rem">
-            <Show param={param} colums={column}>
-              <CompanyFieldsForm isEditing={true} />
-            </Show>
+            {permission.index && (
+              <Show param={param} colums={column} permission={permission}>
+                <CompanyFieldsForm isEditing={true} />
+              </Show>
+            )}
           </Card>
         </Col>
       </Row>

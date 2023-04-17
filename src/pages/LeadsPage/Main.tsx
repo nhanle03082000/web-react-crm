@@ -17,12 +17,13 @@ import React, { useContext, useEffect, useState } from 'react';
 import CustomColumns from './components/CustomColumns';
 import LeadForm from './components/LeadForm';
 import Show from './components/Show';
+import { getRoleUser } from '@app/utils/redux.util';
 
 const Main: React.FC = () => {
-  // const userListPermission = JSON.parse(getRoleUser());
-  // const permission = userListPermission?.filter((item: any) => item.name === path.replace(/\//g, ''))[0].actions;
+  const { page, path } = useContext(DataContext);
+  const userListPermission = JSON.parse(getRoleUser());
+  const permission = userListPermission?.filter((item: any) => item.name === path.replace(/\//g, ''))[0].actions;
   const [saleProcesses, setSaleProcesses] = useState<any>([]);
-  const { page } = useContext(DataContext);
   const [param, setParam] = useState('');
   const [visibleColumns, setVisibleColumns] = useState<string[]>([
     'STT',
@@ -159,21 +160,27 @@ const Main: React.FC = () => {
             <Col span={12}>
               <div style={{ display: 'flex', justifyContent: 'flex-end', columnGap: '5px' }}>
                 <CustomColumns columns={visibleColumns} setColumns={setVisibleColumns} />
-                <Upload accept=".pdf,.doc,.docx,.xls,.xlsx" maxCount={1}>
-                  <Button type="primary" icon={<UploadOutlined />}>
-                    Nhập từ file
-                  </Button>
-                </Upload>
-                <Button type="primary">
-                  <Typography.Link href={download} target="_blank">
-                    Tải file mẫu
-                  </Typography.Link>
-                </Button>
-                <Assign list={listIdLead} buttonName="Phân công" />
-                <Create>
-                  <LeadForm isEditing={false} />
-                </Create>
-                <ExportExcel param={param} />
+                {permission.import && (
+                  <>
+                    <Upload accept=".pdf,.doc,.docx,.xls,.xlsx" maxCount={1}>
+                      <Button type="primary" icon={<UploadOutlined />}>
+                        Nhập từ file
+                      </Button>
+                    </Upload>
+                    <Button type="primary">
+                      <Typography.Link href={download} target="_blank">
+                        Tải file mẫu
+                      </Typography.Link>
+                    </Button>
+                  </>
+                )}
+                {permission.assign && <Assign list={listIdLead} buttonName="Phân công" />}
+                {permission.create && (
+                  <Create>
+                    <LeadForm isEditing={false} />
+                  </Create>
+                )}
+                {permission.export && <ExportExcel param={param} />}
               </div>
             </Col>
           </Row>
@@ -213,9 +220,17 @@ const Main: React.FC = () => {
       </Col>
       <Col span={24}>
         <Card padding="1rem">
-          <Show param={param} colums={columnLead} setListIdLead={setListIdLead} visibleColumns={visibleColumns}>
-            <LeadForm isEditing={true} />
-          </Show>
+          {permission.index && (
+            <Show
+              param={param}
+              colums={columnLead}
+              setListIdLead={setListIdLead}
+              visibleColumns={visibleColumns}
+              permission={permission}
+            >
+              <LeadForm isEditing={true} />
+            </Show>
+          )}
         </Card>
       </Col>
     </Row>

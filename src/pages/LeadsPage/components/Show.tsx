@@ -17,6 +17,7 @@ interface IProps {
   children: React.ReactNode;
   setListIdLead: any;
   visibleColumns: any;
+  permission: any;
 }
 
 interface IFilter {
@@ -27,7 +28,7 @@ interface IFilter {
   total: number;
 }
 
-const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns }) => {
+const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns, permission }) => {
   const { path, isLoad } = useContext(DataContext);
   const [dataShow, setDataShow] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -44,7 +45,6 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns }
     .join('&');
 
   const onShow = async () => {
-    // if (checkPermission?.show) {
     setIsLoading(true);
     try {
       const respUsers: IRespApiSuccess = await apiInstance.get(`${API_BASE_URL}${path}`, {
@@ -63,13 +63,10 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns }
         description: error.message,
       });
     }
-    // }
     setIsLoading(false);
   };
 
   const onDelete = async (idData: number) => {
-    console.log(idData);
-    // if (checkPermission?.delete) {
     try {
       const respDelete: IRespApiSuccess = await apiInstance.delete(`${API_BASE_URL}${path}/${idData}`);
       if (respDelete.code === 200) {
@@ -88,7 +85,6 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns }
       });
     }
     onShow();
-    // }
   };
 
   const handlePageChange = (page: number) => {
@@ -112,19 +108,23 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns }
       render: (record: any) => {
         return (
           <Space>
-            <Tooltip placement="bottom" title="Xoá dữ liệu">
-              <Popconfirm
-                title="Bạn có muốn xoá không?"
-                okText="Có"
-                cancelText="Không"
-                onConfirm={() => onDelete(record.id)}
-              >
-                <RestOutlined style={{ fontSize: '20px', cursor: 'pointer' }} />
-              </Popconfirm>
-            </Tooltip>
-            <Tooltip placement="bottom" title="Xem chi tiết">
-              <EyeOutlined style={{ fontSize: '20px', cursor: 'pointer' }} onClick={() => handleClick(record.id)} />
-            </Tooltip>
+            {permission.delete && (
+              <Tooltip placement="bottom" title="Xoá dữ liệu">
+                <Popconfirm
+                  title="Bạn có muốn xoá không?"
+                  okText="Có"
+                  cancelText="Không"
+                  onConfirm={() => onDelete(record.id)}
+                >
+                  <RestOutlined style={{ fontSize: '20px', cursor: 'pointer' }} />
+                </Popconfirm>
+              </Tooltip>
+            )}
+            {permission.show && (
+              <Tooltip placement="bottom" title="Xem chi tiết">
+                <EyeOutlined style={{ fontSize: '20px', cursor: 'pointer' }} onClick={() => handleClick(record.id)} />
+              </Tooltip>
+            )}
           </Space>
         );
       },

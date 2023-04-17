@@ -1,7 +1,7 @@
 import { Input, TextArea } from '@app/components/common/inputs/Input/Input';
 import { Col, Form, Row, Typography } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
-import { IMyObject } from '../RoleInterface';
+import { IMyObject } from './RoleInterface';
 import { ConvertTextCheckBox, ConvertTextRoles } from '@app/utils/converts';
 import { Checkbox } from '@app/components/common/Checkbox/Checkbox';
 import { IRespApiSuccess } from '@app/interfaces/interfaces';

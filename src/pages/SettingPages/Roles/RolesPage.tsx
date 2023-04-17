@@ -7,7 +7,6 @@ import ExportExcel from '@app/components/customs/exportexcel/ExportExcel';
 import Filter from '@app/components/customs/filter/Filter';
 import { API_URL } from '@app/configs/api-configs';
 import { DataContext } from '@app/contexts/DataContext';
-import { useAppSelector } from '@app/hooks/reduxHooks';
 import { getRoleUser } from '@app/utils/redux.util';
 import { Col, Row } from 'antd';
 import React, { useState } from 'react';
@@ -19,8 +18,8 @@ const Roles: React.FC = () => {
   const { t } = useTranslation();
   const path = API_URL.ROLES;
   const page = t('namepage.vaitro');
-  // const userListPermission = JSON.parse(getRoleUser());
-  // const permission = userListPermission?.filter((item: any) => item.name === path.replace(/\//g, ''))[0].actions;
+  const userListPermission = JSON.parse(getRoleUser());
+  const permission = userListPermission?.filter((item: any) => item.name === path.replace(/\//g, ''))[0].actions;
   const [isLoad, setIsLoad] = useState<boolean>(false);
   const [param, setParam] = useState('');
   const [state, setState] = useState<any>({
@@ -79,10 +78,12 @@ const Roles: React.FC = () => {
               </Col>
               <Col span={3}>
                 <div style={{ display: 'flex', width: '100%', gap: '10px', justifyContent: 'flex-end' }}>
-                  <ExportExcel param={param} />
-                  <Create>
-                    <RoleForm isEditing={false} />
-                  </Create>
+                  {permission.export && <ExportExcel param={param} />}
+                  {permission.create && (
+                    <Create>
+                      <RoleForm isEditing={false} />
+                    </Create>
+                  )}
                 </div>
               </Col>
             </Row>
@@ -95,9 +96,11 @@ const Roles: React.FC = () => {
         </Col>
         <Col span={24}>
           <Card padding="1rem">
-            <Show param={param} colums={roleColumn}>
-              <RoleForm isEditing={true} />
-            </Show>
+            {permission.index && (
+              <Show param={param} colums={roleColumn} permission={permission}>
+                <RoleForm isEditing={true} />
+              </Show>
+            )}
           </Card>
         </Col>
       </Row>

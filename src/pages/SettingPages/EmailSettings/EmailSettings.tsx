@@ -8,11 +8,15 @@ import { Button, Col, Form, Input, Row, Space } from 'antd';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as S from './EmailSettings.styles';
+import { getRoleUser } from '@app/utils/redux.util';
 
 const EmailSettings: React.FC = () => {
   const [form] = Form.useForm();
   const path = API_URL.MAIL;
+  const email = 'email_config';
   const { t } = useTranslation();
+  const userListPermission = JSON.parse(getRoleUser());
+  const permission = userListPermission?.filter((item: any) => item.name === email.replace(/\//g, ''))[0].actions;
 
   const getMail = async () => {
     try {
@@ -59,74 +63,79 @@ const EmailSettings: React.FC = () => {
   return (
     <>
       <PageTitle>{t('namepage.email')}</PageTitle>
-      <S.EmailSettings>
-        <Col xs={24}>
-          <S.Card>
-            <Space style={{ marginBottom: '16px' }}>{t('namepage.email')}</Space>
-            <Form form={form} layout="vertical" onFinish={postMail}>
-              <Row gutter={[16, 16]}>
-                <Col span={12}>
-                  <Form.Item name="MAIL_DRIVER" label="Loại driver dùng để gửi mail">
-                    <Input placeholder="SMTP" size="small" disabled={true} />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item name="MAIL_FROM_ADDRESS" label="Địa chỉ email người gửi">
-                    <Input placeholder="Nhập email" size="small" />
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={[16, 16]}>
-                <Col span={12}>
-                  <Form.Item name="MAIL_PORT" label="Cổng SMTP server">
-                    <Input placeholder="Nhập cổng SMTP server" size="small" />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item name="MAIL_USERNAME" label="Tên tài khoản mail">
-                    <Input placeholder="Nhập tài khoản mail" size="small" />
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={[16, 16]}>
-                <Col span={12}>
-                  <Form.Item name="MAIL_HOST" label="Địa chỉ SMTP server của email service provider">
-                    <Input placeholder="Nhập Địa chỉ SMTP server" size="small" />
-                  </Form.Item>
-                </Col>
+      {permission.index && (
+        <S.EmailSettings>
+          <Col xs={24}>
+            <S.Card>
+              <Space style={{ marginBottom: '16px' }}>{t('namepage.email')}</Space>
+              <Form form={form} layout="vertical" onFinish={postMail}>
+                <Row gutter={[16, 16]}>
+                  <Col span={12}>
+                    <Form.Item name="MAIL_DRIVER" label="Loại driver dùng để gửi mail">
+                      <Input placeholder="SMTP" size="small" disabled={true} />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item name="MAIL_FROM_ADDRESS" label="Địa chỉ email người gửi">
+                      <Input placeholder="Nhập email" size="small" disabled={!permission.edit} />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={[16, 16]}>
+                  <Col span={12}>
+                    <Form.Item name="MAIL_PORT" label="Cổng SMTP server">
+                      <Input placeholder="Nhập cổng SMTP server" size="small" disabled={!permission.edit} />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item name="MAIL_USERNAME" label="Tên tài khoản mail">
+                      <Input placeholder="Nhập tài khoản mail" size="small" disabled={!permission.edit} />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={[16, 16]}>
+                  <Col span={12}>
+                    <Form.Item name="MAIL_HOST" label="Địa chỉ SMTP server của email service provider">
+                      <Input placeholder="Nhập Địa chỉ SMTP server" size="small" disabled={!permission.edit} />
+                    </Form.Item>
+                  </Col>
 
-                <Col span={12}>
-                  <Form.Item name="MAIL_FROM_NAME" label="Tên người gửi">
-                    <Input placeholder="Nhập tên người gửi" size="small" />
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={[16, 16]}>
-                <Col span={12}>
-                  <Form.Item name="MAIL_ENCRYPTION" label="Giao thức bảo mật SSL/TLS">
-                    <Select
-                      options={[
-                        { value: 'SSL', label: 'SSL' },
-                        { value: 'TLS', label: 'TLS' },
-                      ]}
-                    />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item name="MAIL_PASSWORD" label="Mật khẩu của tài khoản email">
-                    <Input.Password placeholder="Nhập email người gửi" size="small" />
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={[10, 0]} justify="end" className="footer">
-                <Button size="small" type="primary" htmlType="submit">
-                  Lưu
-                </Button>
-              </Row>
-            </Form>
-          </S.Card>
-        </Col>
-      </S.EmailSettings>
+                  <Col span={12}>
+                    <Form.Item name="MAIL_FROM_NAME" label="Tên người gửi">
+                      <Input placeholder="Nhập tên người gửi" size="small" disabled={!permission.edit} />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={[16, 16]}>
+                  <Col span={12}>
+                    <Form.Item name="MAIL_ENCRYPTION" label="Giao thức bảo mật SSL/TLS">
+                      <Select
+                        options={[
+                          { value: 'SSL', label: 'SSL' },
+                          { value: 'TLS', label: 'TLS' },
+                        ]}
+                        disabled={!permission.edit}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item name="MAIL_PASSWORD" label="Mật khẩu của tài khoản email">
+                      <Input.Password placeholder="Nhập email người gửi" size="small" disabled={!permission.edit} />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={[10, 0]} justify="end" className="footer">
+                  {permission.edit && (
+                    <Button size="small" type="primary" htmlType="submit">
+                      Lưu
+                    </Button>
+                  )}
+                </Row>
+              </Form>
+            </S.Card>
+          </Col>
+        </S.EmailSettings>
+      )}
     </>
   );
 };

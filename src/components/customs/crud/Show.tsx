@@ -14,6 +14,7 @@ interface IProps {
   param: string | null;
   colums: any;
   children: React.ReactNode;
+  permission: any;
 }
 
 interface IFilter {
@@ -24,7 +25,7 @@ interface IFilter {
   total: number;
 }
 
-const Show: React.FC<IProps> = ({ children, param, colums }) => {
+const Show: React.FC<IProps> = ({ children, param, colums, permission }) => {
   const { path, isLoad } = useContext(DataContext);
   const [dataShow, setDataShow] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -41,7 +42,6 @@ const Show: React.FC<IProps> = ({ children, param, colums }) => {
     .join('&');
 
   const onShow = async () => {
-    // if (checkPermission?.show) {
     setIsLoading(true);
     try {
       const respUsers: IRespApiSuccess = await apiInstance.get(`${API_BASE_URL}${path}`, {
@@ -60,13 +60,11 @@ const Show: React.FC<IProps> = ({ children, param, colums }) => {
         description: error.message,
       });
     }
-    // }
     setIsLoading(false);
   };
 
   const onDelete = async (idData: number) => {
     console.log(idData);
-    // if (checkPermission?.delete) {
     try {
       const respDelete: IRespApiSuccess = await apiInstance.delete(`${API_BASE_URL}${path}/${idData}`);
       if (respDelete.code === 200) {
@@ -85,7 +83,6 @@ const Show: React.FC<IProps> = ({ children, param, colums }) => {
       });
     }
     onShow();
-    // }
   };
 
   const handlePageChange = (page: number) => {
@@ -103,21 +100,25 @@ const Show: React.FC<IProps> = ({ children, param, colums }) => {
       render: (record: any) => {
         return (
           <Space>
-            {path != '/users' && (
-              <Tooltip placement="bottom" title="Xoá dữ liệu">
-                <Popconfirm
-                  title="Bạn có muốn xoá không?"
-                  okText="Có"
-                  cancelText="Không"
-                  onConfirm={() => onDelete(record.id)}
-                >
-                  <RestOutlined style={{ fontSize: '20px', cursor: 'pointer' }} />
-                </Popconfirm>
-              </Tooltip>
+            {path != '/users'
+              ? permission.delete && (
+                  <Tooltip placement="bottom" title="Xoá dữ liệu">
+                    <Popconfirm
+                      title="Bạn có muốn xoá không?"
+                      okText="Có"
+                      cancelText="Không"
+                      onConfirm={() => onDelete(record.id)}
+                    >
+                      <RestOutlined style={{ fontSize: '20px', cursor: 'pointer' }} />
+                    </Popconfirm>
+                  </Tooltip>
+                )
+              : ''}
+            {permission.edit && (
+              <Update id={record.id} onShow={onShow}>
+                {children}
+              </Update>
             )}
-            <Update id={record.id} onShow={onShow}>
-              {children}
-            </Update>
           </Space>
         );
       },

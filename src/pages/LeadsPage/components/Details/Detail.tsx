@@ -13,12 +13,20 @@ import { notificationController } from '@app/controllers/notificationController'
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
 import { Button, Col, Form, Row, Typography } from 'antd';
 import moment from 'moment';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useContext, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import EditDetail from './EditDetail';
+import { DataContext } from '@app/contexts/DataContext';
+import { getRoleUser } from '@app/utils/redux.util';
 
 const Detail: React.FC = () => {
+  const { path } = useContext(DataContext);
+  const userListPermission = JSON.parse(getRoleUser());
+  const leadNote = 'lead_notes';
+  const permission = userListPermission?.filter((item: any) => item.name === path.replace(/\//g, ''))[0].actions;
+  const permissionLeadNotes = userListPermission?.filter((item: any) => item.name === leadNote.replace(/\//g, ''))[0]
+    .actions;
   const { id } = useParams();
   const navigate = useNavigate();
   const [form] = Form.useForm();
@@ -127,9 +135,11 @@ const Detail: React.FC = () => {
                   <div>{data?.tax_code}</div>
                 </Col>
                 <Col span={8}>
-                  <Button className="button-edit" onClick={onEdit}>
-                    <EditOutlined style={{ fontSize: '24px', color: 'var(--primary-color)' }} />
-                  </Button>
+                  {permission.edit && (
+                    <Button className="button-edit" onClick={onEdit}>
+                      <EditOutlined style={{ fontSize: '24px', color: 'var(--primary-color)' }} />
+                    </Button>
+                  )}
                 </Col>
                 <Col span={8}>
                   <H5>Họ tên người đại diện</H5>
@@ -192,63 +202,69 @@ const Detail: React.FC = () => {
                 </Col>
               </Row>
               <Row>
-                <Col span={24} style={{ marginTop: '12px' }}>
-                  <H4>Ghi chú</H4>
-                  <div>
-                    <H5>Nội dung</H5>
-                  </div>
-                  {dataNote?.map((item: any) => {
-                    return (
-                      <Fragment key={item.id}>
-                        <Row justify="space-between" align="middle" style={{ padding: '0 5px' }}>
-                          <Col span={23}>
-                            <div>
-                              <div>{item.note}</div>
-                            </div>
-                          </Col>
-                          <Col span={1}>
-                            <Popconfirm
-                              placement="leftTop"
-                              title="Bạn có muốn xoá không?"
-                              okText="Có"
-                              cancelText="Không"
-                              onConfirm={() => onDelete(item.id)}
-                            >
-                              <Typography.Link>
-                                <RestOutlined style={{ fontSize: '20px', cursor: 'pointer', color: '#FF5B5B' }} />
-                              </Typography.Link>
-                            </Popconfirm>
-                          </Col>
-                        </Row>
-                        <Row justify="space-between" align="middle" style={{ padding: '5px', color: '#bbb' }}>
-                          <Col span={12}>{item?.user?.name}</Col>
-                          <Col span={12} style={{ textAlign: 'right' }}>
-                            {moment(item?.createdAt).format('DD/MM/YYYY, HH:mm:ss')}
-                          </Col>
-                        </Row>
-                      </Fragment>
-                    );
-                  })}
-                </Col>
-                <Col span={24}>
-                  <H5>Thêm ghi chú</H5>
-                  <Form form={form} onFinish={createNote} className="form-note">
-                    <Row>
-                      <Col span={23}>
-                        <Form.Item name="note">
-                          <TextArea rows={4} placeholder="Thêm ghi chú" />
-                        </Form.Item>
-                      </Col>
-                      <Col span={1}>
-                        <Form.Item>
-                          <Button className="button-send" htmlType="submit">
-                            <SendOutlined />
-                          </Button>
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                  </Form>
-                </Col>
+                {permissionLeadNotes.index && (
+                  <Col span={24} style={{ marginTop: '12px' }}>
+                    <H4>Ghi chú</H4>
+                    <div>
+                      <H5>Nội dung</H5>
+                    </div>
+                    {dataNote?.map((item: any) => {
+                      return (
+                        <Fragment key={item.id}>
+                          <Row justify="space-between" align="middle" style={{ padding: '0 5px' }}>
+                            <Col span={23}>
+                              <div>
+                                <div>{item.note}</div>
+                              </div>
+                            </Col>
+                            {permissionLeadNotes.delete && (
+                              <Col span={1}>
+                                <Popconfirm
+                                  placement="leftTop"
+                                  title="Bạn có muốn xoá không?"
+                                  okText="Có"
+                                  cancelText="Không"
+                                  onConfirm={() => onDelete(item.id)}
+                                >
+                                  <Typography.Link>
+                                    <RestOutlined style={{ fontSize: '20px', cursor: 'pointer', color: '#FF5B5B' }} />
+                                  </Typography.Link>
+                                </Popconfirm>
+                              </Col>
+                            )}
+                          </Row>
+                          <Row justify="space-between" align="middle" style={{ padding: '5px', color: '#bbb' }}>
+                            <Col span={12}>{item?.user?.name}</Col>
+                            <Col span={12} style={{ textAlign: 'right' }}>
+                              {moment(item?.createdAt).format('DD/MM/YYYY, HH:mm:ss')}
+                            </Col>
+                          </Row>
+                        </Fragment>
+                      );
+                    })}
+                  </Col>
+                )}
+                {permissionLeadNotes.create && (
+                  <Col span={24}>
+                    <H5>Thêm ghi chú</H5>
+                    <Form form={form} onFinish={createNote} className="form-note">
+                      <Row>
+                        <Col span={23}>
+                          <Form.Item name="note">
+                            <TextArea rows={4} placeholder="Thêm ghi chú" />
+                          </Form.Item>
+                        </Col>
+                        <Col span={1}>
+                          <Form.Item>
+                            <Button className="button-send" htmlType="submit">
+                              <SendOutlined />
+                            </Button>
+                          </Form.Item>
+                        </Col>
+                      </Row>
+                    </Form>
+                  </Col>
+                )}
               </Row>
             </Card>
           </Col>

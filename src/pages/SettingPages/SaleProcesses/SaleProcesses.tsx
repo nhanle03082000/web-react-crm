@@ -7,7 +7,6 @@ import ExportExcel from '@app/components/customs/exportexcel/ExportExcel';
 import Filter from '@app/components/customs/filter/Filter';
 import { API_URL } from '@app/configs/api-configs';
 import { DataContext } from '@app/contexts/DataContext';
-import { useAppSelector } from '@app/hooks/reduxHooks';
 import { getRoleUser } from '@app/utils/redux.util';
 import { Col, Row } from 'antd';
 import React, { useState } from 'react';
@@ -19,8 +18,8 @@ const SaleProcesses: React.FC = () => {
   const { t } = useTranslation();
   const path = API_URL.SALEPROCESSES;
   const page = t('namepage.quytrinhbanhang');
-  // const userListPermission = JSON.parse(getRoleUser());
-  // const permission = userListPermission?.filter((item: any) => item.name === path.replace(/\//g, ''))[0].actions;
+  const userListPermission = JSON.parse(getRoleUser());
+  const permission = userListPermission?.filter((item: any) => item.name === path.replace(/\//g, ''))[0].actions;
   const [isLoad, setIsLoad] = useState<boolean>(false);
   const [param, setParam] = useState('');
   const [state, setState] = useState<any>({
@@ -74,10 +73,12 @@ const SaleProcesses: React.FC = () => {
               </Col>
               <Col span={12}>
                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <ExportExcel param={''} /> &nbsp;&nbsp;
-                  <Create>
-                    <SaleForm isEditing={false} />
-                  </Create>
+                  {permission.export && <ExportExcel param={param} />}&nbsp;&nbsp;
+                  {permission.create && (
+                    <Create>
+                      <SaleForm isEditing={false} />
+                    </Create>
+                  )}
                 </div>
               </Col>
             </Row>
@@ -90,9 +91,11 @@ const SaleProcesses: React.FC = () => {
         </Col>
         <Col span={24}>
           <Card padding="1rem">
-            <Show param={param} colums={saleColumn}>
-              <SaleForm isEditing={true} />
-            </Show>
+            {permission.index && (
+              <Show param={param} colums={saleColumn} permission={permission}>
+                <SaleForm isEditing={true} />
+              </Show>
+            )}
           </Card>
         </Col>
       </Row>

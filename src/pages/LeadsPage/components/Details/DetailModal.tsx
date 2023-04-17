@@ -13,6 +13,7 @@ import { API_BASE_URL } from '@app/configs/api-configs';
 import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
+import { getRoleUser } from '@app/utils/redux.util';
 import { Col, Form, Row, Tooltip, Typography } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useContext, useState } from 'react';
@@ -29,7 +30,10 @@ const DetailModal: React.FC<IProps> = ({ id, contentButton }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { path, page, state, setState } = useContext(DataContext);
   const [dataNote, setDataNote] = useState([]);
-
+  const leadNote = 'lead_notes';
+  const userListPermission = JSON.parse(getRoleUser());
+  const permissionLeadNotes = userListPermission?.filter((item: any) => item.name === leadNote.replace(/\//g, ''))[0]
+    .actions;
   const onDataById = async () => {
     const dataById = await getDataById(id, path);
     setState(dataById);
@@ -134,63 +138,69 @@ const DetailModal: React.FC<IProps> = ({ id, contentButton }) => {
             <H5>Nguồn gốc</H5>
             <div>{state?.customer_source?.name || 'chưa có'}</div>
           </Col>
-          <Col span={24} style={{ marginTop: '12px' }}>
-            <H4>Ghi chú</H4>
-            <div>
-              <H5>Nội dung</H5>
-            </div>
-            {dataNote.map((item: any) => {
-              return (
-                <Fragment key={item.id}>
-                  <Row justify="space-between" align="middle" style={{ padding: '0 5px' }}>
-                    <Col span={23}>
-                      <div>
-                        <div>{item.note}</div>
-                      </div>
-                    </Col>
-                    <Col span={1}>
-                      <Popconfirm
-                        placement="leftTop"
-                        title="Bạn có muốn xoá không?"
-                        okText="Có"
-                        cancelText="Không"
-                        onConfirm={() => onDelete(item.id)}
-                      >
-                        <Typography.Link>
-                          <RestOutlined style={{ fontSize: '20px', cursor: 'pointer', color: '#FF5B5B' }} />
-                        </Typography.Link>
-                      </Popconfirm>
-                    </Col>
-                  </Row>
-                  <Row justify="space-between" align="middle" style={{ padding: '5px', color: '#bbb' }}>
-                    <Col span={12}>{item?.user?.name}</Col>
-                    <Col span={12} style={{ textAlign: 'right' }}>
-                      {moment(item?.createdAt).format('DD/MM/YYYY, HH:mm:ss')}
-                    </Col>
-                  </Row>
-                </Fragment>
-              );
-            })}
-          </Col>
-          <Col span={24}>
-            <H5>Thêm ghi chú</H5>
-            <Form form={form} onFinish={createNote} className="form-note">
-              <Row>
-                <Col span={22}>
-                  <Form.Item name="note">
-                    <TextArea rows={4} placeholder="Thêm ghi chú" />
-                  </Form.Item>
-                </Col>
-                <Col span={2}>
-                  <Form.Item>
-                    <Button className="button-send" htmlType="submit">
-                      <SendOutlined />
-                    </Button>
-                  </Form.Item>
-                </Col>
-              </Row>
-            </Form>
-          </Col>
+          {permissionLeadNotes.index && (
+            <Col span={24} style={{ marginTop: '12px' }}>
+              <H4>Ghi chú</H4>
+              <div>
+                <H5>Nội dung</H5>
+              </div>
+              {dataNote.map((item: any) => {
+                return (
+                  <Fragment key={item.id}>
+                    <Row justify="space-between" align="middle" style={{ padding: '0 5px' }}>
+                      <Col span={23}>
+                        <div>
+                          <div>{item.note}</div>
+                        </div>
+                      </Col>
+                      {permissionLeadNotes.delete && (
+                        <Col span={1}>
+                          <Popconfirm
+                            placement="leftTop"
+                            title="Bạn có muốn xoá không?"
+                            okText="Có"
+                            cancelText="Không"
+                            onConfirm={() => onDelete(item.id)}
+                          >
+                            <Typography.Link>
+                              <RestOutlined style={{ fontSize: '20px', cursor: 'pointer', color: '#FF5B5B' }} />
+                            </Typography.Link>
+                          </Popconfirm>
+                        </Col>
+                      )}
+                    </Row>
+                    <Row justify="space-between" align="middle" style={{ padding: '5px', color: '#bbb' }}>
+                      <Col span={12}>{item?.user?.name}</Col>
+                      <Col span={12} style={{ textAlign: 'right' }}>
+                        {moment(item?.createdAt).format('DD/MM/YYYY, HH:mm:ss')}
+                      </Col>
+                    </Row>
+                  </Fragment>
+                );
+              })}
+            </Col>
+          )}
+          {permissionLeadNotes.create && (
+            <Col span={24}>
+              <H5>Thêm ghi chú</H5>
+              <Form form={form} onFinish={createNote} className="form-note">
+                <Row>
+                  <Col span={22}>
+                    <Form.Item name="note">
+                      <TextArea rows={4} placeholder="Thêm ghi chú" />
+                    </Form.Item>
+                  </Col>
+                  <Col span={2}>
+                    <Form.Item>
+                      <Button className="button-send" htmlType="submit">
+                        <SendOutlined />
+                      </Button>
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Form>
+            </Col>
+          )}
           <Col span={24}>
             <br />
             <Row align={'middle'}>
