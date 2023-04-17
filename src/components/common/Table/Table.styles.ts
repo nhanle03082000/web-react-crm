@@ -14,7 +14,7 @@ export const Table = styled(AntdTable)`
     padding: 12px;
     font-weight: ${FONT_WEIGHT.bold};
     white-space: nowrap;
-    text-align: center;
+    text-align: center !important;
 
     & .anticon {
       color: var(--primary-color);

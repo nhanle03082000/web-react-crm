@@ -25,6 +25,9 @@ const UserForm: React.FC<IProps> = ({ isEditing }) => {
       <Form.Item name="phone" label="Số điện thoại">
         <Input placeholder="Nhập số điện thoại" size="small" disabled={isEditing} />
       </Form.Item>
+      <Form.Item name="am_code" label="Mã nhân viên phát triển">
+        <Input placeholder="Nhập mã nhân viên phát triển" size="small" />
+      </Form.Item>
       <Form.Item name="role_id" label="Vai trò">
         <Select options={state.roles} />
       </Form.Item>

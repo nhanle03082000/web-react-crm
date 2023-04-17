@@ -5,7 +5,7 @@ import { Tabs } from '@app/components/common/Tabs/Tabs';
 import { H4 } from '@app/components/common/typography/H4/H4';
 import { H5 } from '@app/components/common/typography/H5/H5';
 import { Button, Col, Row } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import CustomerContacts from '../DetailItem/CustomerContacts';
@@ -16,15 +16,17 @@ import CustomerQuotes from '../DetailItem/CustomerQuotes';
 import CustomerReminder from '../DetailItem/CustomerReminder';
 import CustomerTask from '../DetailItem/CustomerTask';
 import EditDetail from './EditDetail';
-import DetailsQuotes from './DetailsQuotes';
+import DetailQuotes from './DetailQuotes';
+import CustomerOrder from '../DetailItem/CustomerOrder';
+import DetailOrder from './DetailOrder';
 
 const Detail: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [isEdit, setIsEdit] = useState(false);
   const [data, setData] = useState<any>([]);
-  const [isDetailQuotes, setIsDetailQuotes] = useState(false);
   const [isIdQuotes, setIsIdQuotes] = useState<number>(0);
+  const [isIdOrder, setIsIdOrder] = useState<number>(0);
 
   const onEdit = () => {
     setIsEdit(true);
@@ -35,8 +37,13 @@ const Detail: React.FC = () => {
   };
 
   const handleDetailsQuotes = (id: number) => {
-    setIsDetailQuotes(true);
+    setActiveTab(2);
     setIsIdQuotes(id);
+  };
+
+  const handleDetailsOrder = (id: number) => {
+    setActiveTab(3);
+    setIsIdOrder(id);
   };
 
   useEffect(() => {
@@ -50,33 +57,7 @@ const Detail: React.FC = () => {
     // }
   }, []);
 
-  // const onUpdate = async (values: any) => {
-  //   let data = {
-  //     ...values,
-  //     is_active: true,
-  //   };
-  //   state.rolePermission ? (data = { ...data, permission: JSON.stringify(state.rolePermission) }) : data;
-  //   try {
-  //     const respUpdate: IRespApiSuccess = await apiInstance.put(`${API_BASE_URL}${path}/${id}`, data);
-  //     if (respUpdate.code === 200) {
-  //       notificationController.success({
-  //         message: 'Cập nhật thành công',
-  //       });
-  //     } else {
-  //       notificationController.error({
-  //         message: respUpdate.message,
-  //       });
-  //     }
-  //   } catch (error: any) {
-  //     notificationController.error({
-  //       message: 'Có lỗi xảy ra vui lòng thử lại sau',
-  //       description: error.message,
-  //     });
-  //   }
-  //   // onShow();
-  //   setIsModalOpen(false);
-  //   form.resetFields();
-  // };
+  const [activeTab, setActiveTab] = useState(1);
 
   const itemTab = [
     {
@@ -112,7 +93,7 @@ const Detail: React.FC = () => {
     {
       label: 'Đơn hàng',
       key: '7',
-      children: `Content of Tab Pane 3`,
+      children: <CustomerOrder id={data?.id} handleDetailsOrder={handleDetailsOrder} />,
     },
     {
       label: 'Ghi chú',
@@ -121,112 +102,160 @@ const Detail: React.FC = () => {
     },
   ];
 
-  return isDetailQuotes ? (
-    <DetailsQuotes id={isIdQuotes} setIsDetailQuotes={setIsDetailQuotes} />
-  ) : (
-    <DetailStyles>
-      <Row>
-        <Col span={24}>
-          <Button className="button-back" onClick={onBack}>
-            <LeftOutlined />
-            CHI TIẾT KHÁCH HÀNG
-          </Button>
-        </Col>
-        {isEdit ? (
-          <Col span={24}>
-            <EditDetail data={data} setIsEdit={setIsEdit} />
-          </Col>
-        ) : (
-          <Col span={24}>
-            <Card padding="1.25rem">
-              <Row gutter={[4, 4]}>
-                <Col span={24}>
-                  <H4>Thông tin chung</H4>
-                </Col>
-                <Col span={8}>
-                  <H5>Tên DN</H5>
-                  <div>{data?.company_name}</div>
-                </Col>
-                <Col span={8}>
-                  <H5>Mã số thuế</H5>
-                  <div>{data?.tax_code}</div>
-                </Col>
-                <Col span={8}>
-                  <Button className="button-edit" onClick={onEdit}>
-                    <EditOutlined style={{ fontSize: '24px', color: 'var(--primary-color)' }} />
-                  </Button>
-                </Col>
-                <Col span={8}>
-                  <H5>Họ tên người đại diện</H5>
-                  <div>{data?.name}</div>
-                </Col>
-                <Col span={8}>
-                  <H5>SĐT di động</H5>
-                  <div>{data?.phone_number}</div>
-                </Col>
-                <Col span={8}>
-                  <H5>Email cá nhân</H5>
-                  <div>{data?.email}</div>
-                </Col>
-              </Row>
-              <Row gutter={[4, 4]} style={{ marginTop: '24px' }}>
-                <Col span={24}>
-                  <H4>Thông tin tổ chức</H4>
-                </Col>
-                <Col span={8}>
-                  <H5>Số điện thoại doanh nhiệp</H5>
-                  <div>{data?.headquarters_phone}</div>
-                </Col>
-                <Col span={8}>
-                  <H5>Email doanh nhiệp</H5>
-                  <div>{data?.headquarters_email}</div>
-                </Col>
-                <Col span={8}></Col>
-                <Col span={8}>
-                  <H5>Lĩnh vực doanh nghiệp</H5>
-                  <div>{data?.company_field?.name}</div>
-                </Col>
-                <Col span={8}>
-                  <H5>Nguồn gốc</H5>
-                  <div>{data?.customer_source?.name}</div>
-                </Col>
-                <Col span={8}>
-                  <H5>Quy trình bán hàng</H5>
-                  <div>{data?.sale_process?.name}</div>
-                </Col>
-              </Row>
-              <Row gutter={[4, 4]} style={{ marginTop: '24px' }}>
-                <Col span={24}>
-                  <H4>Thông tin địa chỉ</H4>
-                </Col>
-                <Col span={8}>
-                  <H5>Tỉnh/TP</H5>
-                  <div>{data?.province?.name}</div>
-                </Col>
-                <Col span={8}>
-                  <H5>Quận/Huyện</H5>
-                  <div>{data?.district?.name}</div>
-                </Col>
-                <Col span={8}>
-                  <H5>Phường/Xã</H5>
-                  <div>{data?.area?.name}</div>
-                </Col>
-                <Col span={24}>
-                  <H5>Địa chỉ</H5>
-                  <div>{data?.headquarters_address}</div>
-                </Col>
-              </Row>
-              <Row>
-                <Col span={24}>
-                  <br />
-                  <Tabs type="card" defaultActiveKey="1" items={itemTab} />
-                </Col>
-              </Row>
-            </Card>
-          </Col>
-        )}
-      </Row>
-    </DetailStyles>
+  const components = [
+    {
+      tab: 1,
+      components: (
+        <DetailStyles>
+          <Row>
+            <Col span={24}>
+              <Button className="button-back" onClick={onBack}>
+                <LeftOutlined />
+                CHI TIẾT KHÁCH HÀNG
+              </Button>
+            </Col>
+            {isEdit ? (
+              <Col span={24}>
+                <EditDetail data={data} setIsEdit={setIsEdit} />
+              </Col>
+            ) : (
+              <Col span={24}>
+                <Card padding="1.25rem">
+                  <Row gutter={[4, 4]}>
+                    <Col span={24}>
+                      <H4>Thông tin chung</H4>
+                    </Col>
+                    <Col span={8}>
+                      <H5>Tên DN</H5>
+                      <div>{data?.company_name}</div>
+                    </Col>
+                    <Col span={8}>
+                      <H5>Mã số thuế</H5>
+                      <div>{data?.tax_code}</div>
+                    </Col>
+                    <Col span={8}>
+                      <Button className="button-edit" onClick={onEdit}>
+                        <EditOutlined style={{ fontSize: '24px', color: 'var(--primary-color)' }} />
+                      </Button>
+                    </Col>
+                    <Col span={8}>
+                      <H5>Họ tên người đại diện</H5>
+                      <div>{data?.name}</div>
+                    </Col>
+                    <Col span={8}>
+                      <H5>SĐT di động</H5>
+                      <div>{data?.phone_number}</div>
+                    </Col>
+                    <Col span={8}>
+                      <H5>Email cá nhân</H5>
+                      <div>{data?.email}</div>
+                    </Col>
+                  </Row>
+                  <Row gutter={[4, 4]} style={{ marginTop: '24px' }}>
+                    <Col span={24}>
+                      <H4>Thông tin tổ chức</H4>
+                    </Col>
+                    <Col span={8}>
+                      <H5>Số điện thoại doanh nhiệp</H5>
+                      <div>{data?.headquarters_phone}</div>
+                    </Col>
+                    <Col span={8}>
+                      <H5>Email doanh nhiệp</H5>
+                      <div>{data?.headquarters_email}</div>
+                    </Col>
+                    <Col span={8}></Col>
+                    <Col span={8}>
+                      <H5>Lĩnh vực doanh nghiệp</H5>
+                      <div>{data?.company_field?.name}</div>
+                    </Col>
+                    <Col span={8}>
+                      <H5>Nguồn gốc</H5>
+                      <div>{data?.customer_source?.name}</div>
+                    </Col>
+                    <Col span={8}>
+                      <H5>Quy trình bán hàng</H5>
+                      <div>{data?.sale_process?.name}</div>
+                    </Col>
+                  </Row>
+                  <Row gutter={[4, 4]} style={{ marginTop: '24px' }}>
+                    <Col span={24}>
+                      <H4>Thông tin địa chỉ</H4>
+                    </Col>
+                    <Col span={8}>
+                      <H5>Tỉnh/TP</H5>
+                      <div>{data?.province?.name}</div>
+                    </Col>
+                    <Col span={8}>
+                      <H5>Quận/Huyện</H5>
+                      <div>{data?.district?.name}</div>
+                    </Col>
+                    <Col span={8}>
+                      <H5>Phường/Xã</H5>
+                      <div>{data?.area?.name}</div>
+                    </Col>
+                    <Col span={24}>
+                      <H5>Địa chỉ</H5>
+                      <div>{data?.headquarters_address}</div>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col span={24}>
+                      <br />
+                      <Tabs type="card" defaultActiveKey="1" items={itemTab} />
+                    </Col>
+                  </Row>
+                </Card>
+              </Col>
+            )}
+          </Row>
+        </DetailStyles>
+      ),
+    },
+    {
+      tab: 2,
+      components: <DetailQuotes id={isIdQuotes} setActiveTab={setActiveTab} />,
+    },
+    {
+      tab: 3,
+      components: <DetailOrder id={isIdOrder} setActiveTab={setActiveTab} />,
+    },
+  ];
+
+  // const onUpdate = async (values: any) => {
+  //   let data = {
+  //     ...values,
+  //     is_active: true,
+  //   };
+  //   state.rolePermission ? (data = { ...data, permission: JSON.stringify(state.rolePermission) }) : data;
+  //   try {
+  //     const respUpdate: IRespApiSuccess = await apiInstance.put(`${API_BASE_URL}${path}/${id}`, data);
+  //     if (respUpdate.code === 200) {
+  //       notificationController.success({
+  //         message: 'Cập nhật thành công',
+  //       });
+  //     } else {
+  //       notificationController.error({
+  //         message: respUpdate.message,
+  //       });
+  //     }
+  //   } catch (error: any) {
+  //     notificationController.error({
+  //       message: 'Có lỗi xảy ra vui lòng thử lại sau',
+  //       description: error.message,
+  //     });
+  //   }
+  //   // onShow();
+  //   setIsModalOpen(false);
+  //   form.resetFields();
+  // };
+
+  // return
+  return (
+    <>
+      {components.map(({ tab, components }, index) => (
+        <Fragment key={index}>{activeTab === tab && components}</Fragment>
+      ))}
+    </>
   );
 };
 

@@ -166,6 +166,11 @@ export const userColumn = [
     editable: true,
   },
   {
+    title: 'Mã AM',
+    dataIndex: 'am_code',
+    editable: true,
+  },
+  {
     title: 'Số điện thoại',
     dataIndex: 'phone',
     editable: true,

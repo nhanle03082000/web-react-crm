@@ -1,21 +1,20 @@
 import { UploadOutlined } from '@ant-design/icons';
+import { apiInstance } from '@app/api/app/api_core';
 import { Card } from '@app/components/common/Card/Card';
-import { Popover } from '@app/components/common/Popover/Popover';
 import { Upload } from '@app/components/common/Upload/Upload';
 import { Button } from '@app/components/common/buttons/Button/Button';
 import { H3 } from '@app/components/common/typography/H3/H3';
+import Assign from '@app/components/customs/assign/Assign';
 import Create from '@app/components/customs/crud/Create';
 import ExportExcel from '@app/components/customs/exportexcel/ExportExcel';
 import Filter from '@app/components/customs/filter/Filter';
+import { columnLead } from '@app/components/customs/tables/columns';
 import { API_BASE_URL, API_URL } from '@app/configs/api-configs';
 import { DataContext } from '@app/contexts/DataContext';
+import { IRespApiSuccess } from '@app/interfaces/interfaces';
 import { Col, Row, Space, Typography } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
-import { columnLead } from '@app/components/customs/tables/columns';
-import { IRespApiSuccess } from '@app/interfaces/interfaces';
-import { apiInstance } from '@app/api/app/api_core';
 import CustomColumns from './components/CustomColumns';
-import AssignOverlay from './components/AssignOverlay';
 import LeadForm from './components/LeadForm';
 import Show from './components/Show';
 
@@ -170,9 +169,7 @@ const Main: React.FC = () => {
                     Tải file mẫu
                   </Typography.Link>
                 </Button>
-                <Popover placement="rightTop" trigger="click" content={<AssignOverlay listIdLead={listIdLead} />}>
-                  <Button type="primary">Phân công</Button>
-                </Popover>
+                <Assign list={listIdLead} buttonName="Phân công" />
                 <Create>
                   <LeadForm isEditing={false} />
                 </Create>

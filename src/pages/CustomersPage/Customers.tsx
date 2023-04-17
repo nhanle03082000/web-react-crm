@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
 
-const CustomersList: React.FC = () => {
+const Customers: React.FC = () => {
   const { t } = useTranslation();
   const path = API_URL.CUSTOMER;
   const page = t('namepage.khachhang');
@@ -19,4 +19,4 @@ const CustomersList: React.FC = () => {
   );
 };
 
-export default CustomersList;
+export default Customers;

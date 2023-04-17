@@ -11,6 +11,7 @@ import { API_BASE_URL, API_URL } from '@app/configs/api-configs';
 import { notificationController } from '@app/controllers/notificationController';
 import { IFilter, IRespApiSuccess } from '@app/interfaces/interfaces';
 import { Col, Form, Row, Typography } from 'antd';
+import { ColumnsType } from 'antd/es/table';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 
@@ -98,7 +99,7 @@ const CustomerReminder: React.FC<IProps> = ({ id }) => {
     // }
   };
 
-  const columns = [
+  const columns: ColumnsType = [
     {
       title: 'STT',
       dataIndex: 'stt',
@@ -107,6 +108,7 @@ const CustomerReminder: React.FC<IProps> = ({ id }) => {
       // title: t('tables.actions'),
       title: 'Thao tác',
       dataIndex: 'actions',
+      align: 'center',
       render: (_: any, record: any) => {
         return (
           <Popconfirm
@@ -135,7 +137,6 @@ const CustomerReminder: React.FC<IProps> = ({ id }) => {
     {
       title: 'Thời gian nhắc',
       dataIndex: 'alert_at',
-      editable: false,
       render: (record: string): string => {
         const date = new Date(record);
         return date.toLocaleDateString('en-GB');

@@ -20,24 +20,6 @@ export const sidebarNavigation: SidebarNavigationItem[] = [
   },
   {
     title: 'sidebar.khachhang',
-    key: 'customer',
-    url: '/customer',
-    icon: <CustomerIcon />,
-    children: [
-      {
-        title: 'sidebar.danhsach',
-        key: 'list',
-        url: '/customer/list',
-      },
-      {
-        title: 'sidebar.baogia',
-        key: 'price',
-        url: '/customer/price',
-      },
-    ],
-  },
-  {
-    title: 'sidebar.khachhang',
     key: 'customer1',
     url: '/customers',
     icon: <CustomerIcon />,

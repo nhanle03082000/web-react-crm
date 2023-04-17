@@ -12,15 +12,15 @@ import styled from 'styled-components';
 
 interface IProps {
   id: number;
-  setIsDetailQuotes: any;
+  setActiveTab: any;
 }
 
-const DetailsQuotes: React.FC<IProps> = ({ id, setIsDetailQuotes }) => {
+const DetailQuotes: React.FC<IProps> = ({ id, setActiveTab }) => {
   const [data, setData] = useState<any>([]);
 
   useEffect(() => {
     async function getData() {
-      const result = await getDataById(14, '/quotes');
+      const result = await getDataById(id, '/quotes');
       result[0].quote_detail.map((item: any, index: number) => {
         return (item.stt = index + 1);
       });
@@ -72,7 +72,7 @@ const DetailsQuotes: React.FC<IProps> = ({ id, setIsDetailQuotes }) => {
     <DetailQuotesStyles>
       <Row>
         <Col span={24}>
-          <Button className="button-back" onClick={() => setIsDetailQuotes(false)}>
+          <Button className="button-back" onClick={() => setActiveTab(1)}>
             <LeftOutlined /> CHI TIẾT LỊCH SỬ BÁO GIÁ
           </Button>
         </Col>
@@ -163,4 +163,4 @@ const DetailQuotesStyles = styled.div`
   }
 `;
 
-export default DetailsQuotes;
+export default DetailQuotes;

@@ -19,11 +19,10 @@ import Report from '@app/pages/ReportPages/Report';
 import Sell from '@app/pages/SellPages/Sell';
 import { roleCheckRoute } from '@app/utils/check';
 import { SettingList } from './list-route/SettingList';
-import { CustomerList } from './list-route/CustomerList';
 import Main from '@app/pages/LeadsPage/Main';
 import Detail from '@app/pages/LeadsPage/components/Details/Detail';
 import CustomersDetail from '@app/pages/CustomersPage/components/Details/Detail';
-import CustomersList from '@app/pages/CustomersPage/CustomersList';
+import Customers from '@app/pages/CustomersPage/Customers';
 import CustomersMain from '@app/pages/CustomersPage/CustomersMain';
 
 const NewsFeedPage = React.lazy(() => import('@app/pages/Templates/NewsFeedPage'));
@@ -158,7 +157,7 @@ export const AppRouter: React.FC = () => {
             <Route path="leads" element={<Main />} />
             <Route path="/leads/:id" element={<Detail />} />
           </Route>
-          <Route element={<CustomersList />}>
+          <Route element={<Customers />}>
             <Route path="customers" element={<CustomersMain />} />
             <Route path="/customers/:id" element={<CustomersDetail />} />
           </Route>
@@ -169,11 +168,6 @@ export const AppRouter: React.FC = () => {
               <Route key={route.path} path={route.path} element={route.components} />
             ))} */}
             {SettingList.map((route: any) => (
-              <Route key={route.path} path={route.path} element={route.components} />
-            ))}
-          </Route>
-          <Route path="customer">
-            {CustomerList.map((route: any) => (
               <Route key={route.path} path={route.path} element={route.components} />
             ))}
           </Route>

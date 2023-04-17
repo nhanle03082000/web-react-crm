@@ -39,6 +39,7 @@ const Users: React.FC = () => {
       label: 'Tên',
       type: 'string',
     },
+    { value: 'am_code', label: 'Mã AM', type: 'string' },
     {
       value: 'phone',
       label: 'Số điện thoại',

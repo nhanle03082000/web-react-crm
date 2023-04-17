@@ -1,6 +1,5 @@
 import { UploadOutlined } from '@ant-design/icons';
 import { Card } from '@app/components/common/Card/Card';
-import { Popover } from '@app/components/common/Popover/Popover';
 import { Upload } from '@app/components/common/Upload/Upload';
 import { Button } from '@app/components/common/buttons/Button/Button';
 import { H3 } from '@app/components/common/typography/H3/H3';
@@ -15,9 +14,9 @@ import { columnLead } from '@app/components/customs/tables/columns';
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
 import { apiInstance } from '@app/api/app/api_core';
 import CustomColumns from './components/CustomColumns';
-import AssignOverlay from './components/AssignOverlay';
 import CustomersForm from './components/CustomersForm';
 import Show from './components/Show';
+import Assign from '@app/components/customs/assign/Assign';
 
 const CustomersMain: React.FC = () => {
   // const userListPermission = JSON.parse(getRoleUser());
@@ -170,9 +169,7 @@ const CustomersMain: React.FC = () => {
                     Tải file mẫu
                   </Typography.Link>
                 </Button>
-                <Popover placement="rightTop" trigger="click" content={<AssignOverlay listIdLead={listIdLead} />}>
-                  <Button type="primary">Phân công</Button>
-                </Popover>
+                <Assign list={listIdLead} buttonName="Phân công" />
                 <Create>
                   <CustomersForm isEditing={false} />
                 </Create>

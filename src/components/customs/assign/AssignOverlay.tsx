@@ -13,16 +13,16 @@ interface ISelectOption {
 }
 
 interface IProp {
-  listIdLead: any;
+  list: any;
 }
 
-const AssignOverlay: React.FC<IProp> = ({ listIdLead }) => {
+const AssignOverlay: React.FC<IProp> = ({ list }) => {
   const [data, setData] = useState<ISelectOption[]>([{ value: '', label: '' }]);
 
   const onAssign = async (value: any) => {
     const data = {
       ...value,
-      id: listIdLead,
+      id: list,
     };
     try {
       const respUsers: IRespApiSuccess = await apiInstance.post(`${API_BASE_URL}/leads/assign`, data);
