@@ -31,5 +31,5 @@ export const API_URL = {
   CUSTOMERINTERACTIONS: '/customers/interactions',
   CUSTOMERTASK: '/tasks',
   QUOTES: '/quotes',
-  CUSTOMERORDER: '/orders',
+  ORDERS: '/orders',
 };

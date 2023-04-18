@@ -17,13 +17,17 @@ import NftDashboardPage from '@app/pages/Templates/DashboardPages/NftDashboardPa
 import MedicalDashboardPage from '@app/pages/Templates/DashboardPages/MedicalDashboardPage';
 import Report from '@app/pages/ReportPages/Report';
 import Sell from '@app/pages/SellPages/Sell';
-import { roleCheckRoute } from '@app/utils/check';
+// import { roleCheckRoute } from '@app/utils/check';
 import { SettingList } from './list-route/SettingList';
 import Main from '@app/pages/LeadsPage/Main';
 import Detail from '@app/pages/LeadsPage/components/Details/Detail';
 import CustomersDetail from '@app/pages/CustomersPage/components/Details/Detail';
 import Customers from '@app/pages/CustomersPage/Customers';
 import CustomersMain from '@app/pages/CustomersPage/CustomersMain';
+import SellQuotes from '@app/pages/SellPages/SellQuotes/SellQuotes';
+import SellOrders from '@app/pages/SellPages/SellOrders/SellOrders';
+import DetailOrder from '@app/pages/SellPages/components/Details/DetailOrder';
+import DetailQuotes from '@app/pages/SellPages/components/Details/DetailQuotes';
 
 const NewsFeedPage = React.lazy(() => import('@app/pages/Templates/NewsFeedPage'));
 const KanbanPage = React.lazy(() => import('@app/pages/Templates/KanbanPage'));
@@ -162,7 +166,12 @@ export const AppRouter: React.FC = () => {
             <Route path="/customers/:id" element={<CustomersDetail />} />
           </Route>
           <Route path="report" element={<Report />} />
-          <Route path="sell" element={<Sell />} />
+          <Route element={<Sell />}>
+            <Route path="quotes" element={<SellQuotes />} />
+            <Route path="/quotes/:id" element={<DetailQuotes />} />
+            <Route path="orders" element={<SellOrders />} />
+            <Route path="/orders/:id" element={<DetailOrder />} />
+          </Route>
           <Route path="setting">
             {/* {roleCheckRoute(SettingList).map((route: any) => (
               <Route key={route.path} path={route.path} element={route.components} />

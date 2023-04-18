@@ -2,6 +2,7 @@ import { getRoleUser } from './redux.util';
 
 export const roleCheckRoute = (arrCheck: any) => {
   const replacePath = (str: string) => str.replace(/-/g, '_');
+  console.log(replacePath);
   const roleUser = getRoleUser() && JSON.parse(getRoleUser());
 
   const arrChecked = arrCheck.filter((obj1: any) => {

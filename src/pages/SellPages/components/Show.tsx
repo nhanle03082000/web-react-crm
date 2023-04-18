@@ -1,20 +1,22 @@
-import { RestOutlined } from '@ant-design/icons';
+import { EyeOutlined, RestOutlined } from '@ant-design/icons';
 import { apiInstance } from '@app/api/app/api_core';
 import { Table } from '@app/components/common/Table/Table';
+import CustomPagination from '@app/components/customs/CustomPagination';
 import { API_BASE_URL } from '@app/configs/api-configs';
 import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
 import { Popconfirm, Space, Tooltip } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
-import CustomPagination from '../CustomPagination';
-import Update from './Update';
+import { useNavigate } from 'react-router-dom';
 
 interface IProps {
   param: string | null;
   colums: any;
   children: React.ReactNode;
-  permission: any;
+  setListIdLead: any;
+  visibleColumns: any;
+  path: string;
 }
 
 interface IFilter {
@@ -25,8 +27,8 @@ interface IFilter {
   total: number;
 }
 
-const Show: React.FC<IProps> = ({ children, param, colums, permission }) => {
-  const { path, show } = useContext(DataContext);
+const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns, path }) => {
+  const { isLoad } = useContext(DataContext);
   const [dataShow, setDataShow] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [filter, setFilter] = useState<IFilter>({
@@ -89,6 +91,12 @@ const Show: React.FC<IProps> = ({ children, param, colums, permission }) => {
     setFilter({ ...filter, page: page });
   };
 
+  const navigate = useNavigate();
+
+  const handleClick = (id: number) => {
+    navigate(`${path}/${id}`);
+  };
+
   const columns: any = [
     {
       title: 'STT',
@@ -100,25 +108,19 @@ const Show: React.FC<IProps> = ({ children, param, colums, permission }) => {
       render: (record: any) => {
         return (
           <Space>
-            {path != '/users'
-              ? permission.delete && (
-                  <Tooltip placement="bottom" title="Xoá dữ liệu">
-                    <Popconfirm
-                      title="Bạn có muốn xoá không?"
-                      okText="Có"
-                      cancelText="Không"
-                      onConfirm={() => onDelete(record.id)}
-                    >
-                      <RestOutlined style={{ fontSize: '20px', cursor: 'pointer' }} />
-                    </Popconfirm>
-                  </Tooltip>
-                )
-              : ''}
-            {permission.edit && (
-              <Update id={record.id} onShow={onShow}>
-                {children}
-              </Update>
-            )}
+            <Tooltip placement="bottom" title="Xoá dữ liệu">
+              <Popconfirm
+                title="Bạn có muốn xoá không?"
+                okText="Có"
+                cancelText="Không"
+                onConfirm={() => onDelete(record.id)}
+              >
+                <RestOutlined style={{ fontSize: '20px', cursor: 'pointer' }} />
+              </Popconfirm>
+            </Tooltip>
+            <Tooltip placement="bottom" title="Xem chi tiết">
+              <EyeOutlined style={{ fontSize: '20px', cursor: 'pointer' }} onClick={() => handleClick(record.id)} />
+            </Tooltip>
           </Space>
         );
       },
@@ -128,25 +130,26 @@ const Show: React.FC<IProps> = ({ children, param, colums, permission }) => {
 
   useEffect(() => {
     onShow();
-  }, [param, filter.page, show]);
+  }, [param, filter.page, isLoad]);
+
+  const handleSelectChange = (selectedRowKeys: React.Key[]) => {
+    setListIdLead(selectedRowKeys);
+  };
+  const rowSelection = {
+    onChange: handleSelectChange,
+  };
 
   return (
     <>
-      {/* <CustomTable
-        tableData={tableData}
-        loading={loading}
-        deleteData={onDelete}
-        updateData={onUpdate}
-        onEditRow={onShowModal}
-        checkPermission={checkPermission}
-      /> */}
       <Table
+        // columns={columns.filter((column: any) => visibleColumns.includes(column.title))}
         columns={columns}
         dataSource={dataShow}
         pagination={false}
         scroll={{ x: 800 }}
         loading={isLoading}
         rowKey="id"
+        rowSelection={rowSelection}
       />
       <CustomPagination
         totalItems={filter.total}

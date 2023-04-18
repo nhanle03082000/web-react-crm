@@ -25,7 +25,7 @@ export const ConvertTextCheckBox = (key: string): string => {
       return 'Phân công';
       break;
     case 'admin_system':
-      return 'Quản trị bộ phận';
+      return 'Quản trị hệ thống';
       break;
     case 'admin_department':
       return 'Quản trị phòng ban';

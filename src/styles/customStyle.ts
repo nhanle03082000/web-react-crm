@@ -14,6 +14,7 @@ export const customStyle = css`
     color: var(--primary-color);
     padding: 10px;
     font-size: 24px;
+    text-transform: uppercase;
   }
   .button-back:hover,
   .button-back:focus,

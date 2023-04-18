@@ -6,6 +6,8 @@ const defaultValues = {
   setState: {},
   isLoad: false,
   setIsLoad: {},
+  show: false,
+  setShow: {},
   state: {
     data: {},
     rolePermission: [],
@@ -14,11 +16,13 @@ const defaultValues = {
 
 interface data {
   path: string;
-  page: string;
+  page?: string;
   state: any;
   setState: any;
   setIsLoad: any;
   isLoad: boolean;
+  show?: boolean;
+  setShow?: any;
 }
 
 export const DataContext = createContext<data>(defaultValues);

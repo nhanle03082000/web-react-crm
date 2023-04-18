@@ -35,9 +35,11 @@ export const doLogin = createAsyncThunk('auth/doLogin', async (loginPayload: any
   dispatch(setUser(loginPayload));
   persistToken(readToken());
   persistPermisstion(loginPayload.role.permission);
+  // persistPermisstion(loginPayload.role);
   return {
     token: readToken(),
-    permission: loginPayload.role.permission,
+    permission: readPermisstion(),
+    // permission: loginPayload.role,
   };
 });
 

@@ -16,14 +16,16 @@ interface IProps {
 const Create: React.FC<IProps> = ({ children }) => {
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { path, page, state, setIsLoad } = useContext(DataContext);
+  const { path, page, state, setIsLoad, setShow } = useContext(DataContext);
 
   const showModal = () => {
     setIsModalOpen(true);
+    setIsLoad(true);
   };
 
   const handleCancel = () => {
     setIsModalOpen(false);
+    setIsLoad(false);
     form.resetFields();
   };
 
@@ -51,7 +53,7 @@ const Create: React.FC<IProps> = ({ children }) => {
         description: error.message,
       });
     }
-    setIsLoad(true);
+    setShow(true);
     setIsModalOpen(false);
     form.resetFields();
   };

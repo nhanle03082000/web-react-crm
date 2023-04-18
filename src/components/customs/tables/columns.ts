@@ -1,3 +1,5 @@
+import numeral from 'numeral';
+
 export const roleColumn = [
   {
     title: 'ID vai trò',
@@ -273,6 +275,84 @@ export const columnLead = [
     dataIndex: 'area',
     render: (record: { id: number; name: string }): string | null => {
       return record?.name || null;
+    },
+  },
+];
+
+export const columnSell = [
+  {
+    title: 'Mã báo giá',
+    dataIndex: 'code',
+    align: 'right',
+  },
+  {
+    title: 'Ngày báo giá',
+    dataIndex: 'quote_date',
+    align: 'right',
+    render: (record: string): string => {
+      const date = new Date(record);
+      return date.toLocaleDateString('en-GB');
+    },
+  },
+  {
+    title: 'Tên doanh nghiệp',
+    dataIndex: 'customer',
+    align: 'left',
+    render: (record: any) => {
+      return record.company_name || null;
+    },
+  },
+  {
+    title: 'Khách hàng',
+    dataIndex: 'customer',
+    align: 'left',
+    render: (record: any) => {
+      return record.name || null;
+    },
+  },
+  {
+    title: 'Mã số thuế',
+    dataIndex: 'customer',
+    align: 'right',
+    render: (record: any) => {
+      return record.tax_code || null;
+    },
+  },
+  {
+    title: 'Email khách hàng',
+    dataIndex: 'customer',
+    render: (record: any) => {
+      return record.email || null;
+    },
+  },
+  {
+    title: 'Số điện thoại khách hàng',
+    align: 'right',
+    dataIndex: 'customer',
+    render: (record: any) => {
+      return record.phone_number || null;
+    },
+  },
+  {
+    title: 'Nhân viên phụ trách',
+    dataIndex: 'employee',
+    render: (record: any): string | null => {
+      return record?.name || null;
+    },
+  },
+  {
+    title: 'Số điện thoại nhân viên',
+    dataIndex: 'employee',
+    align: 'right',
+    render: (record: any): string | null => {
+      return record?.phone || null;
+    },
+  },
+  {
+    title: 'Tổng cộng',
+    dataIndex: 'total_amount',
+    render: (record: { id: number; name: string }): string | null => {
+      return `${numeral(record).format('0,0 đ')}đ` || null;
     },
   },
 ];

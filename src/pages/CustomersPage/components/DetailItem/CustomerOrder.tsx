@@ -15,7 +15,7 @@ interface IProps {
 }
 
 const CustomerOrder: React.FC<IProps> = ({ id, handleDetailsOrder }) => {
-  const path = API_URL.CUSTOMERORDER;
+  const path = API_URL.ORDERS;
   const [dataContacts, setDataContacts] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [filter, setFilter] = useState<IFilter>({

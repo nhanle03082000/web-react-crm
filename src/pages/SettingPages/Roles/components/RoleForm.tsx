@@ -11,14 +11,13 @@ import { notificationController } from '@app/controllers/notificationController'
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { DataContext } from '@app/contexts/DataContext';
 import CustomLoading from '@app/components/customs/CustomLoading';
-import { H4 } from '@app/components/common/typography/H4/H4';
 
 interface IProps {
   isEditing: boolean;
 }
 
 const RoleForm: React.FC<IProps> = ({ isEditing }) => {
-  const { state, setState } = useContext(DataContext);
+  const { state, setState, isLoad } = useContext(DataContext);
   const [isLoading, setIsLoading] = useState(false);
   const getDefaultPermission = async () => {
     setIsLoading(true);
@@ -52,8 +51,8 @@ const RoleForm: React.FC<IProps> = ({ isEditing }) => {
   };
 
   useEffect(() => {
-    getDefaultPermission();
-  }, []);
+    isLoad && getDefaultPermission();
+  }, [isLoad]);
 
   return (
     <>

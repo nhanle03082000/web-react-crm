@@ -89,6 +89,8 @@
     "nguoidung": "Người dùng",
     "email": "email",
     "danhsach": "Danh sách",
-    "baogia": "Báo giá"
+    "baogia": "Báo giá",
+    "quotes": "Báo giá",
+    "orders": "Đơn hàng"
   }
 }

@@ -1,6 +1,5 @@
 import React from 'react';
-import { SettingOutlined, ShoppingCartOutlined, StarOutlined } from '@ant-design/icons';
-import { ReactComponent as CustomerIcon } from '@app/assets/icons/customer.svg';
+import { SettingOutlined, ShoppingCartOutlined, StarOutlined, TeamOutlined } from '@ant-design/icons';
 import { ReactComponent as ReportIcon } from '@app/assets/icons/report.svg';
 
 export interface SidebarNavigationItem {
@@ -22,13 +21,24 @@ export const sidebarNavigation: SidebarNavigationItem[] = [
     title: 'sidebar.khachhang',
     key: 'customer1',
     url: '/customers',
-    icon: <CustomerIcon />,
+    icon: <TeamOutlined />,
   },
   {
     title: 'sidebar.banhang',
     key: 'sell',
-    url: '/sell',
     icon: <ShoppingCartOutlined />,
+    children: [
+      {
+        title: 'Báo giá',
+        key: 'quotes',
+        url: '/quotes',
+      },
+      {
+        title: 'Đơn hàng',
+        key: 'orders',
+        url: '/orders',
+      },
+    ],
   },
   {
     title: 'sidebar.baocao-thongke',
