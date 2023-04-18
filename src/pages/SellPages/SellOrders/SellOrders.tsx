@@ -64,6 +64,11 @@ const SellOrders: React.FC = () => {
       type: 'string',
     },
     {
+      value: 'employee.shop_code',
+      label: 'Theo bộ phận',
+      type: 'string',
+    },
+    {
       value: 'headquarters_phone',
       label: 'Số điện thoại doanh nghiệp',
       type: 'string',

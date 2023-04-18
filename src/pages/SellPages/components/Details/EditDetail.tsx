@@ -1,15 +1,8 @@
-import {
-  getAreasList,
-  getCompanyFieldsList,
-  getCustomerSourcesList,
-  getDistrictsList,
-  getProvincesList,
-  getSaleProcessesList,
-} from '@app/api/app/api';
+import { getCustomersList, getUsersList } from '@app/api/app/api';
 import { apiInstance } from '@app/api/app/api_core';
-import { Card } from '@app/components/common/Card/Card';
 import { Button } from '@app/components/common/buttons/Button/Button';
 import { Input } from '@app/components/common/inputs/Input/Input';
+import { DatePicker } from '@app/components/common/pickers/DatePicker';
 import { Select } from '@app/components/common/selects/Select/Select';
 import { H4 } from '@app/components/common/typography/H4/H4';
 import { H5 } from '@app/components/common/typography/H5/H5';
@@ -18,6 +11,7 @@ import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
 import { Col, Form, Row } from 'antd';
+import moment from 'moment';
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
@@ -29,139 +23,67 @@ interface ISelectOption {
 interface Iprops {
   setIsEdit: any;
   data: any;
+  dataTable: any;
+  children: React.ReactNode;
 }
 
-const EditDetail: React.FC<Iprops> = ({ setIsEdit, data }) => {
+const EditDetail: React.FC<Iprops> = ({ setIsEdit, data, dataTable, children }) => {
   const [form] = Form.useForm();
   const { path } = useContext(DataContext);
-  const [provinces, setProvinces] = useState<ISelectOption[]>([{ value: '', label: '' }]);
-  const [districts, setDistricts] = useState<ISelectOption[]>([{ value: '', label: '' }]);
-  const [areas, setAreas] = useState<ISelectOption[]>([{ value: '', label: '' }]);
-  const [companyFields, setCompanyFields] = useState<ISelectOption[]>([{ value: '', label: '' }]);
-  const [customerSources, setCustomerSources] = useState<ISelectOption[]>([{ value: '', label: '' }]);
-  const [saleProcesses, setSaleProcesses] = useState<ISelectOption[]>([{ value: '', label: '' }]);
+  const [customers, setCustomers] = useState<ISelectOption[]>([{ value: '', label: '' }]);
+  const [user, setUser] = useState<ISelectOption[]>([{ value: '', label: '' }]);
 
   const initialValues = {
-    tax_code: data.tax_code,
-    company_name: data.company_name,
-    name: data.name,
-    headquarters_address: data.headquarters_address,
-
-    headquarters_email: data.headquarters_email,
-    headquarters_phone: data.headquarters_phone,
-    email: data.email,
-    phone_number: data.phone_number,
-  };
-
-  const onChangeProvinces = (values: any) => {
-    provinces.map((item: ISelectOption) => {
-      if (item.value === values) {
-        getDistrictList(item.value);
-      }
-    });
-  };
-
-  const onChangeDistricts = (values: any) => {
-    districts.map((item: ISelectOption) => {
-      if (item.value === values) {
-        getAreaList(item.value);
-      }
-    });
-  };
-
-  const getDistrictList = async (idProvinces: string) => {
-    const districtsList: { value: any; label: any }[] = [];
-    try {
-      const respDistricts: IRespApiSuccess = await apiInstance.get(`${API_BASE_URL}/districts`);
-      respDistricts.data.collection.map((item: any) => {
-        if (item.province_id === idProvinces) {
-          districtsList.push({ value: item.id, label: item.name });
-        }
-      });
-      setDistricts(districtsList);
-    } catch (error: any) {
-      notificationController.error({
-        message: 'Có lỗi xảy ra vui lòng thử lại sau',
-        description: error.message,
-      });
-    }
-  };
-
-  const getAreaList = async (idDistricts: string) => {
-    const areasList: { value: any; label: any }[] = [];
-    try {
-      const respDistricts: IRespApiSuccess = await apiInstance.get(`${API_BASE_URL}/areas`);
-      respDistricts.data.collection.map((item: any) => {
-        if (item.district_id === idDistricts) {
-          areasList.push({ value: item.id, label: item.name });
-        }
-      });
-      setAreas(areasList);
-    } catch (error: any) {
-      notificationController.error({
-        message: 'Có lỗi xảy ra vui lòng thử lại sau',
-        description: error.message,
-      });
-    }
+    code: data.code,
+    quote_date: moment(data.quote_date),
+    company_name: data.customer?.company_name,
+    customer_id: data.customer?.id,
+    tax_code: data.customer?.tax_code,
+    email: data.customer?.email,
+    phone_number: data.customer?.phone_number,
+    employee_id: data.employee_id,
+    phone: data.employee?.phone,
+    total_amount: data.total_amount,
   };
 
   useEffect(() => {
-    async function getCustomerSources() {
-      const dataResult = await getCustomerSourcesList();
-      setCustomerSources(dataResult);
+    async function getCustomer() {
+      const dataResult = await getCustomersList();
+      setCustomers(dataResult);
     }
-    async function getCompanyFields() {
-      const dataResult = await getCompanyFieldsList();
-      setCompanyFields(dataResult);
+    async function getUsers() {
+      const dataResult = await getUsersList();
+      setUser(dataResult);
     }
-    async function getProvinces() {
-      const dataResult = await getProvincesList();
-      setProvinces(dataResult);
-    }
-    async function getDistricts() {
-      const dataResult = await getDistrictsList();
-      setDistricts(dataResult);
-    }
-    async function getAreas() {
-      const dataResult = await getAreasList();
-      setAreas(dataResult);
-    }
-    async function getSaleProcesses() {
-      const dataResult = await getSaleProcessesList();
-      setSaleProcesses(dataResult);
-    }
-    getProvinces();
-    getCustomerSources();
-    getCompanyFields();
-    getSaleProcesses();
-    getDistricts();
-    getAreas();
+    getCustomer();
+    getUsers();
   }, []);
 
   const onUpdate = async (values: any) => {
     const data1 = {
       ...values,
-      customer_source_id: 2,
-      is_active: true,
+      quote_date: moment(new Date(values.quote_date).toUTCString()).format('YYYY-MM-DD'),
+      detail: dataTable,
     };
-    try {
-      const respUpdate: IRespApiSuccess = await apiInstance.put(`${API_BASE_URL}${path}/${data.id}`, data1);
-      if (respUpdate.code === 200) {
-        notificationController.success({
-          message: 'Cập nhật thành công',
-        });
-        setIsEdit(false);
-      } else {
-        notificationController.error({
-          message: respUpdate.message,
-        });
-      }
-    } catch (error: any) {
-      notificationController.error({
-        message: 'Có lỗi xảy ra vui lòng thử lại sau',
-        description: error.message,
-      });
-    }
+    console.log(data1);
+    // try {
+    //   const respUpdate: IRespApiSuccess = await apiInstance.put(`${API_BASE_URL}${path}/${data.id}`, data1);
+    //   if (respUpdate.code === 200) {
+    //     notificationController.success({
+    //       message: 'Cập nhật thành công',
+    //     });
+    //     setIsEdit(false);
+    //   } else {
+    //     notificationController.error({
+    //       message: respUpdate.message,
+    //     });
+    //   }
+    // } catch (error: any) {
+    //   notificationController.error({
+    //     message: 'Có lỗi xảy ra vui lòng thử lại sau',
+    //     description: error.message,
+    //   });
+    // }
   };
 
   useEffect(() => {
@@ -172,11 +94,104 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data }) => {
     <EditDetailStyles>
       <Form form={form} onFinish={onUpdate}>
         <Row>
-          <Col span={8}>
-            <H5>Mã báo giá</H5>
-            <Form.Item name="code" rules={[{ required: true, message: 'Mã báo giá không được bỏ trống!' }]}>
-              <Input placeholder="Nhập tên doanh nghiệp" size="small" />
-            </Form.Item>
+          <Col span={24}>
+            <Row gutter={10}>
+              <Col span={12}>
+                <H5>Mã báo giá</H5>
+                <Form.Item name="code" rules={[{ required: true, message: 'Mã báo giá không được bỏ trống!' }]}>
+                  <Input placeholder="Nhập tên doanh nghiệp" size="small" />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <H5>Ngày báo giá</H5>
+                <Form.Item name="quote_date" rules={[{ required: true, message: 'Mã báo giá không được bỏ trống!' }]}>
+                  <DatePicker
+                    format="DD/MM/YYYY"
+                    placeholder="Chọn ngày báo giá"
+                    size="small"
+                    style={{ width: '100%' }}
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <H5>Tên doanh nghiệp</H5>
+                <Form.Item
+                  name="company_name"
+                  rules={[{ required: true, message: 'Tên doanh nghiệp không được bỏ trống!' }]}
+                >
+                  <Input placeholder="Nhập tên doanh nghiệp" size="small" />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <H5>Khách hàng</H5>
+                <Form.Item name="customer_id" rules={[{ required: true, message: 'Khách hàng không được bỏ trống!' }]}>
+                  <Select options={customers} placeholder="Chọn khách hàng" size="small" />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <H5>Mã số thuế</H5>
+                <Form.Item name="tax_code" rules={[{ required: true, message: 'Mã số thuê không được bỏ trống!' }]}>
+                  <Input placeholder="Nhập mã số thuê" size="small" />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <H5>Email khách hàng</H5>
+                <Form.Item name="email" rules={[{ required: true, message: 'Email khách hàng không được bỏ trống!' }]}>
+                  <Input placeholder="Nhập email khách hàng" size="small" />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <H5>Số điện thoại khách hàng</H5>
+                <Form.Item
+                  name="phone_number"
+                  rules={[{ required: true, message: 'Số điện thoại khách hàng không được bỏ trống!' }]}
+                >
+                  <Input placeholder="Nhập số điện thoại khách hàng" size="small" />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <H5>Nhân viên phụ trách</H5>
+                <Form.Item
+                  name="employee_id"
+                  rules={[{ required: true, message: 'Nhân viên phụ trách không được bỏ trống!' }]}
+                >
+                  <Select options={user} placeholder="Chọn nhân viên phụ trách" size="small" />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <H5>Số điện thoại nhân viên</H5>
+                <Form.Item
+                  name="phone"
+                  rules={[{ required: true, message: 'Số điện thoại nhân viên không được bỏ trống!' }]}
+                >
+                  <Input placeholder="Nhập số điện thoại nhân viên" size="small" />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <H5>Tổng cộng</H5>
+                <Form.Item name="total_amount" rules={[{ required: true, message: 'Tổng cộng không được bỏ trống!' }]}>
+                  <Input placeholder="Nhập tổng cộng" size="small" />
+                </Form.Item>
+              </Col>
+              <Col span={24}>
+                <br />
+                <H4>Thông tin sản phẩm</H4>
+              </Col>
+              <Col span={24}>{children}</Col>
+              <Col style={{ display: 'flex', marginTop: '20px' }}>
+                <Form.Item>
+                  <Button type="ghost" onClick={() => setIsEdit(false)}>
+                    Huỷ
+                  </Button>
+                </Form.Item>
+                &nbsp;
+                <Form.Item>
+                  <Button type="primary" htmlType="submit">
+                    Lưu
+                  </Button>
+                </Form.Item>
+              </Col>
+            </Row>
           </Col>
         </Row>
       </Form>

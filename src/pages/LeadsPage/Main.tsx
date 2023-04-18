@@ -99,6 +99,11 @@ const Main: React.FC = () => {
       type: 'string',
     },
     {
+      value: 'employee.shop_code',
+      label: 'Theo bộ phận',
+      type: 'string',
+    },
+    {
       value: 'province.id',
       label: 'Tỉnh/TP',
       type: 'string',

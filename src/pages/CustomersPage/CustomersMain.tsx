@@ -78,6 +78,11 @@ const CustomersMain: React.FC = () => {
       type: 'string',
     },
     {
+      value: 'employee.shop_code',
+      label: 'Theo bộ phận',
+      type: 'string',
+    },
+    {
       value: 'customer_source.id',
       label: 'Nguồn gốc',
       type: 'string',

@@ -1,5 +1,5 @@
 import { PlusOutlined, RestOutlined } from '@ant-design/icons';
-import { getProductGroupList, getProductList } from '@app/api/app/api';
+import { getProductList } from '@app/api/app/api';
 import { apiInstance } from '@app/api/app/api_core';
 import { Modal } from '@app/components/common/Modal/Modal';
 import { Popconfirm } from '@app/components/common/Popconfirm/Popconfirm';

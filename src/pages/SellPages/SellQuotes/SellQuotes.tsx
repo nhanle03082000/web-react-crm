@@ -22,7 +22,6 @@ import { PageTitle } from '@app/components/common/PageTitle/PageTitle';
 const SellQuotes: React.FC = () => {
   // const userListPermission = JSON.parse(getRoleUser());
   // const permission = userListPermission?.filter((item: any) => item.name === path.replace(/\//g, ''))[0].actions;
-  const [saleProcesses, setSaleProcesses] = useState<any>([]);
   const path = API_URL.QUOTES;
   const page = 'Báo giá';
   const [param, setParam] = useState('');
@@ -92,6 +91,11 @@ const SellQuotes: React.FC = () => {
     {
       value: 'sale_process.id',
       label: 'Quy trình bán hàng',
+      type: 'string',
+    },
+    {
+      value: 'employee.shop_code',
+      label: 'Theo bộ phận',
       type: 'string',
     },
     {
