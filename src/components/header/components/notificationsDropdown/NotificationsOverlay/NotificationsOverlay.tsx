@@ -1,16 +1,13 @@
-import React, { useMemo } from 'react';
-import { Trans } from 'react-i18next';
-import { useTranslation } from 'react-i18next';
-import { Col, Row, Space } from 'antd';
-import { Link } from 'react-router-dom';
+import { Col, Row, Space, Typography } from 'antd';
+import { Notification as NotificationType } from 'api/notifications.api';
 import { Notification } from 'components/common/Notification/Notification';
-import { capitalize } from 'utils/utils';
-import { Mention, Notification as NotificationType } from 'api/notifications.api';
 import { notificationsSeverities } from 'constants/notificationsSeverities';
+import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import * as S from './NotificationsOverlay.styles';
 
 interface NotificationsOverlayProps {
-  notifications: NotificationType[];
+  notifications: any[];
   setNotifications: (state: NotificationType[]) => void;
 }
 
@@ -27,23 +24,17 @@ export const NotificationsOverlay: React.FC<NotificationsOverlayProps> = ({
         const type = notificationsSeverities.find((dbSeverity) => dbSeverity.id === notification.id)?.name;
 
         return (
-          <Notification
-            key={index}
-            type={type || 'warning'}
-            title={capitalize(type || 'warning')}
-            description={t(notification.description)}
-            {...(type === 'mention' && {
-              mentionIconSrc: (notification as Mention).userIcon,
-              title: (notification as Mention).userName,
-              description: (
-                <Trans i18nKey={(notification as Mention).description}>
-                  <S.LinkBtn type="link" href={(notification as Mention).href}>
-                    {{ place: t((notification as Mention).place) }}
-                  </S.LinkBtn>
-                </Trans>
-              ),
-            })}
-          />
+          <>
+            <Notification
+              key={index}
+              type={type || 'warning'}
+              title={notification.title}
+              description={notification.content}
+            />
+            <Typography.Link href={notification.link} target="_blank">
+              Đi đến trang
+            </Typography.Link>
+          </>
         );
       }),
     [notifications, t],
@@ -66,7 +57,7 @@ export const NotificationsOverlay: React.FC<NotificationsOverlayProps> = ({
             {notifications.length > 0 && (
               <Col span={24}>
                 <S.Btn type="ghost" onClick={() => setNotifications([])}>
-                  {t('header.notifications.readAll')}
+                  Bỏ qua thông báo này
                 </S.Btn>
               </Col>
             )}

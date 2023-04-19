@@ -78,12 +78,18 @@ const DetailQuotes: React.FC = () => {
       return item.id === values;
     });
 
-    dataChange.price = dataChange.price || 0;
-    dataChange.amount = dataChange.amount || 100;
-    dataTable[index] = dataChange;
+    console.log(dataChange);
 
+    dataChange.price = dataChange.price || 2;
+    dataChange.amount = dataChange.amount || 100;
+    dataChange.quantity = dataChange.quantity || 100;
+    dataChange.vat = dataChange.vat || 100;
+    dataChange.amount_before_tax = dataChange.amount_before_tax || 100;
+    dataTable[index] = dataChange;
     setDataTable([...dataTable]);
   };
+
+  console.log(dataTable);
 
   const getAmount = (quantity: number, index: number) => {
     const vat = dataTable[index].vat;
@@ -196,7 +202,6 @@ const DetailQuotes: React.FC = () => {
                                 </Col>
                               </Row>
                               {quote_detail.map(({ key, name, ...restField }: any, index) => {
-                                console.log(restField, index, dataTable);
                                 return (
                                   <Row key={key} gutter={10} style={{ marginBottom: '10px' }}>
                                     <Col span={4}>
