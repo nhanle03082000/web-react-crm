@@ -43,18 +43,28 @@ const CustomColumns: React.FC<ICustomColumns> = ({ columns, setColumns }) => {
 const CustomColumnsOverlay = ({ columns, setColumns }: any) => {
   const handleColumnToggle = (checked: boolean, columnName: any) => {
     if (columns.includes(columnName) && checked === false) {
-      setColumns(columns.filter((item: any) => item !== columnName));
+      const filterCol = columns.filter((item: any) => item !== columnName);
+      setColumns(filterCol);
     } else {
       setColumns([...columns, columnName]);
     }
+
+    // Lưu trạng thái cột vào localStorage
+    localStorage.setItem('column_lead', JSON.stringify(columns));
   };
+
+  // Lấy trạng thái cột cuối cùng lưu trữ trong localStorage
+  const storedColumns = JSON.parse(localStorage.getItem('column_lead') || JSON.stringify(visibleColumns));
+
   return (
     <>
       {visibleColumns.map((item: any, index: number) => {
+        const checked = storedColumns.includes(item);
+
         return (
           <Row key={index} style={{ margin: '2px 0' }} gutter={10}>
             <Col>
-              <Switch defaultChecked onChange={(checked) => handleColumnToggle(checked, item)} />
+              <Switch defaultChecked={checked} onChange={(checked) => handleColumnToggle(checked, item)} />
             </Col>
             <Col>
               <Space>{item}</Space>

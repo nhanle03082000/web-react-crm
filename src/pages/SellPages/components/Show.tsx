@@ -137,8 +137,7 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns, 
   return (
     <>
       <Table
-        // columns={columns.filter((column: any) => visibleColumns.includes(column.title))}
-        columns={columns}
+        columns={columns.filter((column: any) => visibleColumns.includes(column.title))}
         dataSource={dataShow}
         pagination={false}
         scroll={{ x: 800 }}

@@ -10,22 +10,17 @@ interface ICustomColumns {
 
 const visibleColumns = [
   'STT',
-  'Mã số thuế',
-  'Nguồn gốc',
   'Thao tác',
-  'Doanh nghiệp',
-  'Họ tên',
-  'SĐT di động',
+  'Mã báo giá',
+  'Ngày báo giá',
+  'Tên doanh nghiệp',
+  'Khách hàng',
+  'Mã số thuế',
+  'Email khách hàng',
+  'Số điện thoại khách hàng',
   'Nhân viên phụ trách',
-  'Quy trình bán hàng',
-  'SĐT doanh nghiệp',
-  'Email doanh nghiệp',
-  'Email cá nhân',
-  'Lĩnh vực hoạt động',
-  'Địa chỉ trụ sở chính',
-  'Tỉnh/Thành phố',
-  'Quận/Huyện',
-  'Phường/Xã',
+  'Số điện thoại nhân viên',
+  'Tổng cộng',
 ];
 
 const CustomColumns: React.FC<ICustomColumns> = ({ columns, setColumns }) => {
@@ -43,18 +38,28 @@ const CustomColumns: React.FC<ICustomColumns> = ({ columns, setColumns }) => {
 const CustomColumnsOverlay = ({ columns, setColumns }: any) => {
   const handleColumnToggle = (checked: boolean, columnName: any) => {
     if (columns.includes(columnName) && checked === false) {
-      setColumns(columns.filter((item: any) => item !== columnName));
+      const filterCol = columns.filter((item: any) => item !== columnName);
+      setColumns(filterCol);
     } else {
       setColumns([...columns, columnName]);
     }
+
+    // Lưu trạng thái cột vào localStorage
+    localStorage.setItem('column_quotes', JSON.stringify(columns));
   };
+
+  // Lấy trạng thái cột cuối cùng lưu trữ trong localStorage
+  const storedColumns = JSON.parse(localStorage.getItem('column_quotes') || JSON.stringify(visibleColumns));
+
   return (
     <>
       {visibleColumns.map((item: any, index: number) => {
+        const checked = storedColumns.includes(item);
+
         return (
           <Row key={index} style={{ margin: '2px 0' }} gutter={10}>
             <Col>
-              <Switch defaultChecked onChange={(checked) => handleColumnToggle(checked, item)} />
+              <Switch defaultChecked={checked} onChange={(checked) => handleColumnToggle(checked, item)} />
             </Col>
             <Col>
               <Space>{item}</Space>

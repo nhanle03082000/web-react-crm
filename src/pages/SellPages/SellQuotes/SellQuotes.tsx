@@ -21,22 +21,17 @@ const SellQuotes: React.FC = () => {
   const [param, setParam] = useState('');
   const [visibleColumns, setVisibleColumns] = useState<string[]>([
     'STT',
-    'Mã số thuế',
-    'Nguồn gốc',
     'Thao tác',
-    'Doanh nghiệp',
-    'Họ tên',
-    'SĐT di động',
+    'Mã báo giá',
+    'Ngày báo giá',
+    'Tên doanh nghiệp',
+    'Khách hàng',
+    'Mã số thuế',
+    'Email khách hàng',
+    'Số điện thoại khách hàng',
     'Nhân viên phụ trách',
-    'Quy trình bán hàng',
-    'SĐT doanh nghiệp',
-    'Email doanh nghiệp',
-    'Email cá nhân',
-    'Lĩnh vực hoạt động',
-    'Địa chỉ trụ sở chính',
-    'Tỉnh/Thành phố',
-    'Quận/Huyện',
-    'Phường/Xã',
+    'Số điện thoại nhân viên',
+    'Tổng cộng',
   ]);
 
   const navigate = useNavigate();
