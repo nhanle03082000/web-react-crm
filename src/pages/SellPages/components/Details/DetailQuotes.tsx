@@ -1,9 +1,13 @@
 import { EditOutlined, LeftOutlined, RestOutlined } from '@ant-design/icons';
+import { getProductList } from '@app/api/app/api';
 import { getDataById } from '@app/api/app/api_getDataById';
-import { Card } from '@app/components/common/Card/Card';
-import { Table } from '@app/components/common/Table/Table';
 import { Button } from '@app/components/common/buttons/Button/Button';
+import { Card } from '@app/components/common/Card/Card';
+import { Input } from '@app/components/common/inputs/Input/Input';
+import { Select } from '@app/components/common/selects/Select/Select';
+import { Table } from '@app/components/common/Table/Table';
 import { H4 } from '@app/components/common/typography/H4/H4';
+import { H5 } from '@app/components/common/typography/H5/H5';
 import CustomLoading from '@app/components/customs/CustomLoading';
 import { Col, Form, Row, Typography } from 'antd';
 import { ColumnsType } from 'antd/es/table';
@@ -13,10 +17,6 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import EditDetail from './EditDetail';
-import { Select } from '@app/components/common/selects/Select/Select';
-import { Input } from '@app/components/common/inputs/Input/Input';
-import { getProductList } from '@app/api/app/api';
-import { H5 } from '@app/components/common/typography/H5/H5';
 
 const DetailQuotes: React.FC = () => {
   const [data, setData] = useState<any>([]);
@@ -31,15 +31,6 @@ const DetailQuotes: React.FC = () => {
   const [productListItem, setProductListItem] = useState<any>([]);
   const [optionProduct, setOptionProduct] = useState<any>([]);
   const [quantity, setQuantity] = useState([]);
-  const defaultNewRow = {
-    stt: count + 1,
-    product: '',
-    quantity: '',
-    price: '',
-    vat: '',
-    amount_before_tax: '',
-    amount: '',
-  };
 
   useEffect(() => {
     async function getData() {
@@ -56,11 +47,6 @@ const DetailQuotes: React.FC = () => {
     getData();
   }, [id]);
 
-  // async function getProductListItem(productId: number) {
-  //   const result = await getDataById(productId, '/products');
-  //   setProductListItem(result);
-  // }
-
   const onEdit = async () => {
     setIsEdit(true);
     setEditable(!editable);
@@ -72,16 +58,38 @@ const DetailQuotes: React.FC = () => {
     setProduct(productList);
   };
 
-  const addRow = () => {
-    setCount(count + 1);
-    setDataTable([...dataTable, defaultNewRow]);
+  // const addRow = () => {
+  //   setCount(count + 1);
+  //   setDataTable([...dataTable, defaultNewRow]);
+  // };
+
+  const defaultDetail = {
+    stt: 1,
+    product_id: productListItem.name,
+    quantity: 1,
+    price: productListItem.marketplace_product_id,
+    vat: 10,
+    amount_before_tax: 10,
+    amount: 1000,
   };
 
-  const handleDeleteRow = (record: any) => {
-    const newData = [...dataTable];
-    const index = newData.findIndex((item) => item.stt === record.stt); // Tìm vị trí của dòng cần xoá trong mảng dữ liệu
-    newData.splice(index, 1); // Xoá dòng đó khỏi mảng dữ liệu
-    setDataTable(newData); // Cập nhật lại giá trị của biến state dataSource
+  const onChangeSelect = (values: any, index: number) => {
+    const dataChange: any = product.find((item: any) => {
+      return item.id === values;
+    });
+
+    dataChange.price = dataChange.price || 0;
+    dataChange.amount = dataChange.amount || 100;
+    dataTable[index] = dataChange;
+
+    setDataTable([...dataTable]);
+  };
+
+  const getAmount = (quantity: number, index: number) => {
+    const vat = dataTable[index].vat;
+    const price = dataTable[index].vat;
+    const amount1 = (vat / 100) * price * quantity;
+    console.log('getAmount ~ amount1:', amount1);
   };
 
   const columns: ColumnsType = [
@@ -92,162 +100,36 @@ const DetailQuotes: React.FC = () => {
     {
       title: 'Tên sản phẩm',
       dataIndex: 'product',
-      render: (text: any, record: any) => {
-        return renderEditableCell(text.name, record, 'product');
+      render: (record: any) => {
+        return record.name;
       },
     },
     {
       title: 'Số lượng',
       dataIndex: 'quantity',
       align: 'right',
-      render: (text: string, record: any) => {
-        return renderEditableCell(text, record, 'quantity');
-      },
     },
     {
       title: 'Đơn giá',
       dataIndex: 'price',
       align: 'right',
-      render: (text: number, record: any) => {
-        return renderEditableCell(text, record, 'price');
-        // return `${numeral(record).format('0,0 đ')}đ`;
-      },
     },
     {
       title: 'VAT%',
       dataIndex: 'vat',
       align: 'right',
-      render: (text: number, record: any) => {
-        return renderEditableCell(text, record, 'vat');
-        // return `${record}%`;
-      },
     },
     {
       title: 'Thành tiền trước thuế',
       dataIndex: 'amount_before_tax',
       align: 'right',
-      render: (text: number, record: any) => {
-        return renderEditableCell(text, record, 'total_before_tax');
-        // return `${numeral(record).format('0,0 đ')}đ`;
-      },
     },
     {
       title: 'Thành tiền',
       dataIndex: 'amount',
       align: 'right',
-      render: (text: number, record: any) => {
-        return renderEditableCell(text, record, 'amount');
-        // return `${numeral(record).format('0,0 đ')}đ`;
-      },
     },
   ];
-
-  const actionColums: ColumnsType = [
-    {
-      title: 'Thao tác',
-      dataIndex: 'stt',
-      align: 'center',
-      render: (record: any) =>
-        isEdit ? <RestOutlined onClick={() => handleDeleteRow(record)} style={{ color: 'red' }} /> : null,
-    },
-  ];
-
-  const handleCellChange = (recordId: number, dataIndex: any, value: any) => {
-    setDataTable((prevDataTable: any) =>
-      prevDataTable.map((record: any) => (record.id === recordId ? { ...record, [dataIndex]: value } : record)),
-    );
-  };
-
-  const handleCellChangeSelect = async (recordId: number, dataIndex: any, value: any) => {
-    const data = await getDataById(recordId, '/products');
-    setDataTable((prevDataTable: any) =>
-      prevDataTable.map((record: any) => (record.id === recordId ? { ...record, vat: data.name } : record)),
-    );
-  };
-
-  // Hàm render ô dữ liệu cho dòng có thể chỉnh sửa
-  const renderEditableCell = (text: string | number, record: any, dataIndex: any) => {
-    return editable ? (
-      dataIndex === 'product' ? (
-        <Select
-          defaultValue={text}
-          placeholder="Chọn sản phẩm"
-          onChange={(value) => handleCellChangeSelect(record.id, dataIndex, value)}
-          style={{ width: '100%' }}
-          options={product}
-        />
-      ) : (
-        <Input
-          value={text}
-          placeholder="Nhập dữ liệu"
-          onChange={(e) => handleCellChange(record.id, dataIndex, e.target.value)}
-        />
-      )
-    ) : (
-      text
-    );
-  };
-
-  const [detail, setDetail] = useState<any>([]);
-  const defaultDetail = {
-    stt: 1,
-    product_id: productListItem.name,
-    quantity: 1,
-    price: productListItem.marketplace_product_id,
-    vat: 10,
-    amount_before_tax: 10,
-    amount: 1000,
-  };
-  const addRow1 = () => {
-    setDataTable([...dataTable, defaultDetail]);
-  };
-
-  const deleteRow = (index: number) => {
-    const newArr = detail.filter((data: any, idx: number) => idx !== index);
-    console.log('@deleteRow', newArr);
-    setDetail([...newArr]);
-  };
-
-  const combinedColumns = columns.concat(actionColums);
-
-  const onChangeField = (value: any) => {
-    setProductListItem(
-      product.find((item: any) => {
-        return item.id === value;
-      }),
-    );
-  };
-
-  const onChangeSelect = (values: any, index: number) => {
-    console.log('onChangeSelect ~ index:', index);
-    console.log('onChangeSelect ~ values:', values);
-    console.log('onChangeSelect ~ product:', product);
-    const dataChange: any = product.find((item: any) => {
-      return item.id === values;
-    });
-    // dataTable.splice(index, 1, {
-    //   price: dataChange.price || 0,
-    // });
-    console.log('B4', dataTable);
-    dataChange.price = dataChange.price || 0;
-    dataChange.amount = dataChange.amount || 100;
-    dataTable[index] = dataChange;
-    console.log('AT', dataTable);
-
-    setDataTable([...dataTable]);
-  };
-
-  const addNewDetail = (add: any) => () => {
-    console.log('@addNewDetail', defaultDetail);
-    add(defaultDetail);
-  };
-
-  const getAmount = (quantity: number, index: number) => {
-    const vat = dataTable[index].vat;
-    const price = dataTable[index].vat;
-    const amount1 = (vat / 100) * price * quantity;
-    console.log('getAmount ~ amount1:', amount1);
-  };
 
   const onBack = () => {
     navigate(-1);
@@ -314,7 +196,7 @@ const DetailQuotes: React.FC = () => {
                                 </Col>
                               </Row>
                               {quote_detail.map(({ key, name, ...restField }: any, index) => {
-                                console.log(restField, index, detail, dataTable);
+                                console.log(restField, index, dataTable);
                                 return (
                                   <Row key={key} gutter={10} style={{ marginBottom: '10px' }}>
                                     <Col span={4}>
@@ -382,62 +264,6 @@ const DetailQuotes: React.FC = () => {
                                       />
                                     </Col>
                                   </Row>
-
-                                  // <Row key={id} gutter={10} style={{ marginBottom: '10px' }}>
-
-                                  //   <Col span={4}>
-                                  //     <Form.Item
-                                  //       name={[item.amount_in_words, 'amount_in_words']}
-                                  //       rules={[{ required: true, message: 'error' }]}
-                                  //       {...item}
-                                  //     >
-                                  //       <div></div>
-                                  //       {/* <MyInput initValue={item.quantity} /> */}
-                                  //     </Form.Item>
-                                  //   </Col>
-                                  //   <Col span={4}>
-                                  //     <Form.Item
-                                  //       name={[item.price, 'price']}
-                                  //       rules={[{ required: true, message: 'Missing first name' }]}
-                                  //       {...item}
-                                  //     >
-                                  //       <MyInput initValue={item.price} />
-                                  //     </Form.Item>
-                                  //   </Col>
-                                  //   <Col span={4}>
-                                  //     <Form.Item
-                                  //       name={[item.vat, 'vat']}
-                                  //       rules={[{ required: true, message: 'Missing first name' }]}
-                                  //       {...item}
-                                  //     >
-                                  //       <MyInput initValue={item.vat} />
-                                  //     </Form.Item>
-                                  //   </Col>
-                                  //   <Col span={4}>
-                                  //     <Form.Item
-                                  //       name={[item.amount_before_tax, 'amount_before_tax']}
-                                  //       rules={[{ required: true, message: 'Missing first name' }]}
-                                  //       {...item}
-                                  //     >
-                                  //       <MyInput initValue={item.amount_before_tax} />
-                                  //     </Form.Item>
-                                  //   </Col>
-                                  //   <Col span={3}>
-                                  //     <Form.Item
-                                  //       name={[item.amount, 'first']}
-                                  //       rules={[{ required: true, message: 'Missing first name' }]}
-                                  //       {...item}
-                                  //     >
-                                  //       <MyInput initValue={item.amount} />
-                                  //     </Form.Item>
-                                  //   </Col>
-                                  //   <Col span={1}>
-                                  //     <RestOutlined
-                                  //       onClick={() => deleteRow(index)}
-                                  //       style={{ color: '#ff4d4f', fontSize: '24px', marginTop: '4px' }}
-                                  //     />
-                                  //   </Col>
-                                  // </Row>
                                 );
                               })}
                             </>

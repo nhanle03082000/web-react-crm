@@ -17,24 +17,21 @@ export const NotificationsDropdown: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const path = '/notifications';
 
-  useEffect(() => {
-    const getListNotification = async () => {
-      setIsLoading(true);
-      try {
-        const respNoti: IRespApiSuccess = await apiInstance.get(`${API_BASE_URL}${path}`);
-        if (respNoti.code === 200) {
-          setNotifications(respNoti.data.collection);
-        }
-      } catch (error: any) {
-        notificationController.error({
-          message: 'Có lỗi xảy ra vui lòng thử lại sau',
-          description: error.message,
-        });
+  const getListNotification = async () => {
+    setIsLoading(true);
+    try {
+      const respNoti: IRespApiSuccess = await apiInstance.get(`${API_BASE_URL}${path}`);
+      if (respNoti.code === 200) {
+        setNotifications(respNoti.data.collection);
+        setIsLoading(false);
       }
-      setIsLoading(false);
-    };
-    getListNotification();
-  }, []);
+    } catch (error: any) {
+      notificationController.error({
+        message: 'Có lỗi xảy ra vui lòng thử lại sau',
+        description: error.message,
+      });
+    }
+  };
 
   return (
     <Popover
@@ -50,6 +47,7 @@ export const NotificationsDropdown: React.FC = () => {
               <BellOutlined />
             </Badge>
           }
+          onClick={getListNotification}
         />
       </HeaderActionWrapper>
     </Popover>

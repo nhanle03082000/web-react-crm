@@ -109,10 +109,15 @@ const Detail: React.FC = () => {
   return (
     <DetailStyles>
       <Row>
-        <Col span={24}>
+        <Col span={12}>
           <Button className="button-back" onClick={onBack}>
             <LeftOutlined />
             CHI TIẾT TIỀM NĂNG
+          </Button>
+        </Col>
+        <Col span={12} style={{ textAlign: 'right' }}>
+          <Button type="primary">
+            <Link to="/customers">Chuyển sang khách hàng</Link>
           </Button>
         </Col>
         {isEdit ? (
@@ -270,9 +275,6 @@ const Detail: React.FC = () => {
           </Col>
         )}
       </Row>
-      <Button type="primary" style={{ margin: '20px 0' }}>
-        <Link to="/customers">Chuyển sang khách hàng</Link>
-      </Button>
     </DetailStyles>
   );
 };

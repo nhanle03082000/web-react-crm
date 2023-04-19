@@ -200,7 +200,7 @@ const LeadForm: React.FC<IProps> = ({ isEditing }) => {
           </Form.Item>
         </Col>
       </Row>
-      <Row gutter={[16, 16]}>
+      <Row gutter={[16, 0]}>
         <Col span={12}>
           <Form.Item name="sale_process_id" label="Quy trình bán hàng">
             <Select options={saleProcesses} placeholder="Chọn quy trình bán hàng" />

@@ -6,9 +6,11 @@ import { API_BASE_URL } from '@app/configs/api-configs';
 import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
+import { ConvertTextRoles } from '@app/utils/converts';
 import { Button, Form, Row, Tooltip } from 'antd';
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
+import CustomLoading from '../CustomLoading';
 
 interface IProps {
   children: React.ReactNode;
@@ -20,14 +22,20 @@ const Update: React.FC<IProps> = ({ children, id, onShow }) => {
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { path, page, state, setState } = useContext(DataContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onDataById = async () => {
+    setIsLoading(true);
     const dataById = await getDataById(id, path);
     if (path === '/roles') {
-      setState({ data: dataById, rolePermission: JSON.parse(dataById.permission) });
+      const permission = JSON.parse(dataById.permission);
+      ConvertTextRoles(permission);
+      const data = permission.sort((a: any, b: any) => a.name.localeCompare(b.name, 'vi', { sensitivity: 'base' }));
+      setState({ data: dataById, rolePermission: data });
     } else {
       setState(dataById);
     }
+    setIsLoading(false);
     form.setFieldsValue(dataById);
   };
 
@@ -83,7 +91,7 @@ const Update: React.FC<IProps> = ({ children, id, onShow }) => {
         footer={null}
       >
         <Form form={form} onFinish={onUpdate} layout="vertical">
-          {children}
+          {isLoading ? <CustomLoading /> : children}
           <Row gutter={[10, 0]} justify="end">
             <Button size="small" type="primary" htmlType="submit">
               Lưu

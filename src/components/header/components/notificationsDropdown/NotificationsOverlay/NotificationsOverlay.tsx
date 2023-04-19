@@ -70,11 +70,6 @@ export const NotificationsOverlay: React.FC<NotificationsOverlayProps> = ({
                 </S.Btn>
               </Col>
             )}
-            <Col span={24}>
-              <S.Btn type="link">
-                <Link to="/">{t('header.notifications.viewAll')}</Link>
-              </S.Btn>
-            </Col>
           </Row>
         </Col>
       </S.MenuRow>
