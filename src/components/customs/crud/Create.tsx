@@ -32,10 +32,9 @@ const Create: React.FC<IProps> = ({ children }) => {
   const onCreate = async (values: any) => {
     let data = {
       ...values,
-      permission: JSON.stringify(state.rolePermission),
       is_active: true,
     };
-    state.rolePermission ? (data = { ...data, permission: JSON.stringify(state.rolePermission) }) : data;
+    state.rolePermission.length > 0 ? (data = { ...data, permission: JSON.stringify(state.rolePermission) }) : data;
     try {
       const respUsers: IRespApiSuccess = await apiInstance.post(`${API_BASE_URL}${path}`, data);
       if (respUsers.code === 200) {

@@ -170,7 +170,7 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data, dataTable, children }) 
               <Col span={12}>
                 <H5>Tổng cộng</H5>
                 <Form.Item name="total_amount" rules={[{ required: true, message: 'Tổng cộng không được bỏ trống!' }]}>
-                  <Input placeholder="Nhập tổng cộng" size="small" />
+                  <Input placeholder="Nhập tổng cộng" size="small" disabled />
                 </Form.Item>
               </Col>
               <Col span={24}>

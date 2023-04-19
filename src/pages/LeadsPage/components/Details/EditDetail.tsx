@@ -40,22 +40,7 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data }) => {
   const [customerSources, setCustomerSources] = useState<ISelectOption[]>([{ value: '', label: '' }]);
   const [saleProcesses, setSaleProcesses] = useState<ISelectOption[]>([{ value: '', label: '' }]);
 
-  const initialValues = {
-    tax_code: data.tax_code,
-    company_name: data.company_name,
-    name: data.name,
-    headquarters_address: data.headquarters_address,
-    headquarters_province_id: data.province.id,
-    headquarters_district_id: data.district.id,
-    headquarters_area_id: data.area.id,
-    headquarters_email: data.headquarters_email,
-    headquarters_phone: data.headquarters_phone,
-    email: data.email,
-    phone_number: data.phone_number,
-    company_field_id: data.company_field.id,
-    customer_source_id: data.customer_source.id,
-    sale_process: data.sale_process.id,
-  };
+  console.log(data);
 
   const onChangeProvinces = (values: any) => {
     provinces.map((item: ISelectOption) => {
@@ -176,8 +161,24 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data }) => {
   };
 
   useEffect(() => {
+    const initialValues = {
+      tax_code: data?.tax_code,
+      company_name: data?.company_name,
+      name: data?.name,
+      headquarters_address: data?.headquarters_address,
+      headquarters_province_id: data?.province.id,
+      headquarters_district_id: data?.district.id,
+      headquarters_area_id: data?.area.id,
+      headquarters_email: data?.headquarters_email,
+      headquarters_phone: data?.headquarters_phone,
+      email: data?.email,
+      phone_number: data?.phone_number,
+      company_field_id: data?.company_field.id,
+      customer_source_id: data?.customer_source?.id || null,
+      sale_process_id: data?.sale_process?.id || null,
+    };
     form.setFieldsValue(initialValues);
-  }, [initialValues]);
+  }, [data]);
 
   return (
     <EditDetailStyles>

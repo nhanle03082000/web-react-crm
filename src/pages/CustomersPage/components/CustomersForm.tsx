@@ -93,7 +93,7 @@ const CustomersForm: React.FC<IProps> = ({ isEditing }) => {
     const getSaleProcessesList = async () => {
       try {
         const respSaleProcesses: IRespApiSuccess = await apiInstance.get(
-          `${API_BASE_URL}${API_URL.SALEPROCESSES}?f[0][field]=type&f[0][operator]=contain&f[0][value]=leads&page=1&limit=10&sort_direction=asc&sort_column=sale_process_index`,
+          `${API_BASE_URL}${API_URL.SALEPROCESSES}?f[0][field]=type&f[0][operator]=contain&f[0][value]=customers&page=1&limit=10&sort_direction=asc&sort_column=sale_process_index`,
         );
         const optionsSaleProcesses = respSaleProcesses.data.collection.map((item: any) => {
           return { value: item.id, label: item.name };

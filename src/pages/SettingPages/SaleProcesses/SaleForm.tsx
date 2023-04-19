@@ -16,11 +16,6 @@ const SaleForm: React.FC<IProps> = ({ isEditing }) => {
         </Form.Item>
       </Col>
       <Col span={12}>
-        <Form.Item name="code" label="Mã quy trình">
-          <Input placeholder="Nhập mã quy trình" size="small" disabled={isEditing} />
-        </Form.Item>
-      </Col>
-      <Col span={12}>
         <Form.Item name="name" label="Tên quy trình">
           <Input placeholder="Nhập tên quy trình" size="small" />
         </Form.Item>
