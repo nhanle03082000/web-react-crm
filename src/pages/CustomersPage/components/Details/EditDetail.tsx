@@ -13,7 +13,7 @@ import { Input } from '@app/components/common/inputs/Input/Input';
 import { Select } from '@app/components/common/selects/Select/Select';
 import { H4 } from '@app/components/common/typography/H4/H4';
 import { H5 } from '@app/components/common/typography/H5/H5';
-import { API_BASE_URL } from '@app/configs/api-configs';
+import { API_BASE_URL, API_URL } from '@app/configs/api-configs';
 import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
@@ -131,14 +131,21 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data }) => {
       const dataResult = await getAreasList();
       setAreas(dataResult);
     }
-    async function getSaleProcesses() {
-      const dataResult = await getSaleProcessesList();
-      setSaleProcesses(dataResult);
-    }
+    const getSaleProcessesList = async () => {
+      try {
+        const respSaleProcesses: IRespApiSuccess = await apiInstance.get(
+          `${API_BASE_URL}${API_URL.SALEPROCESSES}?f[0][field]=type&f[0][operator]=contain&f[0][value]=leads&page=1&limit=10&sort_direction=asc&sort_column=sale_process_index`,
+        );
+        const optionsSaleProcesses = respSaleProcesses.data.collection.map((item: any) => {
+          return { value: item.id, label: item.name };
+        });
+        setSaleProcesses(optionsSaleProcesses);
+      } catch (error: any) {}
+    };
     getProvinces();
     getCustomerSources();
     getCompanyFields();
-    getSaleProcesses();
+    getSaleProcessesList();
     getDistricts();
     getAreas();
   }, []);

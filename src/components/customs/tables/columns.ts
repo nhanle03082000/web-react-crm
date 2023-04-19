@@ -279,7 +279,7 @@ export const columnLead = [
   },
 ];
 
-export const columnSell = [
+export const columnQuotes = [
   {
     title: 'Mã báo giá',
     dataIndex: 'code',
@@ -354,5 +354,67 @@ export const columnSell = [
     render: (record: { id: number; name: string }): string | null => {
       return `${numeral(record).format('0,0 đ')}đ` || null;
     },
+  },
+];
+
+export const columnOrder = [
+  {
+    title: 'Số hợp đồng',
+    dataIndex: 'contract_no',
+    align: 'left',
+  },
+  {
+    title: 'Ngày tạo hợp đồng',
+    dataIndex: 'created_date',
+    align: 'right',
+    render: (record: string): string => {
+      const date = new Date(record);
+      return date.toLocaleDateString('en-GB');
+    },
+  },
+  {
+    title: 'Ngày bắt đầu',
+    dataIndex: 'started_date',
+    align: 'right',
+    render: (record: string): string => {
+      const date = new Date(record);
+      return date.toLocaleDateString('en-GB');
+    },
+  },
+  {
+    title: 'Ngày kết thúc',
+    dataIndex: 'end_date',
+    align: 'left',
+    render: (record: string): string => {
+      const date = new Date(record);
+      return date.toLocaleDateString('en-GB');
+    },
+  },
+  {
+    title: 'Mã số thuế',
+    dataIndex: 'tax_code',
+    align: 'left',
+  },
+  {
+    title: 'Mã đơn vị phát triển',
+    dataIndex: 'shop_code',
+    align: 'left',
+  },
+  {
+    title: 'Tên khách hàng',
+    dataIndex: 'customer',
+    align: 'left',
+    render: (record: any) => {
+      return record.name || null;
+    },
+  },
+  {
+    title: 'Tên đơn vị phát triển',
+    dataIndex: 'shop_name',
+    align: 'left',
+  },
+  {
+    title: 'Tên nhân viên phát triển',
+    dataIndex: 'am_name',
   },
 ];

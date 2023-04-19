@@ -31,6 +31,8 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns, 
   const { isLoad } = useContext(DataContext);
   const [dataShow, setDataShow] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  console.log();
   const [filter, setFilter] = useState<IFilter>({
     page: 1,
     limit: 20,
@@ -132,13 +134,6 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns, 
     onShow();
   }, [param, filter.page, isLoad]);
 
-  const handleSelectChange = (selectedRowKeys: React.Key[]) => {
-    setListIdLead(selectedRowKeys);
-  };
-  const rowSelection = {
-    onChange: handleSelectChange,
-  };
-
   return (
     <>
       <Table
@@ -149,7 +144,6 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns, 
         scroll={{ x: 800 }}
         loading={isLoading}
         rowKey="id"
-        rowSelection={rowSelection}
       />
       <CustomPagination
         totalItems={filter.total}

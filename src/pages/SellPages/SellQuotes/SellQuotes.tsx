@@ -10,7 +10,7 @@ import { API_BASE_URL, API_URL } from '@app/configs/api-configs';
 import { DataContext } from '@app/contexts/DataContext';
 import { Col, Row, Space, Typography } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
-import { columnLead, columnSell } from '@app/components/customs/tables/columns';
+import { columnLead, columnQuotes } from '@app/components/customs/tables/columns';
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
 import { apiInstance } from '@app/api/app/api_core';
 import CustomColumns from '../components/CustomColumns';
@@ -232,7 +232,7 @@ const SellQuotes: React.FC = () => {
           <Card padding="1rem">
             <Show
               param={param}
-              colums={columnSell}
+              colums={columnQuotes}
               setListIdLead={setListIdLead}
               visibleColumns={visibleColumns}
               path={path}

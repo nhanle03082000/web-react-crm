@@ -2,7 +2,7 @@ import { getCompanyFieldsList, getCustomerSourcesList, getProvincesList } from '
 import { apiInstance } from '@app/api/app/api_core';
 import { Input } from '@app/components/common/inputs/Input/Input';
 import { Select } from '@app/components/common/selects/Select/Select';
-import { API_BASE_URL } from '@app/configs/api-configs';
+import { API_BASE_URL, API_URL } from '@app/configs/api-configs';
 import { notificationController } from '@app/controllers/notificationController';
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
 import { Col, Form, Row } from 'antd';
@@ -23,6 +23,7 @@ const CustomersForm: React.FC<IProps> = ({ isEditing }) => {
   const [areas, setAreas] = useState<ISelectOption[]>([{ value: '', label: '' }]);
   const [companyFields, setCompanyFields] = useState<ISelectOption[]>([{ value: '', label: '' }]);
   const [customerSources, setCustomerSources] = useState<ISelectOption[]>([{ value: '', label: '' }]);
+  const [saleProcesses, setSaleProcesses] = useState<ISelectOption[]>([{ value: '', label: '' }]);
 
   const onChangeProvinces = (values: any) => {
     provinces.map((item: ISelectOption) => {
@@ -89,9 +90,21 @@ const CustomersForm: React.FC<IProps> = ({ isEditing }) => {
       const dataResult = await getProvincesList();
       setProvinces(dataResult);
     }
+    const getSaleProcessesList = async () => {
+      try {
+        const respSaleProcesses: IRespApiSuccess = await apiInstance.get(
+          `${API_BASE_URL}${API_URL.SALEPROCESSES}?f[0][field]=type&f[0][operator]=contain&f[0][value]=leads&page=1&limit=10&sort_direction=asc&sort_column=sale_process_index`,
+        );
+        const optionsSaleProcesses = respSaleProcesses.data.collection.map((item: any) => {
+          return { value: item.id, label: item.name };
+        });
+        setSaleProcesses(optionsSaleProcesses);
+      } catch (error: any) {}
+    };
     getProvinces();
     getCustomerSources();
     getCompanyFields();
+    getSaleProcessesList();
   }, [isEditing]);
 
   return (
@@ -188,17 +201,22 @@ const CustomersForm: React.FC<IProps> = ({ isEditing }) => {
         </Col>
       </Row>
       <Row gutter={[16, 16]}>
-        <Col span={8}>
+        <Col span={12}>
+          <Form.Item name="sale_process_id" label="Quy trình bán hàng">
+            <Select options={saleProcesses} placeholder="Chọn quy trình bán hàng" />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
           <Form.Item name="headquarters_province_id" label="Tỉnh/TP">
             <Select options={provinces} onChange={onChangeProvinces} placeholder="Chọn tỉnh/TP" />
           </Form.Item>
         </Col>
-        <Col span={8}>
+        <Col span={12}>
           <Form.Item name="headquarters_district_id" label="Quận/Huyện">
             <Select options={districts} onChange={onChangeDistricts} placeholder="Chọn quận/Huyện" />
           </Form.Item>
         </Col>
-        <Col span={8}>
+        <Col span={12}>
           <Form.Item name="headquarters_area_id" label="Phường/Xã">
             <Select options={areas} placeholder="Chọn phường/Xã" />
           </Form.Item>
