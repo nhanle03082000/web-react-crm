@@ -65,7 +65,7 @@ const SellOrders: React.FC = () => {
     },
     {
       value: 'employee.shop_code',
-      label: 'Theo bộ phận',
+      label: 'Theo đơn vị',
       type: 'string',
     },
     {

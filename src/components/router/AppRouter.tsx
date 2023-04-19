@@ -28,6 +28,7 @@ import SellQuotes from '@app/pages/SellPages/SellQuotes/SellQuotes';
 import SellOrders from '@app/pages/SellPages/SellOrders/SellOrders';
 import DetailOrder from '@app/pages/SellPages/components/Details/DetailOrder';
 import DetailQuotes from '@app/pages/SellPages/components/Details/DetailQuotes';
+import CreateQuotes from '@app/pages/SellPages/SellQuotes/CreateQuotes';
 
 const NewsFeedPage = React.lazy(() => import('@app/pages/Templates/NewsFeedPage'));
 const KanbanPage = React.lazy(() => import('@app/pages/Templates/KanbanPage'));
@@ -169,6 +170,7 @@ export const AppRouter: React.FC = () => {
           <Route element={<Sell />}>
             <Route path="quotes" element={<SellQuotes />} />
             <Route path="/quotes/:id" element={<DetailQuotes />} />
+            <Route path="/quotes/create" element={<CreateQuotes />} />
             <Route path="orders" element={<SellOrders />} />
             <Route path="/orders/:id" element={<DetailOrder />} />
           </Route>

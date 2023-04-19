@@ -18,6 +18,7 @@ import CustomersForm from '../components/CustomersForm';
 import Show from '../components/Show';
 import Assign from '@app/components/customs/assign/Assign';
 import { PageTitle } from '@app/components/common/PageTitle/PageTitle';
+import { useNavigate } from 'react-router-dom';
 
 const SellQuotes: React.FC = () => {
   // const userListPermission = JSON.parse(getRoleUser());
@@ -46,6 +47,11 @@ const SellQuotes: React.FC = () => {
   ]);
   const download = '/files/lead.xlsx';
   const [listIdLead, setListIdLead] = useState([]);
+
+  const navigate = useNavigate();
+  const onCreate = () => {
+    navigate('/quotes/create');
+  };
 
   const option = [
     {
@@ -95,7 +101,7 @@ const SellQuotes: React.FC = () => {
     },
     {
       value: 'employee.shop_code',
-      label: 'Theo bộ phận',
+      label: 'Theo đơn vị',
       type: 'string',
     },
     {
@@ -177,10 +183,13 @@ const SellQuotes: React.FC = () => {
                     Tải file mẫu
                   </Typography.Link>
                 </Button>
-                <Assign list={listIdLead} buttonName="Phân công" /> */}
+                <Assign list={listIdLead} buttonName="Phân công" /> 
                   <Create>
                     <CustomersForm isEditing={false} />
-                  </Create>
+                  </Create>*/}
+                  <Button className="button-create" onClick={onCreate} type="primary">
+                    Thêm {page}
+                  </Button>
                   <ExportExcel param={param} />
                 </div>
               </Col>
