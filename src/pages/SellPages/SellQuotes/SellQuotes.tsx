@@ -11,7 +11,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CustomColumns from '../components/CustomColumns';
 import CustomersForm from '../components/CustomersForm';
-import Show from '../components/Show';
+import Show from './Show';
 
 const SellQuotes: React.FC = () => {
   // const userListPermission = JSON.parse(getRoleUser());
@@ -112,7 +112,7 @@ const SellQuotes: React.FC = () => {
       type: 'string',
     },
     {
-      value: 'createdAt',
+      value: 'created_at',
       label: 'Ngày tạo',
       type: 'datetime',
     },

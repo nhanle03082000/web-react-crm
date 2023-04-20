@@ -22,6 +22,7 @@ const ProductGroups: React.FC = () => {
   const permission = userListPermission?.filter((item: any) => item.name === path.replace(/\//g, ''))[0].actions;
   const [isLoad, setIsLoad] = useState<boolean>(false);
   const [param, setParam] = useState('');
+  const [show, setShow] = useState(false);
   const [state, setState] = useState<any>({
     data: {},
     rolePermission: [],
@@ -45,12 +46,12 @@ const ProductGroups: React.FC = () => {
       type: 'string',
     },
     {
-      value: 'createdAt',
+      value: 'created_at',
       label: 'Ngày tạo',
       type: 'datetime',
     },
     {
-      value: 'updatedAt',
+      value: 'updated_at',
       label: 'Ngày cập nhật',
       type: 'datetime',
     },
@@ -62,7 +63,7 @@ const ProductGroups: React.FC = () => {
   ];
 
   return (
-    <DataContext.Provider value={{ path, page, state, setState, isLoad, setIsLoad }}>
+    <DataContext.Provider value={{ path, page, state, setState, isLoad, setIsLoad, show, setShow }}>
       <PageTitle>{page}</PageTitle>
       <Row gutter={[10, 10]}>
         <Col span={24}>

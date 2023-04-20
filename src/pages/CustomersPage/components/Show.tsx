@@ -5,7 +5,7 @@ import CustomPagination from '@app/components/customs/CustomPagination';
 import { API_BASE_URL } from '@app/configs/api-configs';
 import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
-import { IRespApiSuccess } from '@app/interfaces/interfaces';
+import { IFilter, IRespApiSuccess } from '@app/interfaces/interfaces';
 import { Popconfirm, Space, Tooltip } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import DetailModal from './Details/DetailModal';
@@ -19,14 +19,6 @@ interface IProps {
   visibleColumns: any;
 }
 
-interface IFilter {
-  page: number;
-  limit: number;
-  sortBy: string;
-  sort: string;
-  total: number;
-}
-
 const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns }) => {
   const { path, isLoad } = useContext(DataContext);
   const [dataShow, setDataShow] = useState([]);
@@ -34,9 +26,9 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns }
   const [filter, setFilter] = useState<IFilter>({
     page: 1,
     limit: 20,
-    sortBy: '',
     total: 0,
-    sort: 'asc',
+    sort_direction: 'desc',
+    sort_column: 'customers.createdAt',
   });
 
   const f = Object.entries(filter)

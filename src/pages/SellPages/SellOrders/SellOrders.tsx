@@ -9,7 +9,7 @@ import { Col, Row } from 'antd';
 import React, { useState } from 'react';
 import CustomColumns from '../components/CustomColumns';
 import CustomersForm from '../components/CustomersForm';
-import Show from '../components/Show';
+import Show from './Show';
 
 const SellOrders: React.FC = () => {
   // const userListPermission = JSON.parse(getRoleUser());
@@ -145,7 +145,7 @@ const SellOrders: React.FC = () => {
               </Col>
               <Col span={12}>
                 <div style={{ display: 'flex', justifyContent: 'flex-end', columnGap: '5px' }}>
-                  <CustomColumns columns={visibleColumns} setColumns={setVisibleColumns} />
+                  {/* <CustomColumns columns={visibleColumns} setColumns={setVisibleColumns} /> */}
                   <ExportExcel param={param} />
                 </div>
               </Col>

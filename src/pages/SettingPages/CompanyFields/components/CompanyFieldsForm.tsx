@@ -9,9 +9,6 @@ interface IProps {
 const CompanyFieldsForm: React.FC<IProps> = ({ isEditing }) => {
   return (
     <>
-      <Form.Item name="code" label="Mã lĩnh vực">
-        <Input placeholder="Nhập mã lĩnh vực" size="small" disabled={isEditing} />
-      </Form.Item>
       <Form.Item name="name" label="Tên lĩnh vực">
         <Input placeholder="Nhập tên lĩnh vực" size="small" />
       </Form.Item>

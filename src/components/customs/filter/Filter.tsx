@@ -5,6 +5,7 @@ import { Col, Form, Row } from 'antd';
 import React, { useState } from 'react';
 import FilterDateTime from './FilterDateTime';
 import FilterText from './FilterText';
+import moment from 'moment';
 
 interface IProps {
   option: { value: string; label: string; type: string }[];
@@ -29,11 +30,21 @@ const Filter: React.FC<IProps> = ({ option, setParam, initialValue }) => {
   };
 
   const onFinsh = (values: any) => {
+    console.log(typeof values.filter[0].value);
+    console.log(typeof values.filter[1].value);
+    if (typeof values.filter[1].value === 'string') {
+      console.log('string OK');
+    } else {
+      console.log('string notOK');
+    }
     const f: any = {};
     values.filter.forEach((filter: any, i: any) => {
       f[`f[${i}][field]`] = filter.field;
       f[`f[${i}][operator]`] = filter.operator;
-      f[`f[${i}][value]`] = filter.value;
+      f[`f[${i}][value]`] =
+        typeof values.filter[i].value === 'string'
+          ? values.filter[i].value
+          : moment(new Date(filter.value).toUTCString()).format('YYYY/MM/DD');
     });
     const param = Object.entries(f)
       .map(([key, value]: any) => `${key}=${value}`)

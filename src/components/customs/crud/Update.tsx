@@ -7,7 +7,7 @@ import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
 import { ConvertTextRoles } from '@app/utils/converts';
-import { Button, Form, Row, Tooltip } from 'antd';
+import { Button, Col, Form, Row, Tooltip } from 'antd';
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import CustomLoading from '../CustomLoading';
@@ -94,7 +94,7 @@ const Update: React.FC<IProps> = ({ children, id, onShow }) => {
       >
         <Form form={form} onFinish={onUpdate} layout="vertical">
           {isLoading ? <CustomLoading /> : children}
-          <Row gutter={[10, 0]} justify="end">
+          <Row gutter={[10, 10]} justify="end">
             <Button size="small" type="primary" htmlType="submit">
               Lưu
             </Button>

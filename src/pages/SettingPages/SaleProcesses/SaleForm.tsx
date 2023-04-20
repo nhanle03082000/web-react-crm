@@ -21,11 +21,6 @@ const SaleForm: React.FC<IProps> = ({ isEditing }) => {
       <Col span={12}>
         <Row gutter={24}>
           <Col span={24}>
-            <Form.Item name="code" label="Mã quy trình">
-              <Input placeholder="Nhập mã quy trình" size="small" disabled={isEditing} />
-            </Form.Item>
-          </Col>
-          <Col span={24}>
             <Form.Item name="name" label="Tên quy trình">
               <Input placeholder="Nhập tên quy trình" size="small" />
             </Form.Item>
@@ -47,7 +42,7 @@ const SaleForm: React.FC<IProps> = ({ isEditing }) => {
             </Form.Item>
           </Col>
           <Col span={24}>
-            <Form.Item name="index" label="Thứ tự">
+            <Form.Item name="sale_process_index" label="Thứ tự">
               <Input placeholder="Nhập số" size="small" />
             </Form.Item>
           </Col>

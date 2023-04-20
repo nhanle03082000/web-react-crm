@@ -67,42 +67,42 @@ const Detail: React.FC = () => {
     {
       label: 'Thông tin liên hệ',
       key: '1',
-      children: <CustomerContacts id={data?.id} />,
+      children: <CustomerContacts id={Number(id)} />,
     },
     {
       label: 'Lịch sử báo giá',
       key: '2',
-      children: <CustomerQuotes id={data?.id} handleDetailsQuotes={handleDetailsQuotes} />,
+      children: <CustomerQuotes id={Number(id)} handleDetailsQuotes={handleDetailsQuotes} />,
     },
     {
       label: 'Giải pháp quan tâm',
       key: '3',
-      children: <CustomerProduct id={data?.id} />,
+      children: <CustomerProduct id={Number(id)} />,
     },
     {
       label: 'Nhật ký tương tác',
       key: '4',
-      children: <CustomerInteractions id={data?.id} />,
+      children: <CustomerInteractions id={Number(id)} />,
     },
     {
       label: 'Công việc',
       key: '5',
-      children: <CustomerTask employee_id={data?.employee_id} customer_id={data?.id} />,
+      children: <CustomerTask employee_id={data?.employee_id} customer_id={Number(id)} />,
     },
     {
       label: 'Nhắc nhở',
       key: '6',
-      children: <CustomerReminder id={data?.id} />,
+      children: <CustomerReminder id={Number(id)} />,
     },
     {
       label: 'Đơn hàng',
       key: '7',
-      children: <CustomerOrder id={data?.id} handleDetailsOrder={handleDetailsOrder} />,
+      children: <CustomerOrder id={Number(id)} handleDetailsOrder={handleDetailsOrder} />,
     },
     {
       label: 'Ghi chú',
       key: '8',
-      children: <CustomerNote id={data?.id} />,
+      children: <CustomerNote id={Number(id)} />,
     },
   ];
 
@@ -111,7 +111,7 @@ const Detail: React.FC = () => {
       tab: 1,
       components: (
         <DetailStyles>
-          {isLoading ? (
+          {!isLoading ? (
             <Row>
               <Col span={24}>
                 <Button className="button-back" onClick={onBack}>

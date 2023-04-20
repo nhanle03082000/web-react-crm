@@ -33,7 +33,7 @@ interface IProps {
 const CreateFromLead: React.FC<IProps> = ({ titleButton, defaultValues }) => {
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { page, state, setIsLoad } = useContext(DataContext);
+  const { page, state, setIsLoad, show, setShow } = useContext(DataContext);
   const path = '/customers';
   const [provinces, setProvinces] = useState<ISelectOption[]>([{ value: '', label: '' }]);
   const [districts, setDistricts] = useState<ISelectOption[]>([{ value: '', label: '' }]);
@@ -169,7 +169,7 @@ const CreateFromLead: React.FC<IProps> = ({ titleButton, defaultValues }) => {
     //     description: error.message,
     //   });
     // }
-    // setShow(true);
+    // setShow(!show);
     // setIsModalOpen(false);
     // form.resetFields();
   };

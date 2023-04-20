@@ -29,9 +29,9 @@ const CustomerProduct: React.FC<IProps> = ({ id }) => {
   const [filter, setFilter] = useState<IFilter>({
     page: 1,
     limit: 20,
-    sortBy: '',
     total: 0,
-    sort: 'asc',
+    sort_direction: 'desc',
+    sort_column: 'customer_products.createdAt',
   });
 
   const handlePageChange = (page: number) => {

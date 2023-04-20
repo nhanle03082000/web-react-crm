@@ -16,7 +16,7 @@ interface IProps {
 const Create: React.FC<IProps> = ({ children }) => {
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { path, page, state, setIsLoad, setShow } = useContext(DataContext);
+  const { path, page, state, setIsLoad, setShow, show } = useContext(DataContext);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -34,7 +34,7 @@ const Create: React.FC<IProps> = ({ children }) => {
       ...values,
       is_active: true,
     };
-    state.rolePermission.length > 0 ? (data = { ...data, permission: JSON.stringify(state.rolePermission) }) : data;
+    state?.rolePermission?.length > 0 ? (data = { ...data, permission: JSON.stringify(state.rolePermission) }) : data;
     try {
       const respUsers: IRespApiSuccess = await apiInstance.post(`${API_BASE_URL}${path}`, data);
       if (respUsers.code === 200) {
@@ -52,7 +52,7 @@ const Create: React.FC<IProps> = ({ children }) => {
         description: error.message,
       });
     }
-    setShow(true);
+    setShow(!show);
     setIsModalOpen(false);
     form.resetFields();
   };

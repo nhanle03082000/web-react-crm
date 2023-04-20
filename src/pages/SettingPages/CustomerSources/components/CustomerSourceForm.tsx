@@ -9,9 +9,6 @@ interface IProps {
 const CustomerSourceForm: React.FC<IProps> = ({ isEditing }) => {
   return (
     <>
-      <Form.Item name="code" label="Mã nguồn gốc">
-        <Input placeholder="Nhập mã nguồn gốc" size="small" disabled={isEditing} />
-      </Form.Item>
       <Form.Item name="name" label="Tên nguồn gốc">
         <Input placeholder="Nhập tên nguồn gốc" size="small" />
       </Form.Item>

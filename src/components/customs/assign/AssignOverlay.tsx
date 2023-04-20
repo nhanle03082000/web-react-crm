@@ -2,10 +2,11 @@ import { apiInstance } from '@app/api/app/api_core';
 import { Button } from '@app/components/common/buttons/Button/Button';
 import { Select } from '@app/components/common/selects/Select/Select';
 import { API_BASE_URL } from '@app/configs/api-configs';
+import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
 import { Form } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 interface ISelectOption {
   value: any;
@@ -18,6 +19,7 @@ interface IProp {
 
 const AssignOverlay: React.FC<IProp> = ({ list }) => {
   const [data, setData] = useState<ISelectOption[]>([{ value: '', label: '' }]);
+  const { setShow, show } = useContext(DataContext);
 
   const onAssign = async (value: any) => {
     const data = {
@@ -37,6 +39,7 @@ const AssignOverlay: React.FC<IProp> = ({ list }) => {
         description: error.message,
       });
     }
+    setShow(!show);
   };
 
   useEffect(() => {

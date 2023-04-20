@@ -16,7 +16,6 @@ const DetailOrder: React.FC = () => {
   const [data, setData] = useState<any>([]);
   const { id } = useParams();
   const navigate = useNavigate();
-  const [isEdit, setIsEdit] = useState(false);
 
   useEffect(() => {
     async function getData() {
@@ -141,12 +140,6 @@ const DetailOrder: React.FC = () => {
                 </Col>
                 <Col span={24}>
                   <Table columns={columns} dataSource={data.detail} rowKey="id" bordered pagination={false} />
-                  <Row justify={'end'} style={{ marginTop: '10px' }}>
-                    <span>Tổng cộng:</span> &nbsp;
-                    <Col span={3}>
-                      <span>{numeral(data.total_amount).format('0,0 đ')}đ</span>
-                    </Col>
-                  </Row>
                 </Col>
               </Row>
             </Card>
@@ -160,6 +153,7 @@ const DetailOrder: React.FC = () => {
 const DetailQuotesStyles = styled.div`
   h4 {
     color: var(--primary-color) !important;
+    font-size: 22px !important;
   }
 `;
 

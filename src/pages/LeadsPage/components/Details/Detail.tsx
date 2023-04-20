@@ -135,9 +135,6 @@ const Detail: React.FC = () => {
               <Col span={24}>
                 <Card padding="1.25rem">
                   <Row gutter={[4, 4]}>
-                    <Col span={24}>
-                      <H4>Thông tin chung</H4>
-                    </Col>
                     <Col span={8}>
                       <H5>Tên DN</H5>
                       <div>{data?.company_name}</div>
@@ -167,9 +164,6 @@ const Detail: React.FC = () => {
                     </Col>
                   </Row>
                   <Row gutter={[4, 4]} style={{ marginTop: '24px' }}>
-                    <Col span={24}>
-                      <H4>Thông tin tổ chức</H4>
-                    </Col>
                     <Col span={8}>
                       <H5>Số điện thoại doanh nhiệp</H5>
                       <div>{data?.headquarters_phone}</div>
@@ -193,9 +187,6 @@ const Detail: React.FC = () => {
                     </Col>
                   </Row>
                   <Row gutter={[4, 4]} style={{ marginTop: '24px' }}>
-                    <Col span={24}>
-                      <H4>Thông tin địa chỉ</H4>
-                    </Col>
                     <Col span={8}>
                       <H5>Tỉnh/TP</H5>
                       <div>{data?.province?.name}</div>
@@ -247,7 +238,11 @@ const Detail: React.FC = () => {
                                   </Col>
                                 )}
                               </Row>
-                              <Row justify="space-between" align="middle" style={{ padding: '5px', color: '#bbb' }}>
+                              <Row
+                                justify="space-between"
+                                align="middle"
+                                style={{ padding: '5px', color: '#bbb', fontStyle: 'italic' }}
+                              >
                                 <Col span={12}>{item?.user?.name}</Col>
                                 <Col span={12} style={{ textAlign: 'right' }}>
                                   {moment(item?.createdAt).format('DD/MM/YYYY, HH:mm:ss')}

@@ -80,7 +80,6 @@ const DetailQuotes: React.FC = () => {
     });
 
     const dataFinal = {
-      id: dataChange.id,
       product_id: dataChange.id,
       quantity: dataChange.quantity || 1,
       vat: dataChange.vat || 10,
@@ -144,7 +143,7 @@ const DetailQuotes: React.FC = () => {
       title: 'Tên sản phẩm',
       dataIndex: 'product',
       render: (record: any) => {
-        return record.name;
+        return record?.name || null;
       },
     },
     {
@@ -156,6 +155,9 @@ const DetailQuotes: React.FC = () => {
       title: 'Đơn giá',
       dataIndex: 'price',
       align: 'right',
+      render: (record: any) => {
+        return record?.toLocaleString('en-US', { useGrouping: true });
+      },
     },
     {
       title: 'VAT%',
@@ -166,11 +168,17 @@ const DetailQuotes: React.FC = () => {
       title: 'Thành tiền trước thuế',
       dataIndex: 'amount_before_tax',
       align: 'right',
+      render: (record: any) => {
+        return record?.toLocaleString('en-US', { useGrouping: true });
+      },
     },
     {
       title: 'Thành tiền',
       dataIndex: 'amount',
       align: 'right',
+      render: (record: any) => {
+        return record?.toLocaleString('en-US', { useGrouping: true });
+      },
     },
   ];
 
@@ -182,9 +190,9 @@ const DetailQuotes: React.FC = () => {
     for (let i = 0; i < dataTable.length; i++) {
       before_tax += Number(dataTable[i].amount_before_tax);
       after_tax += Number(dataTable[i].amount);
-      tax += after_tax - before_tax;
     }
 
+    tax = after_tax - before_tax;
     setAmount({ before_tax: before_tax, after_tax: after_tax, tax: tax });
   };
 
@@ -416,7 +424,9 @@ const DetailQuotes: React.FC = () => {
                         Tổng cộng
                       </Typography.Title>
                       &nbsp;
-                      <Typography.Text>{data.total_amount}</Typography.Text>
+                      <Typography.Text>
+                        {data.total_amount?.toLocaleString('en-US', { useGrouping: true })}
+                      </Typography.Text>
                     </Col>
                   </>
                 )}
@@ -432,15 +442,30 @@ const DetailQuotes: React.FC = () => {
                   <Row gutter={10} justify={'end'} style={{ marginTop: '10px', textAlign: 'right' }}>
                     <Col span={24}>
                       <span>Tổng thành tiền trước thuế:</span> &nbsp;
-                      <span>{amount.before_tax === 0 ? data.total_before_tax : amount.before_tax} đ</span>
+                      <span>
+                        {amount.before_tax === 0
+                          ? data.total_before_tax?.toLocaleString('en-US', { useGrouping: true })
+                          : amount.before_tax?.toLocaleString('en-US', { useGrouping: true })}
+                        đ
+                      </span>
                     </Col>
                     <Col span={24}>
                       <span>Tổng tiền thuế:</span> &nbsp;
-                      <span>{amount.tax === 0 ? data.total_tax_amount : amount.tax} đ</span>
+                      <span>
+                        {amount.tax === 0
+                          ? data.total_tax_amount?.toLocaleString('en-US', { useGrouping: true })
+                          : amount.tax?.toLocaleString('en-US', { useGrouping: true })}
+                        đ
+                      </span>
                     </Col>
                     <Col span={24} style={{ fontWeight: 700 }}>
                       <span>Tổng cộng:</span> &nbsp;
-                      <span>{amount.after_tax === 0 ? data.total_amount : amount.after_tax} đ</span>
+                      <span>
+                        {amount.after_tax === 0
+                          ? data.total_amount?.toLocaleString('en-US', { useGrouping: true })
+                          : amount.after_tax?.toLocaleString('en-US', { useGrouping: true })}
+                        đ
+                      </span>
                     </Col>
                   </Row>
                 </Col>
@@ -456,7 +481,7 @@ const DetailQuotes: React.FC = () => {
 const DetailQuotesStyles = styled.div`
   h4 {
     color: var(--primary-color) !important;
-    font-size: 18px !important;
+    font-size: 22px !important;
   }
   .button-edit {
     position: absolute;

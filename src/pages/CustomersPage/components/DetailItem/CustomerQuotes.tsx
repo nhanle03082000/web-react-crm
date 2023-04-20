@@ -23,9 +23,9 @@ const CustomerQuotes: React.FC<IProps> = ({ id, handleDetailsQuotes }) => {
   const [filter, setFilter] = useState<IFilter>({
     page: 1,
     limit: 20,
-    sortBy: '',
     total: 0,
-    sort: 'asc',
+    sort_direction: 'desc',
+    sort_column: 'quotes.createdAt',
   });
 
   const handlePageChange = (page: number) => {
@@ -37,8 +37,10 @@ const CustomerQuotes: React.FC<IProps> = ({ id, handleDetailsQuotes }) => {
     .join('&');
 
   const sendMail = async (id: number) => {
+    setIsLoading(true);
+    console.log(id);
     try {
-      const respUsers: IRespApiSuccess = await apiInstance.post(`${API_BASE_URL}${path}/send`, id);
+      const respUsers: IRespApiSuccess = await apiInstance.post(`${API_BASE_URL}${path}/send`, { id: id });
       if (respUsers.code === 200) {
         notificationController.success({
           message: 'Gửi thành công',
@@ -54,6 +56,7 @@ const CustomerQuotes: React.FC<IProps> = ({ id, handleDetailsQuotes }) => {
         description: error.message,
       });
     }
+    setIsLoading(false);
   };
 
   const columns: ColumnsType = [

@@ -207,17 +207,29 @@ const CustomersForm: React.FC<IProps> = ({ isEditing }) => {
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item name="headquarters_province_id" label="Tỉnh/TP">
+          <Form.Item
+            name="headquarters_province_id"
+            label="Tỉnh/TP"
+            rules={[{ required: true, message: 'Tỉnh/TP không được bỏ trống!' }]}
+          >
             <Select options={provinces} onChange={onChangeProvinces} placeholder="Chọn tỉnh/TP" />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item name="headquarters_district_id" label="Quận/Huyện">
+          <Form.Item
+            name="headquarters_district_id"
+            label="Quận/Huyện"
+            rules={[{ required: true, message: 'Quận/Huyện không được bỏ trống!' }]}
+          >
             <Select options={districts} onChange={onChangeDistricts} placeholder="Chọn quận/Huyện" />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item name="headquarters_area_id" label="Phường/Xã">
+          <Form.Item
+            name="headquarters_area_id"
+            label="Phường/Xã"
+            rules={[{ required: true, message: 'Phường/Xã không được bỏ trống!' }]}
+          >
             <Select options={areas} placeholder="Chọn phường/Xã" />
           </Form.Item>
         </Col>

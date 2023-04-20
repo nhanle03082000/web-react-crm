@@ -9,6 +9,7 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as S from './EmailSettings.styles';
 import { getRoleUser } from '@app/utils/redux.util';
+import { InputPassword } from '@app/components/common/inputs/InputPassword/InputPassword';
 
 const EmailSettings: React.FC = () => {
   const [form] = Form.useForm();
@@ -120,7 +121,12 @@ const EmailSettings: React.FC = () => {
                   </Col>
                   <Col span={12}>
                     <Form.Item name="MAIL_PASSWORD" label="Mật khẩu của tài khoản email">
-                      <Input.Password placeholder="Nhập email người gửi" size="small" disabled={!permission.edit} />
+                      <InputPassword
+                        placeholder="Nhập email người gửi"
+                        size="small"
+                        autoComplete="true"
+                        disabled={!permission.edit}
+                      />
                     </Form.Item>
                   </Col>
                 </Row>

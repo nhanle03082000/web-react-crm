@@ -55,7 +55,7 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data }) => {
     phone_number: data.phone_number,
     company_field_id: data.company_field.id,
     customer_source_id: data.customer_source.id,
-    sale_process: data.sale_process.id,
+    sale_process_id: data.sale_process.id,
   };
 
   const onChangeProvinces = (values: any) => {
@@ -265,7 +265,7 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data }) => {
                 </Col>
                 <Col span={8}>
                   <H5>Quy trình bán hàng</H5>
-                  <Form.Item name="sale_process">
+                  <Form.Item name="sale_process_id">
                     <Select options={saleProcesses} placeholder="Chọn quy trình bán hàng" />
                   </Form.Item>
                 </Col>

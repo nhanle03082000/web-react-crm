@@ -18,9 +18,9 @@ export interface ITableData {
 export interface IFilter {
   page: number;
   limit: number;
-  sortBy: string;
-  sort: string;
   total: number;
+  sort_column: string;
+  sort_direction: string;
 }
 
 export interface IRespApiSuccess {

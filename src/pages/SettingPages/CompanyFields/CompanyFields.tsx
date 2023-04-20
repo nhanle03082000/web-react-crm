@@ -10,7 +10,7 @@ import { getRoleUser } from '@app/utils/redux.util';
 import { Col, Row } from 'antd';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { column } from '@app/components/customs/tables/columns';
+import { columnSouce } from '@app/components/customs/tables/columns';
 import Create from '@app/components/customs/crud/Create';
 import CompanyFieldsForm from './components/CompanyFieldsForm';
 
@@ -21,6 +21,7 @@ const CompanyFields: React.FC = () => {
   const userListPermission = JSON.parse(getRoleUser());
   const permission = userListPermission?.filter((item: any) => item.name === path.replace(/\//g, ''))[0].actions;
   const [isLoad, setIsLoad] = useState<boolean>(false);
+  const [show, setShow] = useState(false);
   const [param, setParam] = useState('');
   const [state, setState] = useState<any>({
     data: {},
@@ -29,11 +30,6 @@ const CompanyFields: React.FC = () => {
   });
 
   const option = [
-    {
-      value: 'code',
-      label: 'Mã',
-      type: 'string',
-    },
     {
       value: 'name',
       label: 'Tên',
@@ -45,24 +41,24 @@ const CompanyFields: React.FC = () => {
       type: 'string',
     },
     {
-      value: 'createdAt',
+      value: 'created_at',
       label: 'Ngày tạo',
       type: 'datetime',
     },
     {
-      value: 'updatedAt',
+      value: 'updated_at',
       label: 'Ngày cập nhật',
       type: 'datetime',
     },
   ];
 
   const initialValue = [
-    { field: 'code', operator: 'contain', value: '' },
     { field: 'name', operator: 'contain', value: '' },
+    { field: 'description', operator: 'contain', value: '' },
   ];
 
   return (
-    <DataContext.Provider value={{ path, page, state, setState, isLoad, setIsLoad }}>
+    <DataContext.Provider value={{ path, page, state, setState, isLoad, setIsLoad, show, setShow }}>
       <PageTitle>{page}</PageTitle>
       <Row gutter={[10, 10]}>
         <Col span={24}>
@@ -93,7 +89,7 @@ const CompanyFields: React.FC = () => {
         <Col span={24}>
           <Card padding="1rem">
             {permission.index && (
-              <Show param={param} colums={column} permission={permission}>
+              <Show param={param} colums={columnSouce} permission={permission}>
                 <CompanyFieldsForm isEditing={true} />
               </Show>
             )}

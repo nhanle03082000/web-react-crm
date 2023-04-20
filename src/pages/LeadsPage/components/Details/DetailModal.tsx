@@ -98,9 +98,6 @@ const DetailModal: React.FC<IProps> = ({ id, contentButton }) => {
         footer={null}
       >
         <Row gutter={10}>
-          <Col span={24}>
-            <H4>Thông tin chung</H4>
-          </Col>
           <Col span={12}>
             <H5>Họ tên</H5>
             <div>{state?.name}</div>
@@ -168,7 +165,11 @@ const DetailModal: React.FC<IProps> = ({ id, contentButton }) => {
                         </Col>
                       )}
                     </Row>
-                    <Row justify="space-between" align="middle" style={{ padding: '5px', color: '#bbb' }}>
+                    <Row
+                      justify="space-between"
+                      align="middle"
+                      style={{ padding: '5px', color: '#bbb', fontStyle: 'italic' }}
+                    >
                       <Col span={12}>{item?.user?.name}</Col>
                       <Col span={12} style={{ textAlign: 'right' }}>
                         {moment(item?.createdAt).format('DD/MM/YYYY, HH:mm:ss')}

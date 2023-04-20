@@ -38,9 +38,9 @@ export const Table = styled(AntdTable)`
     .ant-form-item-control-input {
       min-height: unset;
     }
-    .ant-form-item {
+    /* .ant-form-item {
       margin: -4px !important;
-    }
+    } */
     /* .ant-input {
       padding: 0px 5px;
       font-size: 14px;

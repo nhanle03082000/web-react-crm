@@ -51,12 +51,12 @@ const Roles: React.FC = () => {
       type: 'string',
     },
     {
-      value: 'createdAt',
+      value: 'created_at',
       label: 'Ngày tạo',
       type: 'datetime',
     },
     {
-      value: 'updatedAt',
+      value: 'updated_at',
       label: 'Ngày cập nhật',
       type: 'datetime',
     },

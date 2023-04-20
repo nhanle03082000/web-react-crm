@@ -42,4 +42,8 @@ export const customStyle = css`
   }
   .select-product {
   }
+  textarea::placeholder,
+  .ant-select-selection-placeholder {
+    color: #ccc !important;
+  }
 `;

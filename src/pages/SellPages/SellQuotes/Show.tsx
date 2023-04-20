@@ -5,10 +5,11 @@ import CustomPagination from '@app/components/customs/CustomPagination';
 import { API_BASE_URL } from '@app/configs/api-configs';
 import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
-import { IRespApiSuccess } from '@app/interfaces/interfaces';
-import { Popconfirm, Space, Tooltip } from 'antd';
+import { IFilter, IRespApiSuccess } from '@app/interfaces/interfaces';
+import { Popconfirm, Space, Tooltip, Typography } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ReactComponent as MailIcon } from '@app/assets/icons/mail.svg';
 
 interface IProps {
   param: string | null;
@@ -17,14 +18,6 @@ interface IProps {
   setListIdLead: any;
   visibleColumns: any;
   path: string;
-}
-
-interface IFilter {
-  page: number;
-  limit: number;
-  sortBy: string;
-  sort: string;
-  total: number;
 }
 
 const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns, path }) => {
@@ -36,9 +29,9 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns, 
   const [filter, setFilter] = useState<IFilter>({
     page: 1,
     limit: 20,
-    sortBy: '',
     total: 0,
-    sort: 'asc',
+    sort_direction: 'desc',
+    sort_column: 'quotes.createdAt',
   });
 
   const f = Object.entries(filter)
@@ -89,6 +82,29 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns, 
     onShow();
   };
 
+  const sendMail = async (id: number) => {
+    setIsLoading(true);
+    console.log(id);
+    try {
+      const respUsers: IRespApiSuccess = await apiInstance.post(`${API_BASE_URL}${path}/send`, { id: id });
+      if (respUsers.code === 200) {
+        notificationController.success({
+          message: 'Gửi thành công',
+        });
+      } else {
+        notificationController.error({
+          message: respUsers.message,
+        });
+      }
+    } catch (error: any) {
+      notificationController.error({
+        message: 'Có lỗi xảy ra vui lòng thử lại sau',
+        description: error.message,
+      });
+    }
+    setIsLoading(false);
+  };
+
   const handlePageChange = (page: number) => {
     setFilter({ ...filter, page: page });
   };
@@ -122,6 +138,14 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns, 
             </Tooltip>
             <Tooltip placement="bottom" title="Xem chi tiết">
               <EyeOutlined style={{ fontSize: '20px', cursor: 'pointer' }} onClick={() => handleClick(record.id)} />
+            </Tooltip>
+            <Tooltip placement="bottom" title="Gởi email">
+              <Typography.Link
+                onClick={() => sendMail(record.id)}
+                // style={checkPermission?.edit ? { display: 'unset' } : { display: 'none' }}
+              >
+                <MailIcon />
+              </Typography.Link>
             </Tooltip>
           </Space>
         );

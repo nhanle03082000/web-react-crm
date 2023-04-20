@@ -75,11 +75,40 @@ export const column = [
   },
 ];
 
-export const saleColumn = [
+export const columnSouce = [
   {
-    title: 'Mã',
-    dataIndex: 'code',
+    title: 'Tên',
+    dataIndex: 'name',
+    editable: true,
   },
+  {
+    title: 'Mô tả',
+    dataIndex: 'description',
+    editable: true,
+  },
+  {
+    title: 'Ngày tạo',
+    dataIndex: 'createdAt',
+    editable: false,
+    align: 'right',
+    render: (record: string): string => {
+      const date = new Date(record);
+      return date.toLocaleDateString('en-GB');
+    },
+  },
+  {
+    title: 'Ngày cập nhật',
+    dataIndex: 'updatedAt',
+    editable: false,
+    align: 'right',
+    render: (record: string): string => {
+      const date = new Date(record);
+      return date.toLocaleDateString('en-GB');
+    },
+  },
+];
+
+export const saleColumn = [
   {
     title: 'Tên',
     dataIndex: 'name',
@@ -90,6 +119,10 @@ export const saleColumn = [
     render: (record: string): string => {
       return record === 'leads' ? 'Tiềm năng' : 'Khách hàng';
     },
+  },
+  {
+    title: 'Thứ tự',
+    dataIndex: 'sale_process_index',
   },
   {
     title: 'Mô tả',

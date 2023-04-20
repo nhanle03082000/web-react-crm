@@ -11,7 +11,7 @@ import { Col, Row } from 'antd';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import CustomerSourceForm from './components/CustomerSourceForm';
-import { column } from '@app/components/customs/tables/columns';
+import { columnSouce } from '@app/components/customs/tables/columns';
 import Create from '@app/components/customs/crud/Create';
 
 const CustomerSources: React.FC = () => {
@@ -22,6 +22,7 @@ const CustomerSources: React.FC = () => {
   const permission = userListPermission?.filter((item: any) => item.name === path.replace(/\//g, ''))[0].actions;
   const [isLoad, setIsLoad] = useState<boolean>(false);
   const [param, setParam] = useState('');
+  const [show, setShow] = useState(false);
   const [state, setState] = useState<any>({
     data: {},
     rolePermission: [],
@@ -29,11 +30,6 @@ const CustomerSources: React.FC = () => {
   });
 
   const option = [
-    {
-      value: 'code',
-      label: 'Mã',
-      type: 'string',
-    },
     {
       value: 'name',
       label: 'Tên',
@@ -45,24 +41,24 @@ const CustomerSources: React.FC = () => {
       type: 'string',
     },
     {
-      value: 'createdAt',
+      value: 'created_at',
       label: 'Ngày tạo',
       type: 'datetime',
     },
     {
-      value: 'updatedAt',
+      value: 'updated_at',
       label: 'Ngày cập nhật',
       type: 'datetime',
     },
   ];
 
   const initialValue = [
-    { field: 'code', operator: 'contain', value: '' },
     { field: 'name', operator: 'contain', value: '' },
+    { field: 'description', operator: 'contain', value: '' },
   ];
 
   return (
-    <DataContext.Provider value={{ path, page, state, setState, isLoad, setIsLoad }}>
+    <DataContext.Provider value={{ path, page, state, setState, isLoad, setIsLoad, show, setShow }}>
       <PageTitle>{page}</PageTitle>
       <Row gutter={[10, 10]}>
         <Col span={24}>
@@ -93,7 +89,7 @@ const CustomerSources: React.FC = () => {
         <Col span={24}>
           <Card padding="1rem">
             {permission.index && (
-              <Show param={param} colums={column} permission={permission}>
+              <Show param={param} colums={columnSouce} permission={permission}>
                 <CustomerSourceForm isEditing={true} />
               </Show>
             )}

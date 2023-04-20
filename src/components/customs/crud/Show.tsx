@@ -4,7 +4,7 @@ import { Table } from '@app/components/common/Table/Table';
 import { API_BASE_URL } from '@app/configs/api-configs';
 import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
-import { IRespApiSuccess } from '@app/interfaces/interfaces';
+import { IFilter, IRespApiSuccess } from '@app/interfaces/interfaces';
 import { Popconfirm, Space, Tooltip } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import CustomPagination from '../CustomPagination';
@@ -17,14 +17,6 @@ interface IProps {
   permission: any;
 }
 
-interface IFilter {
-  page: number;
-  limit: number;
-  sortBy: string;
-  sort: string;
-  total: number;
-}
-
 const Show: React.FC<IProps> = ({ children, param, colums, permission }) => {
   const { path, show } = useContext(DataContext);
   const [dataShow, setDataShow] = useState([]);
@@ -32,9 +24,9 @@ const Show: React.FC<IProps> = ({ children, param, colums, permission }) => {
   const [filter, setFilter] = useState<IFilter>({
     page: 1,
     limit: 20,
-    sortBy: '',
     total: 0,
-    sort: 'asc',
+    sort_direction: 'desc',
+    sort_column: 'created_at',
   });
 
   const f = Object.entries(filter)

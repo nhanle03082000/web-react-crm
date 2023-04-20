@@ -31,13 +31,13 @@ const SaleProcesses: React.FC = () => {
 
   const option = [
     {
-      value: 'code',
-      label: 'Mã',
+      value: 'name',
+      label: 'Tên',
       type: 'string',
     },
     {
-      value: 'name',
-      label: 'Tên',
+      value: 'sale_process_index',
+      label: 'Thứ tự',
       type: 'string',
     },
     {
@@ -46,20 +46,20 @@ const SaleProcesses: React.FC = () => {
       type: 'string',
     },
     {
-      value: 'createdAt',
+      value: 'created_at',
       label: 'Ngày tạo',
       type: 'datetime',
     },
     {
-      value: 'updatedAt',
+      value: 'updated_at',
       label: 'Ngày cập nhật',
       type: 'datetime',
     },
   ];
 
   const initialValue = [
-    { field: 'code', operator: 'contain', value: '' },
     { field: 'name', operator: 'contain', value: '' },
+    { field: 'sale_process_index', operator: 'contain', value: '' },
   ];
 
   return (

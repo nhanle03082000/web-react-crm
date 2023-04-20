@@ -41,12 +41,6 @@ export const sidebarNavigation: SidebarNavigationItem[] = [
     ],
   },
   {
-    title: 'sidebar.baocao-thongke',
-    key: 'report',
-    url: '/report',
-    icon: <ReportIcon />,
-  },
-  {
     title: 'sidebar.caidat',
     key: 'settings',
     icon: <SettingOutlined />,
