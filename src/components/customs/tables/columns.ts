@@ -20,6 +20,7 @@ export const roleColumn = [
   {
     title: 'Ngày tạo',
     dataIndex: 'createdAt',
+    align: 'right',
     render: (record: string): string => {
       const date = new Date(record);
       return record ? date.toLocaleDateString('en-GB') : '';
@@ -28,6 +29,7 @@ export const roleColumn = [
   {
     title: 'Ngày cập nhật',
     dataIndex: 'updatedAt',
+    align: 'right',
     render: (record: string): string => {
       const date = new Date(record);
       return date.toLocaleDateString('en-GB');
@@ -55,6 +57,7 @@ export const column = [
     title: 'Ngày tạo',
     dataIndex: 'createdAt',
     editable: false,
+    align: 'right',
     render: (record: string): string => {
       const date = new Date(record);
       return date.toLocaleDateString('en-GB');
@@ -64,6 +67,7 @@ export const column = [
     title: 'Ngày cập nhật',
     dataIndex: 'updatedAt',
     editable: false,
+    align: 'right',
     render: (record: string): string => {
       const date = new Date(record);
       return date.toLocaleDateString('en-GB');
@@ -75,12 +79,10 @@ export const saleColumn = [
   {
     title: 'Mã',
     dataIndex: 'code',
-    editable: true,
   },
   {
     title: 'Tên',
     dataIndex: 'name',
-    editable: true,
   },
   {
     title: 'Loại quy trình',
@@ -97,7 +99,7 @@ export const saleColumn = [
   {
     title: 'Ngày tạo',
     dataIndex: 'createdAt',
-    editable: false,
+    align: 'right',
     render: (record: string): string => {
       const date = new Date(record);
       return date.toLocaleDateString('en-GB');
@@ -106,7 +108,7 @@ export const saleColumn = [
   {
     title: 'Ngày cập nhật',
     dataIndex: 'updatedAt',
-    editable: false,
+    align: 'right',
     render: (record: string): string => {
       const date = new Date(record);
       return date.toLocaleDateString('en-GB');
@@ -165,22 +167,19 @@ export const userColumn = [
   {
     title: 'Tên',
     dataIndex: 'name',
-    editable: true,
   },
   {
     title: 'Mã AM',
     dataIndex: 'am_code',
-    editable: true,
   },
   {
     title: 'Số điện thoại',
     dataIndex: 'phone',
-    editable: true,
+    align: 'right',
   },
   {
     title: 'Đơn vị',
     dataIndex: 'department',
-    editable: false,
     render: (record: Department): string | null => {
       return record?.name || null;
     },
@@ -188,7 +187,6 @@ export const userColumn = [
   {
     title: 'Vai trò',
     dataIndex: 'role',
-    editable: false,
     render: (record: Role): string | null => {
       return record?.name || null;
     },
@@ -281,11 +279,6 @@ export const columnLead = [
 
 export const columnQuotes = [
   {
-    title: 'Mã báo giá',
-    dataIndex: 'code',
-    align: 'right',
-  },
-  {
     title: 'Ngày báo giá',
     dataIndex: 'quote_date',
     align: 'right',
@@ -354,6 +347,19 @@ export const columnQuotes = [
     render: (record: { id: number; name: string }): string | null => {
       return `${numeral(record).format('0,0 đ')}đ` || null;
     },
+  },
+  {
+    title: 'Ngày tạo',
+    dataIndex: 'createdAt',
+    render: (record: any): string => {
+      const date = new Date(record);
+      return date.toLocaleDateString('en-GB');
+    },
+  },
+  {
+    title: 'Mã báo giá',
+    dataIndex: 'code',
+    align: 'right',
   },
 ];
 

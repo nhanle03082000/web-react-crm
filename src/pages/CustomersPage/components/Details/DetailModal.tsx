@@ -126,6 +126,7 @@ const DetailModalStyles = styled.div`
     resize: none;
     transition: all 0.3s !important;
     font-size: 16px !important;
+    border: none;
     ::placeholder {
       color: #ccc;
     }

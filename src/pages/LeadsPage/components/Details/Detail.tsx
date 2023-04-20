@@ -9,16 +9,17 @@ import { TextArea } from '@app/components/common/inputs/Input/Input';
 import { H4 } from '@app/components/common/typography/H4/H4';
 import { H5 } from '@app/components/common/typography/H5/H5';
 import { API_BASE_URL } from '@app/configs/api-configs';
+import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
+import CreateFromLead from '@app/pages/CustomersPage/components/Form/CreateFromLead';
+import { getRoleUser } from '@app/utils/redux.util';
 import { Button, Col, Form, Row, Typography } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useContext, useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import EditDetail from './EditDetail';
-import { DataContext } from '@app/contexts/DataContext';
-import { getRoleUser } from '@app/utils/redux.util';
 
 const Detail: React.FC = () => {
   const { path } = useContext(DataContext);
@@ -108,18 +109,18 @@ const Detail: React.FC = () => {
 
   return (
     <DetailStyles>
-      <Row>
-        <Col span={12}>
+      <Row align={'middle'} justify={'space-between'}>
+        <Col span={10}>
           <Button className="button-back" onClick={onBack}>
             <LeftOutlined />
             CHI TIẾT TIỀM NĂNG
           </Button>
         </Col>
-        <Col span={12} style={{ textAlign: 'right' }}>
-          <Button type="primary">
-            <Link to="/customers">Chuyển sang khách hàng</Link>
-          </Button>
+        <Col span={6} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <CreateFromLead titleButton="Chuyển sang khách hàng" defaultValues={data} />
         </Col>
+      </Row>
+      <Row>
         {isEdit ? (
           <Col span={24}>
             <EditDetail data={data} setIsEdit={setIsEdit} />
@@ -297,7 +298,7 @@ const DetailStyles = styled.div`
     resize: none;
     transition: all 0.3s !important;
     font-size: 16px !important;
-    border: none;
+    border: none !important;
     ::placeholder {
       color: #ccc;
     }

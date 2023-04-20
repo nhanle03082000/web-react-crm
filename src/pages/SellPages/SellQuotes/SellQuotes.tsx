@@ -31,6 +31,7 @@ const SellQuotes: React.FC = () => {
     'Số điện thoại khách hàng',
     'Nhân viên phụ trách',
     'Số điện thoại nhân viên',
+    'Ngày tạo',
     'Tổng cộng',
   ]);
 
@@ -109,6 +110,11 @@ const SellQuotes: React.FC = () => {
       value: 'area.id',
       label: 'Phường/Xã',
       type: 'string',
+    },
+    {
+      value: 'createdAt',
+      label: 'Ngày tạo',
+      type: 'datetime',
     },
   ];
 

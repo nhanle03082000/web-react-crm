@@ -13,6 +13,7 @@ import { API_BASE_URL } from '@app/configs/api-configs';
 import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
+import CreateFromLead from '@app/pages/CustomersPage/components/Form/CreateFromLead';
 import { getRoleUser } from '@app/utils/redux.util';
 import { Col, Form, Row, Tooltip, Typography } from 'antd';
 import moment from 'moment';
@@ -39,6 +40,8 @@ const DetailModal: React.FC<IProps> = ({ id, contentButton }) => {
     setState(dataById);
     form.setFieldsValue(dataById);
   };
+
+  console.log(state);
 
   const showModal = async () => {
     onDataById();
@@ -204,11 +207,7 @@ const DetailModal: React.FC<IProps> = ({ id, contentButton }) => {
           <Col span={24}>
             <br />
             <Row align={'middle'}>
-              <Col span={18}>
-                <Button type="primary">
-                  <Link to="/customers">Chuyển sang khách hàng</Link>
-                </Button>
-              </Col>
+              <Col span={18}></Col>
             </Row>
           </Col>
         </Row>
@@ -228,6 +227,7 @@ const DetailModalStyles = styled.div`
     resize: none;
     transition: all 0.3s !important;
     font-size: 16px !important;
+    border: none;
     ::placeholder {
       color: #ccc;
     }

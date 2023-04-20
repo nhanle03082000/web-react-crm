@@ -340,8 +340,8 @@ const EditDetailStyles = styled.div`
   textarea.ant-input {
     resize: none;
     transition: all 0.3s !important;
+    border: none !important;
     font-size: 16px !important;
-    border: none;
     ::placeholder {
       color: #ccc;
     }

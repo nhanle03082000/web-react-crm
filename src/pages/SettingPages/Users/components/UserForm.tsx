@@ -1,15 +1,23 @@
+import { getRoleList } from '@app/api/app/api';
 import { Input } from '@app/components/common/inputs/Input/Input';
 import { Select } from '@app/components/common/selects/Select/Select';
 import { DataContext } from '@app/contexts/DataContext';
 import { Form } from 'antd';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 interface IProps {
   isEditing: boolean;
 }
 
 const UserForm: React.FC<IProps> = ({ isEditing }) => {
-  const { state } = useContext(DataContext);
+  const [role, setRole] = useState([]);
+  useEffect(() => {
+    async function getCustomer() {
+      const dataResult = await getRoleList();
+      setRole(dataResult);
+    }
+    getCustomer();
+  }, []);
 
   return (
     <>
@@ -29,7 +37,7 @@ const UserForm: React.FC<IProps> = ({ isEditing }) => {
         <Input placeholder="Nhập mã nhân viên phát triển" size="small" />
       </Form.Item>
       <Form.Item name="role_id" label="Vai trò">
-        <Select options={state.roles} />
+        <Select options={role} />
       </Form.Item>
     </>
   );

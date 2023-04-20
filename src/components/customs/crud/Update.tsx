@@ -28,9 +28,11 @@ const Update: React.FC<IProps> = ({ children, id, onShow }) => {
     setIsLoading(true);
     const dataById = await getDataById(id, path);
     if (path === '/roles') {
-      const permission = JSON.parse(dataById.permission);
-      ConvertTextRoles(permission);
-      const data = permission.sort((a: any, b: any) => a.name.localeCompare(b.name, 'vi', { sensitivity: 'base' }));
+      const permission = JSON.parse(dataById?.permission);
+      permission?.map((item: any) => {
+        return (item.nameVi = ConvertTextRoles(item.name));
+      });
+      const data = permission.sort((a: any, b: any) => a.nameVi.localeCompare(b.nameVi, 'vi', { sensitivity: 'base' }));
       setState({ data: dataById, rolePermission: data });
     } else {
       setState(dataById);

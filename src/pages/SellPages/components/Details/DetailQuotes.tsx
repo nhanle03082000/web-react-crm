@@ -12,7 +12,6 @@ import CustomLoading from '@app/components/customs/CustomLoading';
 import { Col, Form, Row, Typography } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import moment from 'moment';
-import numeral from 'numeral';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -25,12 +24,25 @@ const DetailQuotes: React.FC = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [dataTable, setDataTable] = useState<any>([]);
-  const [count, setCount] = useState(0);
   const [editable, setEditable] = useState(false);
   const [product, setProduct] = useState([]);
-  const [productListItem, setProductListItem] = useState<any>([]);
+  const [amount, setAmount] = useState<any>({
+    before_tax: 0,
+    after_tax: 0,
+    tax: 0,
+  });
+
+  const defaultDetail = {
+    stt: 1,
+    product_id: null,
+    quantity: 1,
+    price: 0,
+    vat: 0,
+    amount_before_tax: 0,
+    amount: 0,
+  };
+
   const [optionProduct, setOptionProduct] = useState<any>([]);
-  const [quantity, setQuantity] = useState([]);
 
   useEffect(() => {
     async function getData() {
@@ -41,7 +53,6 @@ const DetailQuotes: React.FC = () => {
       });
       setData(result[0]);
       setDataTable(result[0]?.quote_detail);
-      setCount(result[0]?.quote_detail.length);
       setIsLoading(false);
     }
     getData();
@@ -58,44 +69,66 @@ const DetailQuotes: React.FC = () => {
     setProduct(productList);
   };
 
-  // const addRow = () => {
-  //   setCount(count + 1);
-  //   setDataTable([...dataTable, defaultNewRow]);
-  // };
-
-  const defaultDetail = {
-    stt: 1,
-    product_id: productListItem.name,
-    quantity: 1,
-    price: productListItem.marketplace_product_id,
-    vat: 10,
-    amount_before_tax: 10,
-    amount: 1000,
-  };
-
-  const onChangeSelect = (values: any, index: number) => {
+  const onChangeSelect = (values: any, index: number, add: any, remove: any) => {
+    remove(index);
     const dataChange: any = product.find((item: any) => {
       return item.id === values;
     });
 
-    console.log(dataChange);
-
-    dataChange.price = dataChange.price || 2;
-    dataChange.amount = dataChange.amount || 100;
-    dataChange.quantity = dataChange.quantity || 100;
-    dataChange.vat = dataChange.vat || 100;
-    dataChange.amount_before_tax = dataChange.amount_before_tax || 100;
-    dataTable[index] = dataChange;
+    const dataFinal = {
+      id: dataChange.id,
+      product_id: dataChange.id,
+      quantity: dataChange.quantity || 1,
+      vat: dataChange.vat || 10,
+      price: dataChange.price || 0,
+      amount_before_tax: dataChange.amount_before_tax || 0,
+      amount: dataChange.amount || 0,
+      stt: index + 1,
+    };
+    dataTable[index] = dataFinal;
+    add(dataFinal);
     setDataTable([...dataTable]);
   };
 
   console.log(dataTable);
 
-  const getAmount = (quantity: number, index: number) => {
-    const vat = dataTable[index].vat;
-    const price = dataTable[index].vat;
-    const amount1 = (vat / 100) * price * quantity;
-    console.log('getAmount ~ amount1:', amount1);
+  const getAmount = (name: string, index: number, add: any, remove: any) => (evt: any) => {
+    const value = Number(evt.target.value) || 0;
+    const data: any = dataTable[index];
+
+    let thanhtien_truocvat = 0;
+    let thanhtien_sauvat = 0;
+
+    switch (name) {
+      case 'quantity':
+        data.quantity = value;
+        thanhtien_truocvat = value * Number(data.price || 0);
+        thanhtien_sauvat = thanhtien_truocvat + thanhtien_truocvat * (Number(data.vat || 0) / 100);
+        break;
+
+      case 'price':
+        data.price = value;
+        thanhtien_truocvat = value * Number(data.quantity || 0);
+        thanhtien_sauvat = thanhtien_truocvat + thanhtien_truocvat * (Number(data.vat || 0) / 100);
+        break;
+
+      case 'vat':
+        data.vat = value;
+        thanhtien_truocvat = Number(data.price || 0) * Number(data.quantity || 0);
+        thanhtien_sauvat = thanhtien_truocvat + thanhtien_truocvat * (Number(value || 0) / 100);
+        break;
+
+      default:
+        break;
+    }
+
+    data.amount_before_tax = thanhtien_truocvat;
+    data.amount = thanhtien_sauvat;
+    dataTable[index] = data;
+    setDataTable([...dataTable]);
+    remove(index);
+    add(data, index);
+    total();
   };
 
   const columns: ColumnsType = [
@@ -137,6 +170,20 @@ const DetailQuotes: React.FC = () => {
     },
   ];
 
+  const total = () => {
+    let before_tax = 0;
+    let after_tax = 0;
+    let tax = 0;
+    console.log('Chạy tới đây');
+    for (let i = 0; i < dataTable.length; i++) {
+      before_tax += Number(dataTable[i].amount_before_tax);
+      after_tax += Number(dataTable[i].amount);
+      tax += after_tax - before_tax;
+    }
+
+    setAmount({ before_tax: before_tax, after_tax: after_tax, tax: tax });
+  };
+
   const onBack = () => {
     navigate(-1);
   };
@@ -172,12 +219,11 @@ const DetailQuotes: React.FC = () => {
                 </Col>
                 {isEdit ? (
                   <Col span={24}>
-                    <EditDetail data={data} setIsEdit={setIsEdit} dataTable={dataTable}>
+                    <EditDetail data={data} setIsEdit={setIsEdit} amount={amount}>
                       <Form.List name="detail" initialValue={dataTable}>
                         {(quote_detail, { add, remove }) => {
                           return (
                             <>
-                              <Button onClick={() => add(defaultDetail)}>Thêm</Button>
                               <Row gutter={10}>
                                 <Col span={4}>
                                   <H5>Sản phẩm</H5>
@@ -202,6 +248,8 @@ const DetailQuotes: React.FC = () => {
                                 </Col>
                               </Row>
                               {quote_detail.map(({ key, name, ...restField }: any, index) => {
+                                // console.log(key, name, restField);
+                                // console.log('@@ dataTable > ', dataTable[index]);
                                 return (
                                   <Row key={key} gutter={10} style={{ marginBottom: '10px' }}>
                                     <Col span={4}>
@@ -214,7 +262,7 @@ const DetailQuotes: React.FC = () => {
                                           options={optionProduct}
                                           placeholder="Chọn sản phẩm"
                                           style={{ width: '100%' }}
-                                          onChange={(e) => onChangeSelect(e, index)}
+                                          onChange={(e) => onChangeSelect(e, index, add, remove)}
                                         />
                                       </Form.Item>
                                     </Col>
@@ -224,53 +272,71 @@ const DetailQuotes: React.FC = () => {
                                         rules={[{ required: true, message: 'Thong loi o day' }]}
                                         {...restField}
                                       >
-                                        <MyInput
-                                          initValue={dataTable[index]?.quantity}
-                                          onChange={() => getAmount(dataTable[index]?.quantity, index)}
+                                        <Input
+                                          defaultValue={dataTable[index]?.quantity}
+                                          onBlur={getAmount('quantity', index, add, remove)}
                                         />
                                       </Form.Item>
                                     </Col>
                                     <Col span={4}>
                                       <Form.Item name={[name, 'price']} {...restField}>
-                                        <MyInput initValue={dataTable[index]?.price} />
+                                        <Input
+                                          defaultValue={dataTable[index]?.price}
+                                          onBlur={getAmount('price', index, add, remove)}
+                                        />
                                       </Form.Item>
                                     </Col>
                                     <Col span={4}>
                                       <Form.Item
                                         name={[name, 'vat']}
-                                        rules={[{ required: true, message: 'Thong loi o day' }]}
+                                        // rules={[{ required: true, message: 'Thong loi o day' }]}
                                         {...restField}
                                       >
-                                        <MyInput initValue={dataTable[index]?.vat} />
+                                        <Input
+                                          defaultValue={dataTable[index]?.vat}
+                                          onBlur={getAmount('vat', index, add, remove)}
+                                        />
                                       </Form.Item>
                                     </Col>
                                     <Col span={4}>
                                       <Form.Item
                                         name={[name, 'amount_before_tax']}
-                                        rules={[{ required: true, message: 'Thong loi o day' }]}
+                                        // rules={[{ required: true, message: 'Thong loi o day' }]}
                                         {...restField}
                                       >
-                                        <MyInput initValue={dataTable[index]?.amount_before_tax} />
+                                        <Input defaultValue={dataTable[index]?.amount_before_tax} disabled />
                                       </Form.Item>
                                     </Col>
                                     <Col span={3}>
                                       <Form.Item
                                         name={[name, 'amount']}
-                                        rules={[{ required: true, message: 'Thong loi o day' }]}
+                                        // rules={[{ required: true, message: 'Thong loi o day' }]}
                                         {...restField}
                                       >
-                                        <MyInput initValue={dataTable[index]?.amount} />
+                                        <Input defaultValue={dataTable[index]?.amount} disabled />
                                       </Form.Item>
                                     </Col>
                                     <Col span={1}>
                                       <RestOutlined
-                                        onClick={() => remove(name)}
+                                        onClick={() => {
+                                          console.log('remove(name) > ', name);
+                                          remove(name);
+                                        }}
                                         style={{ color: '#ff4d4f', fontSize: '24px', marginTop: '4px' }}
                                       />
                                     </Col>
                                   </Row>
                                 );
                               })}
+                              <Button
+                                onClick={() => {
+                                  add(defaultDetail);
+                                  dataTable.push(defaultDetail);
+                                  setDataTable([...dataTable]);
+                                }}
+                              >
+                                Thêm sản phẩm
+                              </Button>
                             </>
                           );
                         }}
@@ -365,15 +431,15 @@ const DetailQuotes: React.FC = () => {
                   <Row gutter={10} justify={'end'} style={{ marginTop: '10px', textAlign: 'right' }}>
                     <Col span={24}>
                       <span>Tổng thành tiền trước thuế:</span> &nbsp;
-                      <span>{numeral(data?.total_before_tax).format('0,0 đ')}đ</span>
+                      <span>{amount.before_tax} đ</span>
                     </Col>
                     <Col span={24}>
                       <span>Tổng tiền thuế:</span> &nbsp;
-                      <span>{numeral(data.total_tax_amount).format('0,0 đ')}đ</span>
+                      <span>{amount.tax} đ</span>
                     </Col>
                     <Col span={24} style={{ fontWeight: 700 }}>
                       <span>Tổng cộng:</span> &nbsp;
-                      <span>{numeral(data.total_amount).format('0,0 đ')}đ</span>
+                      <span>{amount.after_tax} đ</span>
                     </Col>
                   </Row>
                 </Col>
@@ -384,19 +450,6 @@ const DetailQuotes: React.FC = () => {
       </Row>
     </DetailQuotesStyles>
   );
-};
-
-const MyInput = (props: { initValue: string; disabled?: boolean; onChange?: any }) => {
-  const [value, setValue] = useState(props.initValue);
-  const onChange1 = (evt: any) => {
-    props.onChange();
-    setValue(evt.target.value);
-  };
-  useEffect(() => {
-    setValue(props.initValue);
-  }, [props.initValue]);
-
-  return <Input value={value} onChange={onChange1} disabled={props.disabled} />;
 };
 
 const DetailQuotesStyles = styled.div`

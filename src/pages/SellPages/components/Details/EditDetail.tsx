@@ -23,11 +23,11 @@ interface ISelectOption {
 interface Iprops {
   setIsEdit: any;
   data: any;
-  dataTable: any;
+  amount: any;
   children: React.ReactNode;
 }
 
-const EditDetail: React.FC<Iprops> = ({ setIsEdit, data, dataTable, children }) => {
+const EditDetail: React.FC<Iprops> = ({ setIsEdit, data, amount, children }) => {
   const [form] = Form.useForm();
   const { path } = useContext(DataContext);
   const [customers, setCustomers] = useState<ISelectOption[]>([{ value: '', label: '' }]);
@@ -63,7 +63,9 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data, dataTable, children }) 
     const data1 = {
       ...values,
       quote_date: moment(new Date(values.quote_date).toUTCString()).format('YYYY-MM-DD'),
-      detail: dataTable,
+      total_tax_amount: amount.tax,
+      total_before_tax: amount.before_tax,
+      total_amount: amount.after_tax,
     };
     console.log(data1);
     // try {
@@ -96,10 +98,16 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data, dataTable, children }) 
         <Row>
           <Col span={24}>
             <Row gutter={10}>
-              <Col span={12}>
+              <Col span={24}>
                 <H5>Mã báo giá</H5>
                 <Form.Item name="code" rules={[{ required: true, message: 'Mã báo giá không được bỏ trống!' }]}>
-                  <Input placeholder="Nhập tên doanh nghiệp" size="small" />
+                  <Input placeholder="Nhập tên doanh nghiệp" size="small" disabled />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <H5>Khách hàng</H5>
+                <Form.Item name="customer_id" rules={[{ required: true, message: 'Khách hàng không được bỏ trống!' }]}>
+                  <Select options={customers} placeholder="Chọn khách hàng" size="small" />
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -123,12 +131,6 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data, dataTable, children }) 
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <H5>Khách hàng</H5>
-                <Form.Item name="customer_id" rules={[{ required: true, message: 'Khách hàng không được bỏ trống!' }]}>
-                  <Select options={customers} placeholder="Chọn khách hàng" size="small" />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
                 <H5>Mã số thuế</H5>
                 <Form.Item name="tax_code" rules={[{ required: true, message: 'Mã số thuê không được bỏ trống!' }]}>
                   <Input placeholder="Nhập mã số thuê" size="small" />
@@ -147,30 +149,6 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data, dataTable, children }) 
                   rules={[{ required: true, message: 'Số điện thoại khách hàng không được bỏ trống!' }]}
                 >
                   <Input placeholder="Nhập số điện thoại khách hàng" size="small" />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <H5>Nhân viên phụ trách</H5>
-                <Form.Item
-                  name="employee_id"
-                  rules={[{ required: true, message: 'Nhân viên phụ trách không được bỏ trống!' }]}
-                >
-                  <Select options={user} placeholder="Chọn nhân viên phụ trách" size="small" />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <H5>Số điện thoại nhân viên</H5>
-                <Form.Item
-                  name="phone"
-                  rules={[{ required: true, message: 'Số điện thoại nhân viên không được bỏ trống!' }]}
-                >
-                  <Input placeholder="Nhập số điện thoại nhân viên" size="small" />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <H5>Tổng cộng</H5>
-                <Form.Item name="total_amount" rules={[{ required: true, message: 'Tổng cộng không được bỏ trống!' }]}>
-                  <Input placeholder="Nhập tổng cộng" size="small" disabled />
                 </Form.Item>
               </Col>
               <Col span={24}>

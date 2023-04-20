@@ -41,12 +41,12 @@ export const Table = styled(AntdTable)`
     .ant-form-item {
       margin: -4px !important;
     }
-    .ant-input {
+    /* .ant-input {
       padding: 0px 5px;
       font-size: 14px;
       border: none;
       border-radius: 0px;
-    }
+    } */
   }
 
   & tbody .ant-table-row-expand-icon {

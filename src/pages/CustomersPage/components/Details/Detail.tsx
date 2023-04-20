@@ -277,7 +277,7 @@ const DetailStyles = styled.div`
     resize: none;
     transition: all 0.3s !important;
     font-size: 16px !important;
-    border: none;
+    border: none !important;
     ::placeholder {
       color: #ccc;
     }

@@ -74,7 +74,7 @@ const CompanyCareers: React.FC = () => {
               <Col span={12}>
                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                   {permission.export && <ExportExcel param={param} />} &nbsp;&nbsp;
-                  {permission.cretae && (
+                  {permission.create && (
                     <Create>
                       <CompanyCareersForm isEditing={false} />
                     </Create>

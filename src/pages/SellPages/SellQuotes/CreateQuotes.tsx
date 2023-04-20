@@ -1,9 +1,8 @@
 import { LeftOutlined, RestOutlined } from '@ant-design/icons';
-import { getCustomersList, getProductList, getUsersList } from '@app/api/app/api';
+import { getCustomersList, getProductList } from '@app/api/app/api';
 import { apiInstance } from '@app/api/app/api_core';
 import { Button } from '@app/components/common/buttons/Button/Button';
 import { Input } from '@app/components/common/inputs/Input/Input';
-import { DatePicker } from '@app/components/common/pickers/DatePicker';
 import { API_URL } from '@app/configs/api-configs';
 import { Select } from '@app/components/common/selects/Select/Select';
 import { H4 } from '@app/components/common/typography/H4/H4';
@@ -11,25 +10,32 @@ import { H5 } from '@app/components/common/typography/H5/H5';
 import { API_BASE_URL } from '@app/configs/api-configs';
 import { notificationController } from '@app/controllers/notificationController';
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
-import { Card, Col, Form, Row } from 'antd';
+import { Card, Col, DatePicker, Form, Row } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-interface ISelectOption {
-  value: any;
-  label: string;
-}
-
 const CreateQuotes: React.FC = () => {
   const [form] = Form.useForm();
   const path = API_URL.QUOTES;
-  const [customers, setCustomers] = useState<ISelectOption[]>([{ value: '', label: '' }]);
-  const [user, setUser] = useState<ISelectOption[]>([{ value: '', label: '' }]);
+  const defaultDetail = {
+    stt: 1,
+    product_id: null,
+    quantity: 1,
+    price: 0,
+    vat: 0,
+    amount_before_tax: 0,
+    amount: 0,
+  };
+  const [customers, setCustomers] = useState<any[]>([]);
   const [optionProduct, setOptionProduct] = useState<any>([]);
   const [product, setProduct] = useState([]);
-  const [dataRow, setdataRow] = useState<any>([]);
-  const [formUpdateCount, setFormUpdateCount] = useState(0);
+  const [newArr, setNewArr] = useState<any[]>([defaultDetail]);
+  const [amount, setAmount] = useState<any>({
+    before_tax: 0,
+    after_tax: 0,
+    tax: 0,
+  });
 
   useEffect(() => {
     async function getProduct() {
@@ -44,12 +50,8 @@ const CreateQuotes: React.FC = () => {
       const dataResult = await getCustomersList();
       setCustomers(dataResult);
     }
-    async function getUsers() {
-      const dataResult = await getUsersList();
-      setUser(dataResult);
-    }
+
     getCustomer();
-    getUsers();
     getProduct();
   }, []);
 
@@ -57,6 +59,9 @@ const CreateQuotes: React.FC = () => {
     const data1 = {
       ...values,
       quote_date: moment(new Date(values.quote_date).toUTCString()).format('YYYY-MM-DD'),
+      total_tax_amount: amount.tax,
+      total_before_tax: amount.before_tax,
+      total_amount: amount.after_tax,
     };
     console.log(data1);
     // try {
@@ -78,25 +83,87 @@ const CreateQuotes: React.FC = () => {
     // }
   };
 
-  const onChangeSelect = (value: any, index: number, name: string) => {
+  const onChangeSelect = (values: any, index: number, add: any, remove: any) => {
+    remove(index);
     const dataChange: any = product.find((item: any) => {
-      return item.id === value;
+      return item.id === values;
     });
-    console.log(name);
-    console.log(dataChange);
-    form.setFieldsValue({
-      [`${name}.price`]: dataChange?.description || 0,
-      [`${name}.vat`]: 0,
-      [`${name}.amount_before_tax`]: 0,
-      [`${name}.amount`]: 0,
-    });
-    // console.log(form);
-    // dataRow[index] = dataChange;
-    // setdataRow([...dataRow]);
-    // setFormUpdateCount(formUpdateCount + 1);
+
+    const dataFinal = {
+      id: dataChange.id,
+      product_id: dataChange.id,
+      quantity: dataChange.quantity || 1,
+      vat: dataChange.vat || 10,
+      price: dataChange.price || 0,
+      amount_before_tax: dataChange.amount_before_tax || 0,
+      amount: dataChange.amount || 0,
+      stt: index + 1,
+    };
+    newArr[index] = dataFinal;
+    add(dataFinal);
+    setNewArr([...newArr]);
+    // setDataTable([...dataTable]);
   };
 
-  console.log('render');
+  const onChangeCustomer = (value: any) => {
+    const itemCus = customers.find((item) => (item.value = value));
+    form.setFieldsValue(itemCus);
+  };
+
+  const getAmount = (name: string, index: number, add: any, remove: any) => (evt: any) => {
+    const value = Number(evt.target.value) || 0;
+    const data: any = newArr[index];
+
+    let thanhtien_truocvat = 0;
+    let thanhtien_sauvat = 0;
+
+    switch (name) {
+      case 'quantity':
+        data.quantity = value;
+        thanhtien_truocvat = value * Number(data.price || 0);
+        thanhtien_sauvat = thanhtien_truocvat + thanhtien_truocvat * (Number(data.vat || 0) / 100);
+        break;
+
+      case 'price':
+        data.price = value;
+        thanhtien_truocvat = value * Number(data.quantity || 0);
+        thanhtien_sauvat = thanhtien_truocvat + thanhtien_truocvat * (Number(data.vat || 0) / 100);
+        break;
+
+      case 'vat':
+        data.vat = value;
+        thanhtien_truocvat = Number(data.price || 0) * Number(data.quantity || 0);
+        thanhtien_sauvat = thanhtien_truocvat + thanhtien_truocvat * (Number(value || 0) / 100);
+        break;
+
+      default:
+        break;
+    }
+
+    data.amount_before_tax = thanhtien_truocvat;
+    data.amount = thanhtien_sauvat;
+
+    newArr[index] = data;
+    setNewArr([...newArr]);
+    remove(index);
+    add(data, index);
+    total();
+  };
+
+  const total = () => {
+    let before_tax = 0;
+    let after_tax = 0;
+    let tax = 0;
+    console.log(newArr);
+    for (let i = 0; i < newArr.length; i++) {
+      before_tax += Number(newArr[i].amount_before_tax);
+      after_tax += Number(newArr[i].amount);
+      tax += after_tax - before_tax;
+    }
+    console.log(before_tax, after_tax, tax);
+
+    setAmount({ before_tax: before_tax, after_tax: after_tax, tax: tax });
+  };
 
   return (
     <EditDetailStyles>
@@ -112,11 +179,19 @@ const CreateQuotes: React.FC = () => {
           </Col>
           <Col span={24}>
             <Card>
-              {/* <Row gutter={10}>
+              <Row gutter={10}>
                 <Col span={12}>
-                  <H5>Mã báo giá</H5>
-                  <Form.Item name="code" rules={[{ required: true, message: 'Mã báo giá không được bỏ trống!' }]}>
-                    <Input placeholder="Nhập tên doanh nghiệp" size="small" />
+                  <H5>Khách hàng</H5>
+                  <Form.Item
+                    name="customer_id"
+                    rules={[{ required: true, message: 'Khách hàng không được bỏ trống!' }]}
+                  >
+                    <Select
+                      options={customers}
+                      placeholder="Chọn khách hàng"
+                      size="small"
+                      onChange={(value) => onChangeCustomer(value)}
+                    />
                   </Form.Item>
                 </Col>
                 <Col span={12}>
@@ -137,15 +212,6 @@ const CreateQuotes: React.FC = () => {
                     rules={[{ required: true, message: 'Tên doanh nghiệp không được bỏ trống!' }]}
                   >
                     <Input placeholder="Nhập tên doanh nghiệp" size="small" />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <H5>Khách hàng</H5>
-                  <Form.Item
-                    name="customer_id"
-                    rules={[{ required: true, message: 'Khách hàng không được bỏ trống!' }]}
-                  >
-                    <Select options={customers} placeholder="Chọn khách hàng" size="small" />
                   </Form.Item>
                 </Col>
                 <Col span={12}>
@@ -172,43 +238,15 @@ const CreateQuotes: React.FC = () => {
                     <Input placeholder="Nhập số điện thoại khách hàng" size="small" />
                   </Form.Item>
                 </Col>
-                <Col span={12}>
-                  <H5>Nhân viên phụ trách</H5>
-                  <Form.Item
-                    name="employee_id"
-                    rules={[{ required: true, message: 'Nhân viên phụ trách không được bỏ trống!' }]}
-                  >
-                    <Select options={user} placeholder="Chọn nhân viên phụ trách" size="small" />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <H5>Số điện thoại nhân viên</H5>
-                  <Form.Item
-                    name="phone"
-                    rules={[{ required: true, message: 'Số điện thoại nhân viên không được bỏ trống!' }]}
-                  >
-                    <Input placeholder="Nhập số điện thoại nhân viên" size="small" />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <H5>Tổng cộng</H5>
-                  <Form.Item
-                    name="total_amount"
-                    rules={[{ required: true, message: 'Tổng cộng không được bỏ trống!' }]}
-                  >
-                    <Input placeholder="Nhập tổng cộng" size="small" />
-                  </Form.Item>
-                </Col>
-              </Row> */}
+              </Row>
               <Row>
                 <Col span={24}>
                   <br />
                   <H4>Thông tin sản phẩm</H4>
-                  <Form.List name="detail" initialValue={[{}]} key={formUpdateCount}>
+                  <Form.List name="detail" initialValue={newArr}>
                     {(quote_detail, { add, remove }) => {
                       return (
                         <>
-                          <Button onClick={add}>Thêm</Button>
                           <Row gutter={10}>
                             <Col span={4}>
                               <H5>Sản phẩm</H5>
@@ -233,6 +271,8 @@ const CreateQuotes: React.FC = () => {
                             </Col>
                           </Row>
                           {quote_detail.map(({ key, name, ...restField }: any, index) => {
+                            // console.log(key, name, restField);
+                            // console.log('@@ dataTable > ', dataTable[index]);
                             return (
                               <Row key={key} gutter={10} style={{ marginBottom: '10px' }}>
                                 <Col span={4}>
@@ -245,9 +285,7 @@ const CreateQuotes: React.FC = () => {
                                       options={optionProduct}
                                       placeholder="Chọn sản phẩm"
                                       style={{ width: '100%' }}
-                                      onChange={(value) => {
-                                        onChangeSelect(value, index, 'detail');
-                                      }}
+                                      onChange={(e) => onChangeSelect(e, index, add, remove)}
                                     />
                                   </Form.Item>
                                 </Col>
@@ -257,65 +295,91 @@ const CreateQuotes: React.FC = () => {
                                     rules={[{ required: true, message: 'Thong loi o day' }]}
                                     {...restField}
                                   >
-                                    <Input />
+                                    <Input onBlur={getAmount('quantity', index, add, remove)} />
                                   </Form.Item>
                                 </Col>
                                 <Col span={4}>
-                                  <Form.Item
-                                    name={[name, 'price']}
-                                    rules={[{ required: true, message: 'Thong loi o day' }]}
-                                    {...restField}
-                                  >
-                                    <Input />
+                                  <Form.Item name={[name, 'price']} {...restField}>
+                                    <Input onBlur={getAmount('price', index, add, remove)} />
                                   </Form.Item>
                                 </Col>
                                 <Col span={4}>
                                   <Form.Item
                                     name={[name, 'vat']}
-                                    rules={[{ required: true, message: 'Thong loi o day' }]}
+                                    // rules={[{ required: true, message: 'Thong loi o day' }]}
                                     {...restField}
                                   >
-                                    <Input />
+                                    <Input onBlur={getAmount('vat', index, add, remove)} />
                                   </Form.Item>
                                 </Col>
                                 <Col span={4}>
                                   <Form.Item
                                     name={[name, 'amount_before_tax']}
-                                    rules={[{ required: true, message: 'Thong loi o day' }]}
+                                    // rules={[{ required: true, message: 'Thong loi o day' }]}
                                     {...restField}
                                   >
-                                    <Input />
+                                    <Input disabled />
                                   </Form.Item>
                                 </Col>
                                 <Col span={3}>
                                   <Form.Item
                                     name={[name, 'amount']}
-                                    rules={[{ required: true, message: 'Thong loi o day' }]}
+                                    // rules={[{ required: true, message: 'Thong loi o day' }]}
                                     {...restField}
                                   >
-                                    <Input />
+                                    <Input disabled />
                                   </Form.Item>
                                 </Col>
                                 <Col span={1}>
                                   <RestOutlined
-                                    onClick={() => remove(name)}
+                                    onClick={() => {
+                                      console.log('remove(name) > ', name);
+                                      remove(name);
+                                    }}
                                     style={{ color: '#ff4d4f', fontSize: '24px', marginTop: '4px' }}
                                   />
                                 </Col>
-                                &nbsp;
                               </Row>
                             );
                           })}
-                          <Form.Item>
-                            <Button type="primary" htmlType="submit">
-                              Lưu
-                            </Button>
-                          </Form.Item>
+                          <Button
+                            onClick={() => {
+                              add(defaultDetail);
+                              newArr.push(defaultDetail);
+                              setNewArr([...newArr]);
+                            }}
+                          >
+                            Thêm sản phẩm
+                          </Button>
                         </>
                       );
                     }}
                   </Form.List>
                 </Col>
+                <Col span={24}>
+                  <Row gutter={10} justify={'end'} style={{ marginTop: '10px', textAlign: 'right' }}>
+                    <Col span={24}>
+                      <span>Tổng thành tiền trước thuế:</span> &nbsp;
+                      <span>{amount.before_tax}</span>
+                      {/* <span>{numeral(data?.total_before_tax).format('0,0 đ')}đ</span> */}
+                    </Col>
+                    <Col span={24}>
+                      <span>Tổng tiền thuế:</span> &nbsp;
+                      <span>{amount.tax}</span>
+                      {/* <span>{numeral(data.total_tax_amount).format('0,0 đ')}đ</span> */}
+                    </Col>
+                    <Col span={24} style={{ fontWeight: 700 }}>
+                      <span>Tổng cộng:</span> &nbsp;
+                      <span>{amount.after_tax}</span>
+                      {/* <span>{numeral(data.total_amount).format('0,0 đ')}đ</span> */}
+                    </Col>
+                  </Row>
+                </Col>
+                <Form.Item>
+                  <Button type="primary" htmlType="submit">
+                    Tạo báo giá
+                  </Button>
+                </Form.Item>
               </Row>
             </Card>
           </Col>
@@ -323,18 +387,6 @@ const CreateQuotes: React.FC = () => {
       </Form>
     </EditDetailStyles>
   );
-};
-
-const MyInput = (props: { initValue: string; disabled?: boolean }) => {
-  const [value, setValue] = useState(props.initValue);
-  const onChange1 = (evt: any) => {
-    setValue(evt.target.value);
-  };
-  useEffect(() => {
-    setValue(props.initValue);
-  }, [props.initValue]);
-
-  return <Input value={value} onChange={onChange1} disabled={props.disabled} />;
 };
 
 const EditDetailStyles = styled.div`

@@ -2,6 +2,7 @@ import { IRespApiSuccess } from '@app/interfaces/interfaces';
 import { apiInstance } from './api_core';
 import { API_BASE_URL, API_URL } from '@app/configs/api-configs';
 import { notificationController } from '@app/controllers/notificationController';
+import moment from 'moment';
 
 export const getCustomerSourcesList = async () => {
   try {
@@ -97,7 +98,15 @@ export const getCustomersList = async () => {
   try {
     const respUsers: IRespApiSuccess = await apiInstance.get(`${API_BASE_URL}${API_URL.CUSTOMER}`);
     const optionsUsers = respUsers.data.collection.map((item: any) => {
-      return { value: item.id, label: item.name };
+      return {
+        value: item.id || 0,
+        label: item.name || 0,
+        company_name: item.company_name || 0,
+        tax_code: item.tax_code || 0,
+        phone_number: item.phone_number || 0,
+        email: item.email || 0,
+        quote_date: moment(),
+      };
     });
     return optionsUsers;
   } catch (error: any) {
@@ -191,6 +200,21 @@ export const onDeleteById = async (path: string, id: number) => {
         message: 'Xoá thành công',
       });
     }
+  } catch (error: any) {
+    notificationController.error({
+      message: 'Có lỗi xảy ra vui lòng thử lại sau',
+      description: error.message,
+    });
+  }
+};
+
+export const getRoleList = async () => {
+  try {
+    const respRole: IRespApiSuccess = await apiInstance.get(`${API_BASE_URL}/roles`);
+    const optionsRole = respRole.data.collection.map((item: any) => {
+      return { value: item.id, label: item.name };
+    });
+    return optionsRole;
   } catch (error: any) {
     notificationController.error({
       message: 'Có lỗi xảy ra vui lòng thử lại sau',

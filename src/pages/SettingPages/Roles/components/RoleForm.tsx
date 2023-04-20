@@ -26,12 +26,11 @@ const RoleForm: React.FC<IProps> = ({ isEditing }) => {
         `${API_BASE_URL}${API_URL.DEFAULTPERMISSION}`,
       );
       if (respDefautPermission.code === 200) {
-        ConvertTextRoles(respDefautPermission.data);
-        const data = respDefautPermission.data.sort((a, b) =>
-          a.name.localeCompare(b.name, 'vi', { sensitivity: 'base' }),
-        );
-        console.log(respDefautPermission.data);
-        setState({ ...state, rolePermission: data });
+        respDefautPermission.data.map((item: any) => {
+          return (item.nameVi = ConvertTextRoles(item.name));
+        });
+        const data = respDefautPermission.data.sort((a: any, b: any) => a.nameVi.localeCompare(b.nameVi));
+        !isEditing && setState({ ...state, rolePermission: data });
       }
     } catch (error: any) {
       notificationController.error({
@@ -41,8 +40,6 @@ const RoleForm: React.FC<IProps> = ({ isEditing }) => {
     }
     setIsLoading(false);
   };
-
-  console.log(state.rolePermission);
 
   const onChange = (item: any, key: string) => (event: CheckboxChangeEvent) => {
     const updatedActions = {
@@ -58,7 +55,7 @@ const RoleForm: React.FC<IProps> = ({ isEditing }) => {
   };
 
   useEffect(() => {
-    isLoad && getDefaultPermission();
+    isLoad ? getDefaultPermission() : '';
   }, [isLoad]);
 
   return (
@@ -87,7 +84,7 @@ const RoleForm: React.FC<IProps> = ({ isEditing }) => {
               return (
                 <Row key={index} justify="space-between" className="row-role">
                   <Col span={6} style={{ textAlign: 'left' }}>
-                    <Typography.Text style={{ fontSize: '14px' }}>{item.name}</Typography.Text>
+                    <Typography.Text style={{ fontSize: '14px' }}>{ConvertTextRoles(item.name)}</Typography.Text>
                   </Col>
                   <Col span={18}>
                     <Row gutter={10}>
