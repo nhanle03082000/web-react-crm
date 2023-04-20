@@ -432,15 +432,15 @@ const DetailQuotes: React.FC = () => {
                   <Row gutter={10} justify={'end'} style={{ marginTop: '10px', textAlign: 'right' }}>
                     <Col span={24}>
                       <span>Tổng thành tiền trước thuế:</span> &nbsp;
-                      <span>{amount.before_tax} đ</span>
+                      <span>{amount.before_tax === 0 ? data.total_before_tax : amount.before_tax} đ</span>
                     </Col>
                     <Col span={24}>
                       <span>Tổng tiền thuế:</span> &nbsp;
-                      <span>{amount.tax} đ</span>
+                      <span>{amount.tax === 0 ? data.total_tax_amount : amount.tax} đ</span>
                     </Col>
                     <Col span={24} style={{ fontWeight: 700 }}>
                       <span>Tổng cộng:</span> &nbsp;
-                      <span>{amount.after_tax} đ</span>
+                      <span>{amount.after_tax === 0 ? data.total_amount : amount.after_tax} đ</span>
                     </Col>
                   </Row>
                 </Col>
