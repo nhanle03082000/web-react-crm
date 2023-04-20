@@ -44,6 +44,10 @@ const DetailQuotes: React.FC = () => {
 
   const [optionProduct, setOptionProduct] = useState<any>([]);
 
+  const onBack = () => {
+    navigate(-1);
+  };
+
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
@@ -56,7 +60,7 @@ const DetailQuotes: React.FC = () => {
       setIsLoading(false);
     }
     getData();
-  }, [id]);
+  }, [id, isEdit]);
 
   const onEdit = async () => {
     setIsEdit(true);
@@ -184,9 +188,6 @@ const DetailQuotes: React.FC = () => {
     setAmount({ before_tax: before_tax, after_tax: after_tax, tax: tax });
   };
 
-  const onBack = () => {
-    navigate(-1);
-  };
   return (
     <DetailQuotesStyles>
       <Row>
@@ -366,7 +367,7 @@ const DetailQuotes: React.FC = () => {
                         Tên doanh nghiệp
                       </Typography.Title>
                       &nbsp;
-                      <Typography.Text>{data.customer?.company_name}</Typography.Text>
+                      <Typography.Text>{data.company_name}</Typography.Text>
                     </Col>
                     <Col span={12} style={{ display: 'flex', alignItems: 'end' }}>
                       <Typography.Title level={5} style={{ margin: '0 20px 0 0' }}>
@@ -380,21 +381,21 @@ const DetailQuotes: React.FC = () => {
                         Mã số thuế
                       </Typography.Title>
                       &nbsp;
-                      <Typography.Text>{data.customer?.tax_code}</Typography.Text>
+                      <Typography.Text>{data.tax_code}</Typography.Text>
                     </Col>
                     <Col span={12} style={{ display: 'flex', alignItems: 'end' }}>
                       <Typography.Title level={5} style={{ margin: '0 20px 0 0' }}>
                         Email khách hàng
                       </Typography.Title>
                       &nbsp;
-                      <Typography.Text>{data.customer?.email}</Typography.Text>
+                      <Typography.Text>{data.email}</Typography.Text>
                     </Col>
                     <Col span={12} style={{ display: 'flex', alignItems: 'end' }}>
                       <Typography.Title level={5} style={{ margin: '0 20px 0 0' }}>
                         Số điện thoại khách hàng:
                       </Typography.Title>
                       &nbsp;
-                      <Typography.Text>{data.customer?.phone_number}</Typography.Text>
+                      <Typography.Text>{data.phone_number}</Typography.Text>
                     </Col>
                     <Col span={12} style={{ display: 'flex', alignItems: 'end' }}>
                       <Typography.Title level={5} style={{ margin: '0 20px 0 0' }}>

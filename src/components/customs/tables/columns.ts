@@ -289,42 +289,30 @@ export const columnQuotes = [
   },
   {
     title: 'Tên doanh nghiệp',
-    dataIndex: 'customer',
+    dataIndex: 'company_name',
     align: 'left',
-    render: (record: any) => {
-      return record.company_name || null;
-    },
   },
   {
     title: 'Khách hàng',
     dataIndex: 'customer',
     align: 'left',
     render: (record: any) => {
-      return record.name || null;
+      return record?.name || null;
     },
   },
   {
     title: 'Mã số thuế',
-    dataIndex: 'customer',
+    dataIndex: 'tax_code',
     align: 'right',
-    render: (record: any) => {
-      return record.tax_code || null;
-    },
   },
   {
     title: 'Email khách hàng',
-    dataIndex: 'customer',
-    render: (record: any) => {
-      return record.email || null;
-    },
+    dataIndex: 'email',
   },
   {
     title: 'Số điện thoại khách hàng',
     align: 'right',
-    dataIndex: 'customer',
-    render: (record: any) => {
-      return record.phone_number || null;
-    },
+    dataIndex: 'phone_number',
   },
   {
     title: 'Nhân viên phụ trách',

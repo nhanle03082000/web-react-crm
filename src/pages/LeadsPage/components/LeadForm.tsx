@@ -24,7 +24,6 @@ const LeadForm: React.FC<IProps> = ({ isEditing }) => {
   const [companyFields, setCompanyFields] = useState<ISelectOption[]>([{ value: '', label: '' }]);
   const [customerSources, setCustomerSources] = useState<ISelectOption[]>([{ value: '', label: '' }]);
   const [saleProcesses, setSaleProcesses] = useState<ISelectOption[]>([{ value: '', label: '' }]);
-  console.log('saleProcesses:', saleProcesses);
 
   const onChangeProvinces = (values: any) => {
     provinces.map((item: ISelectOption) => {

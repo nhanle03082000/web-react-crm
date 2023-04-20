@@ -29,21 +29,22 @@ interface Iprops {
 
 const EditDetail: React.FC<Iprops> = ({ setIsEdit, data, amount, children }) => {
   const [form] = Form.useForm();
-  const { path } = useContext(DataContext);
+  const path = '/quotes';
   const [customers, setCustomers] = useState<ISelectOption[]>([{ value: '', label: '' }]);
-  const [user, setUser] = useState<ISelectOption[]>([{ value: '', label: '' }]);
 
   const initialValues = {
     code: data.code,
     quote_date: moment(data.quote_date),
-    company_name: data.customer?.company_name,
-    customer_id: data.customer?.id,
-    tax_code: data.customer?.tax_code,
-    email: data.customer?.email,
-    phone_number: data.customer?.phone_number,
+    company_name: data.company_name,
+    customer_id: data.customer.id,
+    tax_code: data.tax_code,
+    email: data.email,
+    phone_number: data.phone_number,
     employee_id: data.employee_id,
     phone: data.employee?.phone,
     total_amount: data.total_amount,
+    total_before_tax: data.total_before_tax,
+    total_tax_amount: data.total_tax_amount,
   };
 
   useEffect(() => {
@@ -51,12 +52,8 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data, amount, children }) => 
       const dataResult = await getCustomersList();
       setCustomers(dataResult);
     }
-    async function getUsers() {
-      const dataResult = await getUsersList();
-      setUser(dataResult);
-    }
+
     getCustomer();
-    getUsers();
   }, []);
 
   const onUpdate = async (values: any) => {
@@ -67,25 +64,24 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data, amount, children }) => 
       total_before_tax: amount.before_tax,
       total_amount: amount.after_tax,
     };
-    console.log(data1);
-    // try {
-    //   const respUpdate: IRespApiSuccess = await apiInstance.put(`${API_BASE_URL}${path}/${data.id}`, data1);
-    //   if (respUpdate.code === 200) {
-    //     notificationController.success({
-    //       message: 'Cập nhật thành công',
-    //     });
-    //     setIsEdit(false);
-    //   } else {
-    //     notificationController.error({
-    //       message: respUpdate.message,
-    //     });
-    //   }
-    // } catch (error: any) {
-    //   notificationController.error({
-    //     message: 'Có lỗi xảy ra vui lòng thử lại sau',
-    //     description: error.message,
-    //   });
-    // }
+    try {
+      const respUpdate: IRespApiSuccess = await apiInstance.put(`${API_BASE_URL}${path}/${data.id}`, data1);
+      if (respUpdate.code === 200) {
+        notificationController.success({
+          message: 'Cập nhật thành công',
+        });
+        setIsEdit(false);
+      } else {
+        notificationController.error({
+          message: respUpdate.message,
+        });
+      }
+    } catch (error: any) {
+      notificationController.error({
+        message: 'Có lỗi xảy ra vui lòng thử lại sau',
+        description: error.message,
+      });
+    }
   };
 
   useEffect(() => {

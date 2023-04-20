@@ -134,8 +134,6 @@ const CreateFromLead: React.FC<IProps> = ({ titleButton, defaultValues }) => {
     getAreas();
   }, []);
 
-  console.log(defaultValues);
-
   const showModal = () => {
     setIsModalOpen(true);
     setIsLoad(true);

@@ -13,12 +13,10 @@ import { API_BASE_URL } from '@app/configs/api-configs';
 import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
-import CreateFromLead from '@app/pages/CustomersPage/components/Form/CreateFromLead';
 import { getRoleUser } from '@app/utils/redux.util';
 import { Col, Form, Row, Tooltip, Typography } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 interface IProps {
@@ -40,8 +38,6 @@ const DetailModal: React.FC<IProps> = ({ id, contentButton }) => {
     setState(dataById);
     form.setFieldsValue(dataById);
   };
-
-  console.log(state);
 
   const showModal = async () => {
     onDataById();

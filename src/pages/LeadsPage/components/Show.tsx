@@ -140,7 +140,7 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns, 
 
   useEffect(() => {
     onShow();
-  }, [param, filter.page, isLoad]);
+  }, [param, filter.page]);
 
   const handleSelectChange = (selectedRowKeys: React.Key[]) => {
     setListIdLead(selectedRowKeys);
