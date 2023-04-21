@@ -43,7 +43,13 @@ export const customStyle = css`
   .select-product {
   }
   textarea::placeholder,
-  .ant-select-selection-placeholder {
+  .ant-select-selection-placeholder,
+  .ant-picker-input > input::placeholder {
     color: #ccc !important;
+    font-size: 12px;
+  }
+  .ant-select-selection-placeholder {
+    line-height: 30px !important;
+    font-size: 12px !important;
   }
 `;

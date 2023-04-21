@@ -1,6 +1,8 @@
 import {
   getAreasList,
+  getCompanyCareerList,
   getCompanyFieldsList,
+  getCompanyTypesList,
   getCustomerSourcesList,
   getDistrictsList,
   getProvincesList,
@@ -18,6 +20,7 @@ import { notificationController } from '@app/controllers/notificationController'
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
 import { Col, Form, Input, Row } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 interface ISelectOption {
@@ -41,6 +44,9 @@ const CreateFromLead: React.FC<IProps> = ({ titleButton, defaultValues }) => {
   const [companyFields, setCompanyFields] = useState<ISelectOption[]>([{ value: '', label: '' }]);
   const [customerSources, setCustomerSources] = useState<ISelectOption[]>([{ value: '', label: '' }]);
   const [saleProcesses, setSaleProcesses] = useState<ISelectOption[]>([{ value: '', label: '' }]);
+  const [CompanyCareer, setCompanyCareer] = useState<ISelectOption[]>([{ value: '', label: '' }]);
+  const [CompanyTypes, setCompanyTypes] = useState<ISelectOption[]>([{ value: '', label: '' }]);
+  const navigate = useNavigate();
 
   const onChangeProvinces = (values: any) => {
     provinces.map((item: ISelectOption) => {
@@ -95,6 +101,14 @@ const CreateFromLead: React.FC<IProps> = ({ titleButton, defaultValues }) => {
   };
 
   useEffect(() => {
+    async function getCompanyTypes() {
+      const dataResult = await getCompanyTypesList();
+      setCompanyTypes(dataResult);
+    }
+    async function getCompanyCareer() {
+      const dataResult = await getCompanyCareerList();
+      setCompanyCareer(dataResult);
+    }
     async function getCustomerSources() {
       const dataResult = await getCustomerSourcesList();
       setCustomerSources(dataResult);
@@ -132,6 +146,8 @@ const CreateFromLead: React.FC<IProps> = ({ titleButton, defaultValues }) => {
     getSaleProcessesList();
     getDistricts();
     getAreas();
+    getCompanyCareer();
+    getCompanyTypes();
   }, []);
 
   const showModal = () => {
@@ -146,32 +162,31 @@ const CreateFromLead: React.FC<IProps> = ({ titleButton, defaultValues }) => {
   };
 
   const onCreate = async (values: any) => {
-    let data = {
+    const data = {
       ...values,
       is_active: true,
     };
-    state?.rolePermission.length > 0 ? (data = { ...data, permission: JSON.stringify(state.rolePermission) }) : data;
-    console.log(data);
-    // try {
-    //   const respUsers: IRespApiSuccess = await apiInstance.post(`${API_BASE_URL}${path}`, data);
-    //   if (respUsers.code === 200) {
-    //     notificationController.success({
-    //       message: 'Tạo thành công',
-    //     });
-    //   } else {
-    //     notificationController.error({
-    //       message: respUsers.message,
-    //     });
-    //   }
-    // } catch (error: any) {
-    //   notificationController.error({
-    //     message: 'Có lỗi xảy ra vui lòng thử lại sau',
-    //     description: error.message,
-    //   });
-    // }
-    // setShow(!show);
-    // setIsModalOpen(false);
-    // form.resetFields();
+    try {
+      const respUsers: IRespApiSuccess = await apiInstance.post(`${API_BASE_URL}${path}`, data);
+      if (respUsers.code === 200) {
+        notificationController.success({
+          message: 'Tạo thành công',
+        });
+        navigate(`customers/${respUsers.data?.id}`);
+      } else {
+        notificationController.error({
+          message: respUsers.message,
+        });
+      }
+    } catch (error: any) {
+      notificationController.error({
+        message: 'Có lỗi xảy ra vui lòng thử lại sau',
+        description: error.message,
+      });
+    }
+    setShow(!show);
+    setIsModalOpen(false);
+    form.resetFields();
   };
 
   useEffect(() => {
@@ -265,7 +280,15 @@ const CreateFromLead: React.FC<IProps> = ({ titleButton, defaultValues }) => {
                       <Input placeholder="Nhập SĐT doanh nghiệp" size="small" />
                     </Form.Item>
                   </Col>
-                  <Col span={8}></Col>
+                  <Col span={8}>
+                    <H5>Danh mục ngành nghề</H5>
+                    <Form.Item
+                      name="company_career_id"
+                      rules={[{ required: true, message: 'Ngành nghề không được bỏ trống!' }]}
+                    >
+                      <Select options={CompanyCareer} placeholder="Chọn ngành nghề" />
+                    </Form.Item>
+                  </Col>
                   <Col span={8}>
                     <H5>Lĩnh vực doanh nghiệp</H5>
                     <Form.Item
@@ -285,6 +308,12 @@ const CreateFromLead: React.FC<IProps> = ({ titleButton, defaultValues }) => {
                     <H5>Quy trình bán hàng</H5>
                     <Form.Item name="sale_process_id">
                       <Select options={saleProcesses} placeholder="Chọn quy trình bán hàng" />
+                    </Form.Item>
+                  </Col>
+                  <Col span={8}>
+                    <H5>Loại hình doanh nghiệp</H5>
+                    <Form.Item name="company_type_id">
+                      <Select options={CompanyTypes} placeholder="Chọn loại hình" />
                     </Form.Item>
                   </Col>
                 </Row>

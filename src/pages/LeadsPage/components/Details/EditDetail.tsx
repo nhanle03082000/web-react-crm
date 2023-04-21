@@ -40,8 +40,6 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data }) => {
   const [customerSources, setCustomerSources] = useState<ISelectOption[]>([{ value: '', label: '' }]);
   const [saleProcesses, setSaleProcesses] = useState<ISelectOption[]>([{ value: '', label: '' }]);
 
-  console.log(data);
-
   const onChangeProvinces = (values: any) => {
     provinces.map((item: ISelectOption) => {
       if (item.value === values) {

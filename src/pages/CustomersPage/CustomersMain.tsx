@@ -43,7 +43,7 @@ const CustomersMain: React.FC = () => {
     'Quận/Huyện',
     'Phường/Xã',
   ]);
-  const download = '/files/lead.xlsx';
+  const download = '/files/customer.xlsx';
   const [listIdLead, setListIdLead] = useState([]);
 
   const option = [

@@ -3,6 +3,7 @@ import React from 'react';
 
 const RolePage = React.lazy(() => import('@app/pages/SettingPages/Roles/RolesPage'));
 const ProductGroupsPages = React.lazy(() => import('@app/pages/SettingPages/ProductGroups/ProductGroups'));
+const ProductsPages = React.lazy(() => import('@app/pages/SettingPages/Products/Products'));
 const CompanyTypesPage = React.lazy(() => import('@app/pages/SettingPages/CompanyTypes/CompanyTypes'));
 const CompanyFieldsPage = React.lazy(() => import('@app/pages/SettingPages/CompanyFields/CompanyFields'));
 const CompanyCareersPage = React.lazy(() => import('@app/pages/SettingPages/CompanyCareers/CompanyCareers'));
@@ -13,6 +14,7 @@ const EmailSettingsPage = React.lazy(() => import('@app/pages/SettingPages/Email
 
 const Roles = withLoading(RolePage);
 const ProductGroups = withLoading(ProductGroupsPages);
+const Products = withLoading(ProductsPages);
 const CompanyTypes = withLoading(CompanyTypesPage);
 const CompanyFields = withLoading(CompanyFieldsPage);
 const CompanyCareers = withLoading(CompanyCareersPage);
@@ -34,6 +36,10 @@ export const SettingList: SettingListItem[] = [
   {
     components: <ProductGroups />,
     path: 'product-groups',
+  },
+  {
+    components: <Products />,
+    path: 'products',
   },
   {
     components: <CompanyTypes />,

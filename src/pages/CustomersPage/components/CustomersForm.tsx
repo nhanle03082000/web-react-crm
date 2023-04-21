@@ -1,4 +1,10 @@
-import { getCompanyFieldsList, getCustomerSourcesList, getProvincesList } from '@app/api/app/api';
+import {
+  getCompanyCareerList,
+  getCompanyFieldsList,
+  getCompanyTypesList,
+  getCustomerSourcesList,
+  getProvincesList,
+} from '@app/api/app/api';
 import { apiInstance } from '@app/api/app/api_core';
 import { Input } from '@app/components/common/inputs/Input/Input';
 import { Select } from '@app/components/common/selects/Select/Select';
@@ -24,6 +30,8 @@ const CustomersForm: React.FC<IProps> = ({ isEditing }) => {
   const [companyFields, setCompanyFields] = useState<ISelectOption[]>([{ value: '', label: '' }]);
   const [customerSources, setCustomerSources] = useState<ISelectOption[]>([{ value: '', label: '' }]);
   const [saleProcesses, setSaleProcesses] = useState<ISelectOption[]>([{ value: '', label: '' }]);
+  const [CompanyCareer, setCompanyCareer] = useState<ISelectOption[]>([{ value: '', label: '' }]);
+  const [CompanyTypes, setCompanyTypes] = useState<ISelectOption[]>([{ value: '', label: '' }]);
 
   const onChangeProvinces = (values: any) => {
     provinces.map((item: ISelectOption) => {
@@ -78,6 +86,14 @@ const CustomersForm: React.FC<IProps> = ({ isEditing }) => {
   };
 
   useEffect(() => {
+    async function getCompanyTypes() {
+      const dataResult = await getCompanyTypesList();
+      setCompanyTypes(dataResult);
+    }
+    async function getCompanyCareer() {
+      const dataResult = await getCompanyCareerList();
+      setCompanyCareer(dataResult);
+    }
     async function getCustomerSources() {
       const dataResult = await getCustomerSourcesList();
       setCustomerSources(dataResult);
@@ -105,6 +121,8 @@ const CustomersForm: React.FC<IProps> = ({ isEditing }) => {
     getCustomerSources();
     getCompanyFields();
     getSaleProcessesList();
+    getCompanyCareer();
+    getCompanyTypes();
   }, [isEditing]);
 
   return (
@@ -180,7 +198,7 @@ const CustomersForm: React.FC<IProps> = ({ isEditing }) => {
           </Form.Item>
         </Col>
       </Row>
-      <Row gutter={[16, 16]}>
+      <Row gutter={[16, 0]}>
         <Col span={12}>
           <Form.Item
             name="customer_source_id"
@@ -197,6 +215,24 @@ const CustomersForm: React.FC<IProps> = ({ isEditing }) => {
             rules={[{ required: true, message: 'Lĩnh vực không được bỏ trống!' }]}
           >
             <Select options={companyFields} placeholder="Chọn lĩnh vực" />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            name="company_career_id"
+            label="Ngành nghề"
+            rules={[{ required: true, message: 'Ngành nghề không được bỏ trống!' }]}
+          >
+            <Select options={CompanyCareer} placeholder="Chọn ngành nghề" />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            name="company_type_id"
+            label="Loại hình"
+            rules={[{ required: true, message: 'Loại hình không được bỏ trống!' }]}
+          >
+            <Select options={CompanyTypes} placeholder="Chọn loại hình" />
           </Form.Item>
         </Col>
       </Row>

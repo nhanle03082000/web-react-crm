@@ -1,6 +1,7 @@
 import { Card } from '@app/components/common/Card/Card';
 import { PageTitle } from '@app/components/common/PageTitle/PageTitle';
 import { H3 } from '@app/components/common/typography/H3/H3';
+import Show from '@app/components/customs/crud/Show';
 import ExportExcel from '@app/components/customs/exportexcel/ExportExcel';
 import Filter from '@app/components/customs/filter/Filter';
 import { API_URL } from '@app/configs/api-configs';
@@ -9,19 +10,19 @@ import { getRoleUser } from '@app/utils/redux.util';
 import { Col, Row } from 'antd';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import UserForm from './components/UserForm';
-import { userColumn } from '@app/components/customs/tables/columns';
-import Show from './components/Show';
+import { column } from '@app/components/customs/tables/columns';
+import Create from '@app/components/customs/crud/Create';
+import ProductsForm from './components/ProductGroupsForm';
 
-const Users: React.FC = () => {
+const Products: React.FC = () => {
   const { t } = useTranslation();
-  const path = API_URL.USERS;
-  const page = t('namepage.nguoidung');
+  const path = API_URL.PRODUCTS;
+  const page = t('namepage.sanpham');
   const userListPermission = JSON.parse(getRoleUser());
   const permission = userListPermission?.filter((item: any) => item.name === path.replace(/\//g, ''))[0].actions;
   const [isLoad, setIsLoad] = useState<boolean>(false);
-  const [show, setShow] = useState(false);
   const [param, setParam] = useState('');
+  const [show, setShow] = useState(false);
   const [state, setState] = useState<any>({
     data: {},
     rolePermission: [],
@@ -30,8 +31,8 @@ const Users: React.FC = () => {
 
   const option = [
     {
-      value: 'username',
-      label: 'Tài khoản',
+      value: 'code',
+      label: 'Mã',
       type: 'string',
     },
     {
@@ -39,27 +40,26 @@ const Users: React.FC = () => {
       label: 'Tên',
       type: 'string',
     },
-    { value: 'am_code', label: 'Mã AM', type: 'string' },
     {
-      value: 'phone',
-      label: 'Số điện thoại',
+      value: 'description',
+      label: 'Mô tả',
       type: 'string',
     },
     {
-      value: 'department',
-      label: 'Đơn vị',
-      type: 'string',
+      value: 'created_at',
+      label: 'Ngày tạo',
+      type: 'datetime',
     },
     {
-      value: 'role',
-      label: 'Vai trò',
-      type: 'string',
+      value: 'updated_at',
+      label: 'Ngày cập nhật',
+      type: 'datetime',
     },
   ];
 
   const initialValue = [
+    { field: 'code', operator: 'contain', value: '' },
     { field: 'name', operator: 'contain', value: '' },
-    { field: 'department', operator: 'contain', value: '' },
   ];
 
   return (
@@ -75,6 +75,12 @@ const Users: React.FC = () => {
               <Col span={12}>
                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                   {permission.export && <ExportExcel param={param} />}
+                  &nbsp;&nbsp;
+                  {permission.create && (
+                    <Create>
+                      <ProductsForm isEditing={false} />
+                    </Create>
+                  )}
                 </div>
               </Col>
             </Row>
@@ -88,8 +94,8 @@ const Users: React.FC = () => {
         <Col span={24}>
           <Card padding="1rem">
             {permission.index && (
-              <Show param={param} colums={userColumn} permission={permission}>
-                <UserForm isEditing={true} />
+              <Show param={param} colums={column} permission={permission}>
+                <ProductsForm isEditing={true} />
               </Show>
             )}
           </Card>
@@ -99,4 +105,4 @@ const Users: React.FC = () => {
   );
 };
 
-export default Users;
+export default Products;

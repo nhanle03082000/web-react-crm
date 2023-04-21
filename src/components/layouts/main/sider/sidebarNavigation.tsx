@@ -51,6 +51,11 @@ export const sidebarNavigation: SidebarNavigationItem[] = [
         url: '/setting/product-groups',
       },
       {
+        title: 'sidebar.danhmucsanpham',
+        key: 'products',
+        url: '/setting/products',
+      },
+      {
         title: 'sidebar.danhmucloaihinhdoanhnghiep',
         key: 'company-types',
         url: '/setting/company-types',

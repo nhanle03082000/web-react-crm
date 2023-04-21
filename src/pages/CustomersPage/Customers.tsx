@@ -10,9 +10,10 @@ const Customers: React.FC = () => {
   const path = API_URL.CUSTOMER;
   const page = t('namepage.khachhang');
   const [isLoad, setIsLoad] = useState<boolean>(false);
+  const [show, setShow] = useState(false);
   const [state, setState] = useState<any>();
   return (
-    <DataContext.Provider value={{ path, page, state, setState, isLoad, setIsLoad }}>
+    <DataContext.Provider value={{ path, page, state, setState, isLoad, setIsLoad, show, setShow }}>
       <PageTitle>{page}</PageTitle>
       <Outlet />
     </DataContext.Provider>

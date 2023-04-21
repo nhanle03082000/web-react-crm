@@ -69,7 +69,7 @@ const Detail: React.FC = () => {
     }
     getData();
     getListNote();
-  }, []);
+  }, [isEdit]);
 
   const createNote = async (value: any) => {
     await onCreateNote({
@@ -83,33 +83,6 @@ const Detail: React.FC = () => {
     await onDeleteById('lead_notes', id);
     getListNote();
   };
-
-  // const onUpdate = async (values: any) => {
-  //   let data = {
-  //     ...values,
-  //     is_active: true,
-  //   };
-  //   try {
-  //     const respUpdate: IRespApiSuccess = await apiInstance.put(`${API_BASE_URL}${path}/${id}`, data);
-  //     if (respUpdate.code === 200) {
-  //       notificationController.success({
-  //         message: 'Cập nhật thành công',
-  //       });
-  //     } else {
-  //       notificationController.error({
-  //         message: respUpdate.message,
-  //       });
-  //     }
-  //   } catch (error: any) {
-  //     notificationController.error({
-  //       message: 'Có lỗi xảy ra vui lòng thử lại sau',
-  //       description: error.message,
-  //     });
-  //   }
-  //   // onShow();
-  //   setIsModalOpen(false);
-  //   form.resetFields();
-  // };
 
   return (
     <DetailStyles>

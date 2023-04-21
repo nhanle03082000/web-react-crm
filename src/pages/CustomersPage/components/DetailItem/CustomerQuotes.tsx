@@ -129,7 +129,9 @@ const CustomerQuotes: React.FC<IProps> = ({ id, handleDetailsQuotes }) => {
   const getCustomerContactsList = async () => {
     setIsLoading(true);
     try {
-      const respContacts: IRespApiSuccess = await apiInstance.get(`${API_BASE_URL}${path}?${f}`);
+      const respContacts: IRespApiSuccess = await apiInstance.get(
+        `${API_BASE_URL}${path}?f[0][field]=customer.id&f[0][operator]=equal&f[0][value]=${id}&${f}`,
+      );
       if (respContacts.code === 200) {
         respContacts.data.collection.map((item: any, index: number) => {
           return (item.stt = index + 1);

@@ -109,7 +109,7 @@ const CustomerInteractions: React.FC<IProps> = ({ id }) => {
     setIsLoading(true);
     try {
       const respContacts: IRespApiSuccess = await apiInstance.get(
-        `${API_BASE_URL}${path}?customers/interactions?customers=${id}&${f}`,
+        `${API_BASE_URL}${path}?f[0][field]=module&f[0][operator]=equal&f[0][value]=customers&f[1][field]=module_id&f[1][operator]=equal&f[1][value]=${id}&sort_direction=asc&sort_column=logs.createdAt`,
       );
       if (respContacts.code === 200) {
         respContacts.data.collection.map((item: any, index: number) => {

@@ -93,8 +93,6 @@ const DetailQuotes: React.FC = () => {
     setDataTable([...dataTable]);
   };
 
-  console.log(dataTable);
-
   const getAmount = (name: string, index: number, add: any, remove: any) => (evt: any) => {
     const value = Number(evt.target.value) || 0;
     const data: any = dataTable[index];

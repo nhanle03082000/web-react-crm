@@ -54,7 +54,6 @@ const CreateQuotes: React.FC = () => {
       const dataResult = await getCustomersList();
       setCustomers(dataResult);
     }
-
     getCustomer();
     getProduct();
   }, []);
@@ -113,7 +112,9 @@ const CreateQuotes: React.FC = () => {
   };
 
   const onChangeCustomer = (value: any) => {
-    const itemCus = customers.find((item) => (item.value = value));
+    const itemCus = customers.find((item) => {
+      if (item.value === value) return item;
+    });
     form.setFieldsValue(itemCus);
   };
 
@@ -167,9 +168,12 @@ const CreateQuotes: React.FC = () => {
       after_tax += Number(newArr[i].amount);
       tax += after_tax - before_tax;
     }
-    console.log(before_tax, after_tax, tax);
 
     setAmount({ before_tax: before_tax, after_tax: after_tax, tax: tax });
+  };
+
+  const onBack = () => {
+    navigate(-1);
   };
 
   return (
@@ -180,11 +184,8 @@ const CreateQuotes: React.FC = () => {
         <Form form={form} onFinish={onCreate}>
           <Row>
             <Col span={24}>
-              <Button
-                className="button-back"
-                // onClick={onBack}
-              >
-                <LeftOutlined /> TẠO BÁO GIÁ
+              <Button className="button-back" onClick={onBack}>
+                <LeftOutlined /> THÊM BÁO GIÁ
               </Button>
             </Col>
             <Col span={24}>

@@ -1,26 +1,24 @@
-import { EyeOutlined, RestOutlined } from '@ant-design/icons';
+import { RestOutlined } from '@ant-design/icons';
 import { apiInstance } from '@app/api/app/api_core';
 import { Table } from '@app/components/common/Table/Table';
 import CustomPagination from '@app/components/customs/CustomPagination';
+import Update from '@app/components/customs/crud/Update';
 import { API_BASE_URL } from '@app/configs/api-configs';
 import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
 import { IFilter, IRespApiSuccess } from '@app/interfaces/interfaces';
 import { Popconfirm, Space, Tooltip } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
-import DetailModal from './Details/DetailModal';
-import { useNavigate } from 'react-router-dom';
 
 interface IProps {
   param: string | null;
   colums: any;
   children: React.ReactNode;
-  setListIdLead: any;
-  visibleColumns: any;
+  permission: any;
 }
 
-const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns }) => {
-  const { path, isLoad, show } = useContext(DataContext);
+const Show: React.FC<IProps> = ({ children, param, colums, permission }) => {
+  const { path, show } = useContext(DataContext);
   const [dataShow, setDataShow] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [filter, setFilter] = useState<IFilter>({
@@ -28,7 +26,7 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns }
     limit: 20,
     total: 0,
     sort_direction: 'desc',
-    sort_column: 'customers.createdAt',
+    sort_column: 'users.id',
   });
 
   const f = Object.entries(filter)
@@ -59,7 +57,6 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns }
 
   const onDelete = async (idData: number) => {
     console.log(idData);
-    // if (checkPermission?.delete) {
     try {
       const respDelete: IRespApiSuccess = await apiInstance.delete(`${API_BASE_URL}${path}/${idData}`);
       if (respDelete.code === 200) {
@@ -84,12 +81,6 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns }
     setFilter({ ...filter, page: page });
   };
 
-  const navigate = useNavigate();
-
-  const handleClick = (id: number) => {
-    navigate(`/customers/${id}`);
-  };
-
   const columns: any = [
     {
       title: 'STT',
@@ -101,27 +92,27 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns }
       render: (record: any) => {
         return (
           <Space>
-            <Tooltip placement="bottom" title="Xoá dữ liệu">
-              <Popconfirm
-                title="Bạn có muốn xoá không?"
-                okText="Có"
-                cancelText="Không"
-                onConfirm={() => onDelete(record.id)}
-              >
-                <RestOutlined style={{ fontSize: '20px', cursor: 'pointer' }} />
-              </Popconfirm>
-            </Tooltip>
-            <Tooltip placement="bottom" title="Xem chi tiết">
-              <EyeOutlined style={{ fontSize: '20px', cursor: 'pointer' }} onClick={() => handleClick(record.id)} />
-            </Tooltip>
+            {path != '/users'
+              ? permission.delete && (
+                  <Tooltip placement="bottom" title="Xoá dữ liệu">
+                    <Popconfirm
+                      title="Bạn có muốn xoá không?"
+                      okText="Có"
+                      cancelText="Không"
+                      onConfirm={() => onDelete(record.id)}
+                    >
+                      <RestOutlined style={{ fontSize: '20px', cursor: 'pointer' }} />
+                    </Popconfirm>
+                  </Tooltip>
+                )
+              : ''}
+            {permission.edit && (
+              <Update id={record.id} onShow={onShow}>
+                {children}
+              </Update>
+            )}
           </Space>
         );
-      },
-    },
-    {
-      title: 'Mã số thuế',
-      render: (record: any) => {
-        return <DetailModal id={record.id} contentButton={record.tax_code} />;
       },
     },
   ];
@@ -129,25 +120,25 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns }
 
   useEffect(() => {
     onShow();
-  }, [param, filter.page, isLoad, show]);
-
-  const handleSelectChange = (selectedRowKeys: React.Key[]) => {
-    setListIdLead(selectedRowKeys);
-  };
-  const rowSelection = {
-    onChange: handleSelectChange,
-  };
+  }, [param, filter.page, show]);
 
   return (
     <>
+      {/* <CustomTable
+        tableData={tableData}
+        loading={loading}
+        deleteData={onDelete}
+        updateData={onUpdate}
+        onEditRow={onShowModal}
+        checkPermission={checkPermission}
+      /> */}
       <Table
-        columns={columns.filter((column: any) => visibleColumns.includes(column.title))}
+        columns={columns}
         dataSource={dataShow}
         pagination={false}
         scroll={{ x: 800 }}
         loading={isLoading}
         rowKey="id"
-        rowSelection={rowSelection}
       />
       <CustomPagination
         totalItems={filter.total}

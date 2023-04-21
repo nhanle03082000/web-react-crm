@@ -1,4 +1,4 @@
-import { PlusOutlined, RestOutlined } from '@ant-design/icons';
+import { CheckOutlined, EditOutlined, PlusOutlined, RestOutlined } from '@ant-design/icons';
 import { apiInstance } from '@app/api/app/api_core';
 import { Modal } from '@app/components/common/Modal/Modal';
 import { Popconfirm } from '@app/components/common/Popconfirm/Popconfirm';
@@ -10,7 +10,7 @@ import CustomPagination from '@app/components/customs/CustomPagination';
 import { API_BASE_URL, API_URL } from '@app/configs/api-configs';
 import { notificationController } from '@app/controllers/notificationController';
 import { IFilter, IRespApiSuccess } from '@app/interfaces/interfaces';
-import { Col, Form, Row, Typography } from 'antd';
+import { Checkbox, Col, Form, Row, Space, Typography } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
@@ -26,6 +26,10 @@ const CustomerTask: React.FC<IProps> = ({ employee_id, customer_id }) => {
   const [dataContacts, setDataContacts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+  const [idEdit, setIdEdit] = useState(0);
+  const [conTent, setConTent] = useState<any>([]);
+  console.log('conTent:', conTent);
 
   const [filter, setFilter] = useState<IFilter>({
     page: 1,
@@ -43,7 +47,8 @@ const CustomerTask: React.FC<IProps> = ({ employee_id, customer_id }) => {
     .map(([key, value]: any) => `${key}=${value}`)
     .join('&');
 
-  const showModal = () => {
+  const showModal = (edit: boolean) => {
+    setIsEdit(edit);
     setIsModalOpen(true);
   };
 
@@ -103,6 +108,35 @@ const CustomerTask: React.FC<IProps> = ({ employee_id, customer_id }) => {
     // }
   };
 
+  const onUpdate = async (values: any) => {
+    const data = {
+      customer_id: customer_id,
+      is_active: true,
+      start_time: moment(new Date(values.start_time).toUTCString()).format('YYYY-MM-DD HH:mm:ss'),
+      end_time: moment(new Date(values.end_time).toUTCString()).format('YYYY-MM-DD HH:mm:ss'),
+      status: values.status ? 1 : 0,
+      ...values,
+    };
+    try {
+      const completed: IRespApiSuccess = await apiInstance.put(`${API_BASE_URL}${path}/${idEdit}`, data);
+      if (completed.code === 200) {
+        notificationController.success({
+          message: 'Thành công',
+        });
+        getCustomerContactsList();
+      } else {
+        notificationController.error({
+          message: completed.message,
+        });
+      }
+    } catch (error: any) {
+      notificationController.error({
+        message: 'Có lỗi xảy ra vui lòng thử lại sau',
+        description: error.message,
+      });
+    }
+  };
+
   const columns: ColumnsType = [
     {
       title: 'STT',
@@ -115,18 +149,35 @@ const CustomerTask: React.FC<IProps> = ({ employee_id, customer_id }) => {
       align: 'center',
       render: (_: any, record: any) => {
         return (
-          <Popconfirm
-            title="Bạn có muốn xoá không?"
-            okText="Có"
-            cancelText="Không"
-            onConfirm={() => onDelete(record.id)}
-          >
-            <Typography.Link
-            //  style={checkPermission?.delete ? { display: 'unset' } : { display: 'none' }}
+          <Space>
+            <Popconfirm
+              title="Bạn có muốn xoá không?"
+              okText="Có"
+              cancelText="Không"
+              onConfirm={() => onDelete(record.id)}
             >
-              <RestOutlined style={{ color: 'red' }} />
+              <Typography.Link
+              //  style={checkPermission?.delete ? { display: 'unset' } : { display: 'none' }}
+              >
+                <RestOutlined style={{ color: 'red' }} />
+              </Typography.Link>
+            </Popconfirm>
+
+            <Typography.Link>
+              <EditOutlined
+                onClick={() => {
+                  showModal(true),
+                    setIdEdit(record.id),
+                    setConTent({
+                      ...record,
+                      start_time: moment(record.start_time),
+                      end_time: moment(record.end_time),
+                      status: record.status === 0 ? false : true,
+                    });
+                }}
+              />
             </Typography.Link>
-          </Popconfirm>
+          </Space>
         );
       },
     },
@@ -156,13 +207,34 @@ const CustomerTask: React.FC<IProps> = ({ employee_id, customer_id }) => {
         return date.toLocaleDateString('en-GB');
       },
     },
+    {
+      title: 'Trạng thái',
+      dataIndex: 'status',
+      align: 'right',
+      render: (record: number): any => {
+        switch (record) {
+          case 0:
+            return 'Đang thực hiện';
+            break;
+          case 1:
+            return 'Hoàn thành';
+            break;
+          case 2:
+            return 'Quá hạn';
+            break;
+          default:
+            break;
+        }
+      },
+    },
   ];
 
   const getCustomerContactsList = async () => {
     setIsLoading(true);
-
     try {
-      const respContacts: IRespApiSuccess = await apiInstance.get(`${API_BASE_URL}${path}?${f}`);
+      const respContacts: IRespApiSuccess = await apiInstance.get(
+        `${API_BASE_URL}${path}?f[0][field]=customer_id&f[0][operator]=equal&f[0][value]=${customer_id}&${f}`,
+      );
       if (respContacts.code === 200) {
         respContacts.data.collection.map((item: any, index: number) => {
           return (item.stt = index + 1);
@@ -213,19 +285,25 @@ const CustomerTask: React.FC<IProps> = ({ employee_id, customer_id }) => {
           onPageChange={handlePageChange}
         />
       )}
-      <Button type="primary" onClick={showModal} icon={<PlusOutlined />}>
+      <Button type="primary" onClick={() => showModal(false)} icon={<PlusOutlined />}>
         Thêm
       </Button>
       <Modal
         centered
         footer={false}
-        title="THÊM THÔNG TIN LIÊN HỆ"
+        title={isEdit ? 'SỬA THÔNG TIN LIÊN HỆ' : 'THÊM THÔNG TIN LIÊN HỆ'}
         open={isModalOpen}
         onCancel={handleCancel}
         maskClosable={false}
         width={700}
       >
-        <Form form={form} onFinish={onCreate} autoComplete="off" layout="vertical">
+        <Form
+          form={form}
+          onFinish={isEdit ? onUpdate : onCreate}
+          autoComplete="off"
+          layout="vertical"
+          initialValues={isEdit ? conTent : ''}
+        >
           <Row gutter={[12, 0]}>
             <Col span={24}>
               <Form.Item
@@ -247,12 +325,17 @@ const CustomerTask: React.FC<IProps> = ({ employee_id, customer_id }) => {
             </Col>
             <Col span={12}>
               <Form.Item label="Ngày bắt đầu" name="start_time">
-                <DatePicker format="DD/MM/YYYY HH:mm:ss" showTime onChange={onChangeStartDate} />
+                <DatePicker format="L" showTime onChange={onChangeStartDate} />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item label="Ngày kế thúc" name="end_time">
-                <DatePicker format="DD/MM/YYYY HH:mm:ss" showTime disabledDate={disabledDate} />
+                <DatePicker format="L" showTime disabledDate={disabledDate} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item label="Trạng thái" valuePropName="checked" name="status">
+                <Checkbox>Hoàn thành</Checkbox>
               </Form.Item>
             </Col>
           </Row>
