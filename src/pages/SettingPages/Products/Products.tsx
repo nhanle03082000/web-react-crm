@@ -12,7 +12,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { column } from '@app/components/customs/tables/columns';
 import Create from '@app/components/customs/crud/Create';
-import ProductsForm from './components/ProductGroupsForm';
+import ProductsForm from './components/ProductForm';
 
 const Products: React.FC = () => {
   const { t } = useTranslation();

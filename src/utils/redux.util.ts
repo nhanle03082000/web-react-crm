@@ -11,11 +11,6 @@ export const getRoleUser = (): string => {
   return state.auth?.permission;
 };
 
-export const getEditing = (): boolean => {
-  const state = store.getState();
-  return state.app?.editing;
-};
-
 export const signOut = (): any => {
   return store.dispatch(doLogout());
 };
