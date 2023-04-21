@@ -5,12 +5,11 @@ import { Popconfirm } from '@app/components/common/Popconfirm/Popconfirm';
 import { Table } from '@app/components/common/Table/Table';
 import { Button } from '@app/components/common/buttons/Button/Button';
 import { Input } from '@app/components/common/inputs/Input/Input';
-import { DatePicker } from '@app/components/common/pickers/DatePicker';
 import CustomPagination from '@app/components/customs/CustomPagination';
 import { API_BASE_URL, API_URL } from '@app/configs/api-configs';
 import { notificationController } from '@app/controllers/notificationController';
 import { IFilter, IRespApiSuccess } from '@app/interfaces/interfaces';
-import { Checkbox, Col, Form, Row, Space, Typography } from 'antd';
+import { Checkbox, Col, DatePicker, Form, Row, Space, Typography } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
@@ -29,7 +28,6 @@ const CustomerTask: React.FC<IProps> = ({ employee_id, customer_id }) => {
   const [isEdit, setIsEdit] = useState(false);
   const [idEdit, setIdEdit] = useState(0);
   const [conTent, setConTent] = useState<any>([]);
-  console.log('conTent:', conTent);
 
   const [filter, setFilter] = useState<IFilter>({
     page: 1,
@@ -266,6 +264,13 @@ const CustomerTask: React.FC<IProps> = ({ employee_id, customer_id }) => {
     return current && current < startDate;
   };
 
+  const disabledDateStart = (current: any) => {
+    if (!current) return false;
+
+    // Trả về true cho các ngày trước ngày hiện tại
+    return current < moment().startOf('day');
+  };
+
   return (
     <>
       <Table
@@ -325,7 +330,7 @@ const CustomerTask: React.FC<IProps> = ({ employee_id, customer_id }) => {
             </Col>
             <Col span={12}>
               <Form.Item label="Ngày bắt đầu" name="start_time">
-                <DatePicker format="L" showTime onChange={onChangeStartDate} />
+                <DatePicker format="L" showTime onChange={onChangeStartDate} disabledDate={disabledDateStart} />
               </Form.Item>
             </Col>
             <Col span={12}>

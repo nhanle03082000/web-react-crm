@@ -32,10 +32,6 @@ const CustomerInteractions: React.FC<IProps> = ({ id }) => {
     setFilter({ ...filter, page: page });
   };
 
-  const f = Object.entries(filter)
-    .map(([key, value]: any) => `${key}=${value}`)
-    .join('&');
-
   const handleCancel = () => {
     setIsModalOpen(false);
   };

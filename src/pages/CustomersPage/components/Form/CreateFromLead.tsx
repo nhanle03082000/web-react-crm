@@ -6,6 +6,7 @@ import {
   getCustomerSourcesList,
   getDistrictsList,
   getProvincesList,
+  onDeleteById,
 } from '@app/api/app/api';
 import { apiInstance } from '@app/api/app/api_core';
 import { Card } from '@app/components/common/Card/Card';
@@ -161,6 +162,17 @@ const CreateFromLead: React.FC<IProps> = ({ titleButton, defaultValues }) => {
     form.resetFields();
   };
 
+  const onDeleteById = async (path: string, id: number) => {
+    try {
+      await apiInstance.delete(`${API_BASE_URL}/${path}/${id}`);
+    } catch (error: any) {
+      notificationController.error({
+        message: 'Có lỗi xảy ra vui lòng thử lại sau',
+        description: error.message,
+      });
+    }
+  };
+
   const onCreate = async (values: any) => {
     const data = {
       ...values,
@@ -172,7 +184,8 @@ const CreateFromLead: React.FC<IProps> = ({ titleButton, defaultValues }) => {
         notificationController.success({
           message: 'Tạo thành công',
         });
-        navigate(`customers/${respUsers.data?.id}`);
+        onDeleteById('leads', defaultValues.id);
+        navigate(`/customers/${respUsers.data?.id}`);
       } else {
         notificationController.error({
           message: respUsers.message,

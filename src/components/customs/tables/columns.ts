@@ -411,7 +411,7 @@ export const columnOrder = [
   {
     title: 'Ngày kết thúc',
     dataIndex: 'end_date',
-    align: 'left',
+    align: 'right',
     render: (record: string): string => {
       const date = new Date(record);
       return date.toLocaleDateString('en-GB');

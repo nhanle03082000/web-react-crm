@@ -6,10 +6,9 @@ import { API_BASE_URL } from '@app/configs/api-configs';
 import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
 import { IFilter, IRespApiSuccess } from '@app/interfaces/interfaces';
-import { Popconfirm, Space, Tooltip, Typography } from 'antd';
+import { Popconfirm, Space, Tooltip } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ReactComponent as MailIcon } from '@app/assets/icons/mail.svg';
 
 interface IProps {
   param: string | null;
