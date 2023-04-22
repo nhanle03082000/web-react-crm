@@ -115,7 +115,7 @@ const userFilter = [
     type: 'string',
   },
   {
-    value: 'role',
+    value: 'role.name',
     label: 'Vai trò',
     type: 'string',
   },
@@ -187,4 +187,87 @@ const filterProduct = [
   },
 ];
 
-export { filter, rolefilter, saleFilter, userFilter, filterHaveCode, filterProduct };
+const filterLead = [
+  {
+    value: 'tax_code',
+    label: 'Mã số thuế',
+    type: 'string',
+  },
+  {
+    value: 'company_name',
+    label: 'Tên doanh nghiệp',
+    type: 'string',
+  },
+  {
+    value: 'name',
+    label: 'Tên người đại diện',
+    type: 'string',
+  },
+  {
+    value: 'phone',
+    label: 'SĐT người đại diện',
+    type: 'string',
+  },
+  {
+    value: 'headquarters_phone',
+    label: 'SĐT doanh nghiệp',
+    type: 'string',
+  },
+  {
+    value: 'headquarters_email',
+    label: 'Email doanh nghiệp',
+    type: 'string',
+  },
+  {
+    value: 'email',
+    label: 'Email người đại diện',
+    type: 'string',
+  },
+  {
+    value: 'employee.name',
+    label: 'Nhân viên phụ trách',
+    type: 'string',
+  },
+  {
+    value: 'customer_source.name',
+    label: 'Nguồn gốc',
+    type: 'string',
+  },
+  {
+    value: 'company_field.name',
+    label: 'Lĩnh vực',
+    type: 'string',
+  },
+  {
+    value: 'sale_process.name',
+    label: 'Quy trình bán hàng',
+    type: 'string',
+  },
+  {
+    value: 'headquarters_address',
+    label: 'Địa chỉ',
+    type: 'string',
+  },
+  {
+    value: 'employee.shop_code',
+    label: 'Theo đơn vị',
+    type: 'string',
+  },
+  {
+    value: 'province.name',
+    label: 'Tỉnh/TP',
+    type: 'string',
+  },
+  {
+    value: 'district.name',
+    label: 'Quận/Huyện',
+    type: 'string',
+  },
+  {
+    value: 'area.name',
+    label: 'Phường/Xã',
+    type: 'string',
+  },
+];
+
+export { filter, filterLead, rolefilter, saleFilter, userFilter, filterHaveCode, filterProduct };

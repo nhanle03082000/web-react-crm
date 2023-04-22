@@ -10,14 +10,15 @@ import ExportExcel from '@app/components/customs/exportexcel/ExportExcel';
 import Filter from '@app/components/customs/filter/Filter';
 import { columnLead } from '@app/components/customs/tables/columns';
 import { API_BASE_URL, API_URL } from '@app/configs/api-configs';
+import { filterLead } from '@app/configs/filter-configs';
 import { DataContext } from '@app/contexts/DataContext';
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
+import { getRoleUser } from '@app/utils/redux.util';
 import { Col, Row, Space, Typography } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import CustomColumns from './components/CustomColumns';
 import LeadForm from './components/LeadForm';
 import Show from './components/Show';
-import { getRoleUser } from '@app/utils/redux.util';
 
 const Main: React.FC = () => {
   const { page, path } = useContext(DataContext);
@@ -46,79 +47,6 @@ const Main: React.FC = () => {
   ]);
   const download = '/files/lead.xlsx';
   const [listIdLead, setListIdLead] = useState([]);
-
-  const option = [
-    {
-      value: 'tax_code',
-      label: 'Mã số thuế',
-      type: 'string',
-    },
-    {
-      value: 'company_name',
-      label: 'Tên doanh nghiệp',
-      type: 'string',
-    },
-    {
-      value: 'phone',
-      label: 'Số điện thoại di động',
-      type: 'string',
-    },
-    {
-      value: 'headquarters_phone',
-      label: 'Số điện thoại doanh nghiệp',
-      type: 'string',
-    },
-    {
-      value: 'headquarters_email',
-      label: 'Email doanh nghiệp',
-      type: 'string',
-    },
-    {
-      value: 'email',
-      label: 'Email cá nhân',
-      type: 'string',
-    },
-    {
-      value: 'customer_source.id',
-      label: 'Nguồn gốc',
-      type: 'string',
-    },
-    {
-      value: 'company_field.id',
-      label: 'Lĩnh vực',
-      type: 'string',
-    },
-    {
-      value: 'sale_process.id',
-      label: 'Quy trình bán hàng',
-      type: 'string',
-    },
-    {
-      value: 'headquarters_address',
-      label: 'Địa chỉ',
-      type: 'string',
-    },
-    {
-      value: 'employee.shop_code',
-      label: 'Theo đơn vị',
-      type: 'string',
-    },
-    {
-      value: 'province.id',
-      label: 'Tỉnh/TP',
-      type: 'string',
-    },
-    {
-      value: 'district.id',
-      label: 'Quận/Huyện',
-      type: 'string',
-    },
-    {
-      value: 'area.id',
-      label: 'Phường/Xã',
-      type: 'string',
-    },
-  ];
 
   const initialValue = [
     { field: 'tax_code', operator: 'contain', value: '' },
@@ -191,7 +119,7 @@ const Main: React.FC = () => {
           </Row>
           <Row style={{ marginTop: '10px' }}>
             <Col span={24}>
-              <Filter initialValue={initialValue} option={option} setParam={setParam} />
+              <Filter initialValue={initialValue} option={filterLead} setParam={setParam} />
             </Col>
           </Row>
           <Row style={{ marginTop: '10px' }}>

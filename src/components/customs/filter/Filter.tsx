@@ -2,11 +2,12 @@ import { RestOutlined } from '@ant-design/icons';
 import { Button } from '@app/components/common/buttons/Button/Button';
 import { Select } from '@app/components/common/selects/Select/Select';
 import { Col, Form, Row } from 'antd';
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useContext, useState } from 'react';
 import FilterDateTime from './FilterDateTime';
 import FilterText from './FilterText';
 import moment from 'moment';
 import DeleteIcon from '@app/assets/icon-components/DeleteIcon';
+import { DataContext } from '@app/contexts/DataContext';
 
 interface IProps {
   option: { value: string; label: string; type: string }[];
@@ -15,6 +16,7 @@ interface IProps {
 }
 
 const Filter: React.FC<IProps> = ({ option, setParam, initialValue }) => {
+  const { setShow, show } = useContext(DataContext);
   const [listFilter, setListFilter] = useState<any>(initialValue);
   const defaultNewFilter = { field: '', operator: '', value: '' };
   const handleClickAddRow = () => {
@@ -44,6 +46,7 @@ const Filter: React.FC<IProps> = ({ option, setParam, initialValue }) => {
       .map(([key, value]: any) => `${key}=${value}`)
       .join('&');
     setParam(param);
+    setShow(!show);
   };
 
   const onChangeField = (index: number) => (value: any) => {

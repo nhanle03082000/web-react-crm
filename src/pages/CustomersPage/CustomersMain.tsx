@@ -17,6 +17,7 @@ import CustomColumns from './components/CustomColumns';
 import CustomersForm from './components/CustomersForm';
 import Show from './components/Show';
 import Assign from '@app/components/customs/assign/Assign';
+import { filterLead } from '@app/configs/filter-configs';
 
 const CustomersMain: React.FC = () => {
   // const userListPermission = JSON.parse(getRoleUser());
@@ -45,79 +46,6 @@ const CustomersMain: React.FC = () => {
   ]);
   const download = '/files/customer.xlsx';
   const [listIdLead, setListIdLead] = useState([]);
-
-  const option = [
-    {
-      value: 'tax_code',
-      label: 'Mã số thuế',
-      type: 'string',
-    },
-    {
-      value: 'company_name',
-      label: 'Tên doanh nghiệp',
-      type: 'string',
-    },
-    {
-      value: 'phone',
-      label: 'Số điện thoại di động',
-      type: 'string',
-    },
-    {
-      value: 'headquarters_phone',
-      label: 'Số điện thoại doanh nghiệp',
-      type: 'string',
-    },
-    {
-      value: 'headquarters_email',
-      label: 'Email doanh nghiệp',
-      type: 'string',
-    },
-    {
-      value: 'email',
-      label: 'Email cá nhân',
-      type: 'string',
-    },
-    {
-      value: 'employee.shop_code',
-      label: 'Theo đơn vị',
-      type: 'string',
-    },
-    {
-      value: 'customer_source.id',
-      label: 'Nguồn gốc',
-      type: 'string',
-    },
-    {
-      value: 'company_field.id',
-      label: 'Lĩnh vực',
-      type: 'string',
-    },
-    {
-      value: 'sale_process.id',
-      label: 'Quy trình bán hàng',
-      type: 'string',
-    },
-    {
-      value: 'headquarters_address',
-      label: 'Địa chỉ',
-      type: 'string',
-    },
-    {
-      value: 'province.id',
-      label: 'Tỉnh/TP',
-      type: 'string',
-    },
-    {
-      value: 'district.id',
-      label: 'Quận/Huyện',
-      type: 'string',
-    },
-    {
-      value: 'area.id',
-      label: 'Phường/Xã',
-      type: 'string',
-    },
-  ];
 
   const initialValue = [
     { field: 'tax_code', operator: 'contain', value: '' },
@@ -184,7 +112,7 @@ const CustomersMain: React.FC = () => {
           </Row>
           <Row style={{ marginTop: '10px' }}>
             <Col span={24}>
-              <Filter initialValue={initialValue} option={option} setParam={setParam} />
+              <Filter initialValue={initialValue} option={filterLead} setParam={setParam} />
             </Col>
           </Row>
           <Row style={{ marginTop: '10px' }}>

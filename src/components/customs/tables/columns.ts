@@ -290,16 +290,12 @@ export const userColumn = [
 ];
 
 export const columnLead = [
-  // {
-  //   title: 'Mã số thuế',
-  //   dataIndex: 'tax_code',
-  // },
   {
-    title: 'Doanh nghiệp',
+    title: 'Tên doanh nghiệp',
     dataIndex: 'company_name',
   },
   {
-    title: 'Họ tên',
+    title: 'Tên người đại diện',
     dataIndex: 'name',
   },
   {
@@ -315,7 +311,7 @@ export const columnLead = [
     dataIndex: 'headquarters_email',
   },
   {
-    title: 'Email cá nhân',
+    title: 'Email người đại diện',
     dataIndex: 'email',
   },
   {

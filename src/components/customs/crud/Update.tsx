@@ -11,21 +11,23 @@ import { Button, Form, Row } from 'antd';
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import CustomLoading from '../CustomLoading';
+import { useAppDispatch, useAppSelector } from '@app/hooks/reduxHooks';
+import { startLoading, stopLoading } from '@app/utils/redux.util';
 
 interface IProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   id: number;
-  onShow: any;
 }
 
-const Update: React.FC<IProps> = ({ children, id, onShow }) => {
+const Update: React.FC<IProps> = ({ children, id }) => {
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { path, page, state, setState } = useContext(DataContext);
-  const [isLoading, setIsLoading] = useState(true);
+  const { path, page, state, setState, setShow, show } = useContext(DataContext);
+  const isLoading = useAppSelector((state) => state.app.loading);
+  const dispath = useAppDispatch();
 
   const onDataById = async () => {
-    setIsLoading(true);
+    dispath(startLoading);
     const dataById = await getDataById(id, path);
     if (path === '/roles') {
       const permission = JSON.parse(dataById?.permission);
@@ -37,7 +39,7 @@ const Update: React.FC<IProps> = ({ children, id, onShow }) => {
     } else {
       setState(dataById);
     }
-    setIsLoading(false);
+    dispath(stopLoading);
     form.setFieldsValue(dataById);
   };
 
@@ -52,6 +54,7 @@ const Update: React.FC<IProps> = ({ children, id, onShow }) => {
   };
 
   const onUpdate = async (values: any) => {
+    dispath(startLoading);
     let data = {
       ...values,
       is_active: true,
@@ -74,9 +77,9 @@ const Update: React.FC<IProps> = ({ children, id, onShow }) => {
         description: error.message,
       });
     }
-    onShow();
+    setShow(!show);
+    dispath(stopLoading);
     setIsModalOpen(false);
-    form.resetFields();
   };
 
   return (
@@ -91,11 +94,7 @@ const Update: React.FC<IProps> = ({ children, id, onShow }) => {
         footer={null}
       >
         <>
-          {isLoading && (
-            <div className="loading-overlay">
-              <CustomLoading />
-            </div>
-          )}
+          {isLoading && <CustomLoading />}
           <Form form={form} onFinish={onUpdate} layout="vertical">
             {children}
             <Row gutter={[10, 10]} justify="end">

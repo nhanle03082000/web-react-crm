@@ -145,7 +145,11 @@ const LeadForm: React.FC<IProps> = ({ isEditing }) => {
       </Row>
       <Row gutter={[16, 16]}>
         <Col span={12}>
-          <Form.Item name="phone_number" label="Số điện thoại di động">
+          <Form.Item
+            name="phone_number"
+            label="Số điện thoại di động"
+            rules={[{ max: 10, message: 'Số điện thoại phải có độ dài tối đa 10 số!' }]}
+          >
             <Input placeholder="Nhập SĐT cá nhân" size="small" />
           </Form.Item>
         </Col>

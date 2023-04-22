@@ -21,7 +21,6 @@ const Roles: React.FC = () => {
   const page = t('namepage.vaitro');
   const userListPermission = JSON.parse(getRoleUser());
   const permission = userListPermission?.filter((item: any) => item.name === path.replace(/\//g, ''))[0].actions;
-  const [isLoad, setIsLoad] = useState<boolean>(false);
   const [param, setParam] = useState('');
   const [show, setShow] = useState(false);
   const [state, setState] = useState<any>({
@@ -36,7 +35,7 @@ const Roles: React.FC = () => {
   ];
 
   return (
-    <DataContext.Provider value={{ path, page, state, setState, isLoad, setIsLoad, show, setShow }}>
+    <DataContext.Provider value={{ path, page, state, setState, show, setShow }}>
       <PageTitle>{page}</PageTitle>
       <Row gutter={[10, 10]}>
         <Col span={24}>

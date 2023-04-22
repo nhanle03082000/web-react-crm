@@ -24,7 +24,6 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns, 
   const [dataShow, setDataShow] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  console.log();
   const [filter, setFilter] = useState<IFilter>({
     page: 1,
     limit: 20,

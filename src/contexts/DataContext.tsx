@@ -19,10 +19,12 @@ interface data {
   page?: string;
   state: any;
   setState: any;
-  setIsLoad: any;
-  isLoad: boolean;
+  setIsLoad?: any;
+  isLoad?: boolean;
   show?: boolean;
   setShow?: any;
+  showData?: any;
+  setShowData?: any;
 }
 
 export const DataContext = createContext<data>(defaultValues);

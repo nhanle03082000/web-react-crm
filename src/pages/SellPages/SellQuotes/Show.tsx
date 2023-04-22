@@ -21,7 +21,7 @@ interface IProps {
 }
 
 const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns, path }) => {
-  const { isLoad } = useContext(DataContext);
+  const { isLoad, show } = useContext(DataContext);
   const [dataShow, setDataShow] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -156,7 +156,7 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns, 
 
   useEffect(() => {
     onShow();
-  }, [param, filter.page, isLoad]);
+  }, [filter.page, isLoad, show]);
 
   return (
     <>

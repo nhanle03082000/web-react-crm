@@ -12,6 +12,7 @@ import { Card } from '@app/components/common/Card/Card';
 import { Modal } from '@app/components/common/Modal/Modal';
 import { Button } from '@app/components/common/buttons/Button/Button';
 import { Select } from '@app/components/common/selects/Select/Select';
+import { H3 } from '@app/components/common/typography/H3/H3';
 import { H4 } from '@app/components/common/typography/H4/H4';
 import { H5 } from '@app/components/common/typography/H5/H5';
 import { API_BASE_URL, API_URL } from '@app/configs/api-configs';
@@ -36,14 +37,13 @@ interface IProps {
 const CreateFromLead: React.FC<IProps> = ({ titleButton, defaultValues }) => {
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { page, setIsLoad, show, setShow } = useContext(DataContext);
+  const { page, show, setShow } = useContext(DataContext);
   const path = '/customers';
   const [provinces, setProvinces] = useState<ISelectOption[]>([{ value: '', label: '' }]);
   const [districts, setDistricts] = useState<ISelectOption[]>([{ value: '', label: '' }]);
   const [areas, setAreas] = useState<ISelectOption[]>([{ value: '', label: '' }]);
   const [companyFields, setCompanyFields] = useState<ISelectOption[]>([{ value: '', label: '' }]);
   const [customerSources, setCustomerSources] = useState<ISelectOption[]>([{ value: '', label: '' }]);
-  const [saleProcesses, setSaleProcesses] = useState<ISelectOption[]>([{ value: '', label: '' }]);
   const [CompanyCareer, setCompanyCareer] = useState<ISelectOption[]>([{ value: '', label: '' }]);
   const [CompanyTypes, setCompanyTypes] = useState<ISelectOption[]>([{ value: '', label: '' }]);
   const navigate = useNavigate();
@@ -100,64 +100,48 @@ const CreateFromLead: React.FC<IProps> = ({ titleButton, defaultValues }) => {
     }
   };
 
-  useEffect(() => {
-    async function getCompanyTypes() {
-      const dataResult = await getCompanyTypesList();
-      setCompanyTypes(dataResult);
-    }
-    async function getCompanyCareer() {
-      const dataResult = await getCompanyCareerList();
-      setCompanyCareer(dataResult);
-    }
-    async function getCustomerSources() {
-      const dataResult = await getCustomerSourcesList();
-      setCustomerSources(dataResult);
-    }
-    async function getCompanyFields() {
-      const dataResult = await getCompanyFieldsList();
-      setCompanyFields(dataResult);
-    }
-    async function getProvinces() {
-      const dataResult = await getProvincesList();
-      setProvinces(dataResult);
-    }
-    async function getDistricts() {
-      const dataResult = await getDistrictsList();
-      setDistricts(dataResult);
-    }
-    async function getAreas() {
-      const dataResult = await getAreasList();
-      setAreas(dataResult);
-    }
-    const getSaleProcessesList = async () => {
-      try {
-        const respSaleProcesses: IRespApiSuccess = await apiInstance.get(
-          `${API_BASE_URL}${API_URL.SALEPROCESSES}?f[0][field]=type&f[0][operator]=contain&f[0][value]=customers&page=1&limit=10&sort_direction=asc&sort_column=sale_process_index`,
-        );
-        const optionsSaleProcesses = respSaleProcesses.data.collection.map((item: any) => {
-          return { value: item.id, label: item.name };
-        });
-        setSaleProcesses(optionsSaleProcesses);
-      } catch (error: any) {}
-    };
+  async function getCompanyTypes() {
+    const dataResult = await getCompanyTypesList();
+    setCompanyTypes(dataResult);
+  }
+  async function getCompanyCareer() {
+    const dataResult = await getCompanyCareerList();
+    setCompanyCareer(dataResult);
+  }
+  async function getCustomerSources() {
+    const dataResult = await getCustomerSourcesList();
+    setCustomerSources(dataResult);
+  }
+  async function getCompanyFields() {
+    const dataResult = await getCompanyFieldsList();
+    setCompanyFields(dataResult);
+  }
+  async function getProvinces() {
+    const dataResult = await getProvincesList();
+    setProvinces(dataResult);
+  }
+  async function getDistricts() {
+    const dataResult = await getDistrictsList();
+    setDistricts(dataResult);
+  }
+  async function getAreas() {
+    const dataResult = await getAreasList();
+    setAreas(dataResult);
+  }
+
+  const showModal = () => {
+    setIsModalOpen(true);
     getProvinces();
     getCustomerSources();
     getCompanyFields();
-    getSaleProcessesList();
     getDistricts();
     getAreas();
     getCompanyCareer();
     getCompanyTypes();
-  }, []);
-
-  const showModal = () => {
-    setIsModalOpen(true);
-    setIsLoad(true);
   };
 
   const handleCancel = () => {
     setIsModalOpen(false);
-    setIsLoad(false);
     form.resetFields();
   };
 
@@ -230,144 +214,161 @@ const CreateFromLead: React.FC<IProps> = ({ titleButton, defaultValues }) => {
         <Form form={form} onFinish={onCreate} layout="vertical">
           <Row>
             <Col span={24}>
-              <Card padding="1.25rem">
-                <Row gutter={[4, 4]}>
-                  <Col span={24}>
-                    <H4>Thông tin chung</H4>
-                  </Col>
-                  <Col span={8}>
-                    <H5>Tên DN</H5>
-                    <Form.Item
-                      name="company_name"
-                      rules={[{ required: true, message: 'Tên doanh nghiệp không được bỏ trống!' }]}
-                    >
-                      <Input placeholder="Nhập tên doanh nghiệp" size="small" />
-                    </Form.Item>
-                  </Col>
-                  <Col span={8}>
-                    <H5>Mã số thuế</H5>
-                    <Form.Item name="tax_code" rules={[{ required: true, message: 'Mã số thuế không được bỏ trống!' }]}>
-                      <Input placeholder="Nhập mã số thuế" size="small" />
-                    </Form.Item>
-                  </Col>
-                  <Col span={8}></Col>
-                  <Col span={8}>
-                    <H5>Họ tên người đại diện</H5>
-                    <Form.Item name="name" rules={[{ required: true, message: 'Họ tên không được bỏ trống!' }]}>
-                      <Input placeholder="Nhập họ tên người đại diện" size="small" />
-                    </Form.Item>
-                  </Col>
-                  <Col span={8}>
-                    <H5>SĐT di động</H5>
-                    <Form.Item name="phone_number">
-                      <Input placeholder="Nhập SĐT cá nhân" size="small" />
-                    </Form.Item>
-                  </Col>
-                  <Col span={8}>
-                    <H5>Email cá nhân</H5>
-                    <Form.Item name="email">
-                      <Input placeholder="Nhập email cá nhân" size="small" />
-                    </Form.Item>
-                  </Col>
-                </Row>
-                <Row gutter={[4, 4]} style={{ marginTop: '24px' }}>
-                  <Col span={24}>
-                    <H4>Thông tin tổ chức</H4>
-                  </Col>
-                  <Col span={8}>
-                    <H5>Số điện thoại doanh nhiệp</H5>
-                    <Form.Item
-                      name="headquarters_phone"
-                      rules={[{ required: true, message: 'SĐT doanh nghiệp không được bỏ trống!' }]}
-                    >
-                      <Input placeholder="Nhập SĐT doanh nghiệp" size="small" />
-                    </Form.Item>
-                  </Col>
-                  <Col span={8}>
-                    <H5>Email doanh nhiệp</H5>
-                    <Form.Item
-                      name="headquarters_email"
-                      rules={[{ required: true, message: 'SĐT doanh nghiệp không được bỏ trống!' }]}
-                    >
-                      <Input placeholder="Nhập SĐT doanh nghiệp" size="small" />
-                    </Form.Item>
-                  </Col>
-                  <Col span={8}>
-                    <H5>Danh mục ngành nghề</H5>
-                    <Form.Item
-                      name="company_career_id"
-                      rules={[{ required: true, message: 'Ngành nghề không được bỏ trống!' }]}
-                    >
-                      <Select options={CompanyCareer} placeholder="Chọn ngành nghề" />
-                    </Form.Item>
-                  </Col>
-                  <Col span={8}>
-                    <H5>Lĩnh vực doanh nghiệp</H5>
-                    <Form.Item
-                      name="company_field_id"
-                      rules={[{ required: true, message: 'Lĩnh vực DN không được bỏ trống!' }]}
-                    >
-                      <Select options={companyFields} placeholder="Chọn lĩnh vực" />
-                    </Form.Item>
-                  </Col>
-                  <Col span={8}>
-                    <H5>Nguồn gốc</H5>
-                    <Form.Item name="customer_source_id">
-                      <Select options={customerSources} placeholder="Chọn nguồn gốc" />
-                    </Form.Item>
-                  </Col>
-                  <Col span={8}>
-                    <H5>Quy trình bán hàng</H5>
-                    <Form.Item name="sale_process_id">
-                      <Select options={saleProcesses} placeholder="Chọn quy trình bán hàng" />
-                    </Form.Item>
-                  </Col>
-                  <Col span={8}>
-                    <H5>Loại hình doanh nghiệp</H5>
-                    <Form.Item name="company_type_id">
-                      <Select options={CompanyTypes} placeholder="Chọn loại hình" />
-                    </Form.Item>
-                  </Col>
-                </Row>
-                <Row gutter={[4, 4]} style={{ marginTop: '24px' }}>
-                  <Col span={24}>
-                    <H4>Thông tin địa chỉ</H4>
-                  </Col>
-                  <Col span={8}>
-                    <H5>Tỉnh/TP</H5>
-                    <Form.Item name="headquarters_province_id">
-                      <Select options={provinces} onChange={onChangeProvinces} placeholder="Chọn tỉnh/TP" />
-                    </Form.Item>
-                  </Col>
-                  <Col span={8}>
-                    <H5>Quận/Huyện</H5>
-                    <Form.Item name="headquarters_district_id">
-                      <Select options={districts} onChange={onChangeDistricts} placeholder="Chọn quận/Huyện" />
-                    </Form.Item>
-                  </Col>
-                  <Col span={8}>
-                    <H5>Phường/Xã</H5>
-                    <Form.Item name="headquarters_area_id">
-                      <Select options={areas} placeholder="Chọn phường/Xã" />
-                    </Form.Item>
-                  </Col>
-                  <Col span={24}>
-                    <H5>Địa chỉ</H5>
-                    <Form.Item
-                      name="headquarters_address"
-                      rules={[{ required: true, message: 'Địa chỉ trụ sở chính không được bỏ trống!' }]}
-                    >
-                      <Input placeholder="Nhập địa chỉ trụ sở chính" size="small" />
-                    </Form.Item>
-                  </Col>
-                </Row>
-              </Card>
+              <Row gutter={[10, 0]}>
+                <Col span={24}>
+                  <H4 className="uppercase">Thông tin tổ chức</H4>
+                </Col>
+                <Col span={8}>
+                  <Form.Item
+                    name="name"
+                    label="Họ tên người đại diện"
+                    rules={[{ required: true, message: 'Họ tên không được bỏ trống!' }]}
+                  >
+                    <Input placeholder="Nhập họ tên người đại diện" size="small" />
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item
+                    label="SĐT người đại diện"
+                    name="phone_number"
+                    rules={[{ max: 10, message: 'SĐT phải có độ dài tối đa 10 số!' }]}
+                  >
+                    <Input placeholder="Nhập SĐT người đại diện" size="small" />
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item name="email" label="Email người đại diện">
+                    <Input placeholder="Nhập email người đại diện" size="small" />
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item
+                    label="Tên doanh nghiệp"
+                    name="company_name"
+                    rules={[{ required: true, message: 'Tên doanh nghiệp không được bỏ trống!' }]}
+                  >
+                    <Input placeholder="Nhập tên doanh nghiệp" size="small" />
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item
+                    name="tax_code"
+                    label="Mã số thuế"
+                    rules={[{ required: true, message: 'Mã số thuế không được bỏ trống!' }]}
+                  >
+                    <Input placeholder="Nhập mã số thuế" size="small" />
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item
+                    name="company_career_id"
+                    label="Danh mục ngành nghề"
+                    rules={[{ required: true, message: 'Ngành nghề không được bỏ trống!' }]}
+                  >
+                    <Select options={CompanyCareer} placeholder="Chọn ngành nghề" />
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item
+                    label="SĐT doanh nghiệp"
+                    name="headquarters_phone"
+                    rules={[
+                      { required: true, message: 'SĐT doanh nghiệp không được bỏ trống!' },
+                      { max: 10, message: 'Số điện thoại phải có độ dài tối đa 10 số!' },
+                    ]}
+                  >
+                    <Input placeholder="Nhập SĐT doanh nghiệp" size="small" />
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item
+                    label="Email doanh nghiệp"
+                    name="headquarters_email"
+                    rules={[{ required: true, message: 'Email doanh nghiệp không được bỏ trống!' }]}
+                  >
+                    <Input placeholder="Nhập email doanh nghiệp" size="small" />
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item
+                    name="company_field_id"
+                    label="Lĩnh vực"
+                    rules={[{ required: true, message: 'Lĩnh vực DN không được bỏ trống!' }]}
+                  >
+                    <Select options={companyFields} placeholder="Chọn lĩnh vực" />
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item
+                    name="customer_source_id"
+                    label="Nguồn gốc"
+                    rules={[{ required: true, message: 'Nguồn gốc không được bỏ trống!' }]}
+                  >
+                    <Select options={customerSources} placeholder="Chọn nguồn gốc" />
+                  </Form.Item>
+                </Col>
+                {/* <Col span={8}>
+                  <Form.Item name="sale_process_id" label="Quy trình bán hàng">
+                    <Select options={saleProcesses} placeholder="Chọn quy trình bán hàng" />
+                  </Form.Item>
+                </Col> */}
+                <Col span={8}>
+                  <Form.Item
+                    name="company_type_id"
+                    label="Loại hình"
+                    rules={[{ required: true, message: 'Loại hình không được bỏ trống!' }]}
+                  >
+                    <Select options={CompanyTypes} placeholder="Chọn loại hình" />
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row gutter={[4, 4]}>
+                <Col span={24}>
+                  <H4>Thông tin địa chỉ</H4>
+                </Col>
+                <Col span={8}>
+                  <Form.Item
+                    name="headquarters_province_id"
+                    label="Tỉnh/TP"
+                    rules={[{ required: true, message: 'Tỉnh/TP không được bỏ trống!' }]}
+                  >
+                    <Select options={provinces} onChange={onChangeProvinces} placeholder="Chọn tỉnh/TP" />
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item
+                    name="headquarters_district_id"
+                    label="Quận/Huyện"
+                    rules={[{ required: true, message: 'Quận/Huyện không được bỏ trống!' }]}
+                  >
+                    <Select options={districts} onChange={onChangeDistricts} placeholder="Chọn quận/Huyện" />
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item
+                    name="headquarters_area_id"
+                    label="Phường/Xã"
+                    rules={[{ required: true, message: 'Phường/Xã không được bỏ trống!' }]}
+                  >
+                    <Select options={areas} placeholder="Chọn phường/Xã" />
+                  </Form.Item>
+                </Col>
+                <Col span={24}>
+                  <Form.Item
+                    label="Địa chỉ trụ sở chính"
+                    name="headquarters_address"
+                    rules={[{ required: true, message: 'Địa chỉ trụ sở chính không được bỏ trống!' }]}
+                  >
+                    <Input placeholder="Nhập số nhà, đường" size="small" />
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row justify="start">
+                <Button size="small" type="primary" htmlType="submit">
+                  Lưu
+                </Button>
+              </Row>
             </Col>
-          </Row>
-          <Row gutter={[10, 0]} justify="end">
-            <Button size="small" type="primary" htmlType="submit">
-              Lưu
-            </Button>
           </Row>
         </Form>
       </Modal>

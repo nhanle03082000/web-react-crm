@@ -5,28 +5,32 @@ import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
 import { IFilter, IRespApiSuccess } from '@app/interfaces/interfaces';
 import { Space } from 'antd';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { memo, useContext, useEffect, useState } from 'react';
 import CustomPagination from '../CustomPagination';
 import Delete from './Delete';
 import Update from './Update';
+import { useAppDispatch, useAppSelector } from '@app/hooks/reduxHooks';
+import { startLoading, stopLoading } from '@app/utils/redux.util';
 
 interface IProps {
   param: string | null;
   colums: any;
   children: React.ReactNode;
   permission: any;
+  sortColumn?: string;
 }
 
-const Show: React.FC<IProps> = ({ children, param, colums, permission }) => {
+const Show: React.FC<IProps> = ({ children, param, colums, permission, sortColumn }) => {
   const { path, show } = useContext(DataContext);
-  const [dataShow, setDataShow] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [showData, setShowData] = useState([]);
+  const isLoading = useAppSelector((state) => state.app.loading);
+  const dispath = useAppDispatch();
   const [filter, setFilter] = useState<IFilter>({
     page: 1,
     limit: 20,
     total: 0,
     sort_direction: 'desc',
-    sort_column: 'created_at',
+    sort_column: sortColumn ? sortColumn : 'created_at',
   });
 
   const f = Object.entries(filter)
@@ -34,17 +38,14 @@ const Show: React.FC<IProps> = ({ children, param, colums, permission }) => {
     .join('&');
 
   const onShow = async () => {
-    setIsLoading(true);
+    dispath(startLoading);
     try {
       const respUsers: IRespApiSuccess = await apiInstance.get(`${API_BASE_URL}${path}`, {
         params: param ? `${param}&${f}` : f,
       });
       if (respUsers.code === 200) {
         setFilter({ ...filter, total: respUsers.data.total });
-        respUsers.data.collection.map((item: any, index: number) => {
-          return (item.stt = index + 1);
-        });
-        setDataShow(respUsers.data.collection);
+        setShowData(respUsers.data.collection);
       }
     } catch (error: any) {
       notificationController.error({
@@ -52,7 +53,7 @@ const Show: React.FC<IProps> = ({ children, param, colums, permission }) => {
         description: error.message,
       });
     }
-    setIsLoading(false);
+    dispath(stopLoading);
   };
 
   const handlePageChange = (page: number) => {
@@ -62,8 +63,9 @@ const Show: React.FC<IProps> = ({ children, param, colums, permission }) => {
   const columns: any = [
     {
       title: 'STT',
-      dataIndex: 'stt',
+      dataIndex: 'index',
       align: 'right',
+      render: (_text: any, _record: any, index: any) => index + 1,
     },
     {
       title: 'Thao tác',
@@ -72,11 +74,7 @@ const Show: React.FC<IProps> = ({ children, param, colums, permission }) => {
         return (
           <Space>
             {path != '/users' ? permission.delete && <Delete id={record.id} onShow={onShow} /> : ''}
-            {permission.edit && (
-              <Update id={record.id} onShow={onShow}>
-                {children}
-              </Update>
-            )}
+            {permission.edit && <Update id={record.id}>{children}</Update>}
           </Space>
         );
       },
@@ -92,7 +90,7 @@ const Show: React.FC<IProps> = ({ children, param, colums, permission }) => {
     <>
       <Table
         columns={columns}
-        dataSource={dataShow}
+        dataSource={showData}
         pagination={false}
         scroll={{ x: 800 }}
         loading={isLoading}
@@ -108,4 +106,4 @@ const Show: React.FC<IProps> = ({ children, param, colums, permission }) => {
   );
 };
 
-export default Show;
+export default memo(Show);

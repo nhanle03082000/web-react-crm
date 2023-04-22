@@ -11,8 +11,8 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import UserForm from './components/UserForm';
 import { userColumn } from '@app/components/customs/tables/columns';
-import Show from './components/Show';
 import { userFilter } from '@app/configs/filter-configs';
+import Show from '@app/components/customs/crud/Show';
 
 const Users: React.FC = () => {
   const { t } = useTranslation();
@@ -20,12 +20,10 @@ const Users: React.FC = () => {
   const page = t('namepage.nguoidung');
   const userListPermission = JSON.parse(getRoleUser());
   const permission = userListPermission?.filter((item: any) => item.name === path.replace(/\//g, ''))[0].actions;
-  const [isLoad, setIsLoad] = useState<boolean>(false);
   const [show, setShow] = useState(false);
   const [param, setParam] = useState('');
   const [state, setState] = useState<any>({
     data: {},
-    rolePermission: [],
     defaultInputValues: {},
   });
 
@@ -35,7 +33,7 @@ const Users: React.FC = () => {
   ];
 
   return (
-    <DataContext.Provider value={{ path, page, state, setState, isLoad, setIsLoad, show, setShow }}>
+    <DataContext.Provider value={{ path, page, state, setState, show, setShow }}>
       <PageTitle>{page}</PageTitle>
       <Row gutter={[10, 10]}>
         <Col span={24}>
@@ -60,7 +58,7 @@ const Users: React.FC = () => {
         <Col span={24}>
           <Card padding="1rem">
             {permission.index && (
-              <Show param={param} colums={userColumn} permission={permission}>
+              <Show param={param} colums={userColumn} permission={permission} sortColumn="users.id">
                 <UserForm isEditing={true} />
               </Show>
             )}

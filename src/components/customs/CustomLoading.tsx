@@ -1,16 +1,16 @@
-import styled from 'styled-components';
+import { appSelector } from '@app/store/slices/appSlice';
+import { connect } from 'react-redux';
 
-const StyledContainer = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-
-const CustomLoading: React.FC = () => {
+const CustomLoading: React.FC = (): any => {
   return (
-    <StyledContainer>
+    <div className="loading-overlay">
       <div className="dashed-loading" />
-    </StyledContainer>
+    </div>
   );
 };
 
-export default CustomLoading;
+const mapStateToProps = (state: any) => ({
+  loading: appSelector.loading(state),
+});
+
+export default connect(mapStateToProps, null)(CustomLoading);

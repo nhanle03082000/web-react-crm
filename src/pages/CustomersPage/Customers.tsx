@@ -13,7 +13,7 @@ const Customers: React.FC = () => {
   const [show, setShow] = useState(false);
   const [state, setState] = useState<any>();
   return (
-    <DataContext.Provider value={{ path, page, state, setState, isLoad, setIsLoad, show, setShow }}>
+    <DataContext.Provider value={{ path, page, state, setState, isLoad, show, setShow }}>
       <PageTitle>{page}</PageTitle>
       <Outlet />
     </DataContext.Provider>

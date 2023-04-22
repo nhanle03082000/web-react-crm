@@ -15,7 +15,7 @@ interface IProps {
   param: string | null;
   colums: any;
   children: React.ReactNode;
-  setListIdLead: any;
+  setListIdLead?: any;
   visibleColumns: any;
 }
 

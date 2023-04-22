@@ -1,7 +1,7 @@
 import { apiInstance } from '@app/api/app/api_core';
 import { Modal } from '@app/components/common/Modal/Modal';
 import { Button } from '@app/components/common/buttons/Button/Button';
-import { API_BASE_URL } from '@app/configs/api-configs';
+import { API_BASE_URL, API_URL } from '@app/configs/api-configs';
 import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
@@ -9,6 +9,9 @@ import { Form, Row } from 'antd';
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import CustomLoading from '../CustomLoading';
+import { ConvertTextRoles } from '@app/utils/converts';
+import { useAppDispatch, useAppSelector } from '@app/hooks/reduxHooks';
+import { startLoading, stopLoading } from '@app/utils/redux.util';
 
 interface IProps {
   children: React.ReactNode;
@@ -17,27 +20,54 @@ interface IProps {
 const Create: React.FC<IProps> = ({ children }) => {
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLoading, setisLoading] = useState(false);
-  const { path, page, state, setIsLoad, setShow, show } = useContext(DataContext);
+  const isLoading = useAppSelector((state) => state.app.loading);
+  const dispath = useAppDispatch();
+  const { path, page, state, setState, show, setShow } = useContext(DataContext);
+
+  const getDefaultPermission = async () => {
+    dispath(startLoading);
+    try {
+      const respDefautPermission: IRespApiSuccess = await apiInstance.post(
+        `${API_BASE_URL}${API_URL.DEFAULTPERMISSION}`,
+      );
+      if (respDefautPermission.code === 200) {
+        respDefautPermission.data.map((item: any) => {
+          return (item.nameVi = ConvertTextRoles(item.name));
+        });
+        const data = respDefautPermission.data.sort((a: any, b: any) => a.nameVi.localeCompare(b.nameVi));
+        setState({ ...state, rolePermission: data });
+      }
+    } catch (error: any) {
+      notificationController.error({
+        message: 'Có lỗi xảy ra vui lòng thử lại sau',
+        description: error.message,
+      });
+    }
+    dispath(stopLoading);
+  };
 
   const showModal = () => {
+    if (path === '/roles') {
+      getDefaultPermission();
+    }
     setIsModalOpen(true);
-    setIsLoad(true);
   };
 
   const handleCancel = () => {
     setIsModalOpen(false);
-    setIsLoad(false);
     form.resetFields();
   };
 
   const onCreate = async (values: any) => {
-    setisLoading(true);
+    dispath(startLoading);
+
     let data = {
       ...values,
       is_active: true,
     };
-    state?.rolePermission?.length > 0 ? (data = { ...data, permission: JSON.stringify(state.rolePermission) }) : data;
+    if (path === '/roles') {
+      data = { ...data, permission: JSON.stringify(state.rolePermission) };
+    }
     try {
       const respUsers: IRespApiSuccess = await apiInstance.post(`${API_BASE_URL}${path}`, data);
       if (respUsers.code === 200) {
@@ -55,10 +85,9 @@ const Create: React.FC<IProps> = ({ children }) => {
         description: error.message,
       });
     }
-    setisLoading(false);
     setShow(!show);
-    setIsModalOpen(false);
-    form.resetFields();
+    dispath(stopLoading);
+    handleCancel();
   };
 
   return (
@@ -75,11 +104,7 @@ const Create: React.FC<IProps> = ({ children }) => {
         footer={null}
       >
         <>
-          {isLoading && (
-            <div className="loading-overlay">
-              <CustomLoading />
-            </div>
-          )}
+          {isLoading && <CustomLoading />}
           <Form form={form} onFinish={onCreate} layout="vertical">
             {children}
             <Row gutter={[10, 0]} justify="end">
