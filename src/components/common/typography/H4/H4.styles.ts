@@ -8,7 +8,7 @@ export const Text = styled(Typography.Title)`
     font-size: 0.75rem;
     margin-bottom: 0;
 
-    color: var(--text-main-color);
+    color: var(--ant-primary-color);
 
     @media only screen and ${media.md} {
       font-weight: 600;

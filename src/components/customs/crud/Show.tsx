@@ -1,13 +1,13 @@
-import { RestOutlined } from '@ant-design/icons';
 import { apiInstance } from '@app/api/app/api_core';
 import { Table } from '@app/components/common/Table/Table';
 import { API_BASE_URL } from '@app/configs/api-configs';
 import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
 import { IFilter, IRespApiSuccess } from '@app/interfaces/interfaces';
-import { Popconfirm, Space, Tooltip } from 'antd';
+import { Space } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import CustomPagination from '../CustomPagination';
+import Delete from './Delete';
 import Update from './Update';
 
 interface IProps {
@@ -55,28 +55,6 @@ const Show: React.FC<IProps> = ({ children, param, colums, permission }) => {
     setIsLoading(false);
   };
 
-  const onDelete = async (idData: number) => {
-    console.log(idData);
-    try {
-      const respDelete: IRespApiSuccess = await apiInstance.delete(`${API_BASE_URL}${path}/${idData}`);
-      if (respDelete.code === 200) {
-        notificationController.success({
-          message: 'Xoá thành công',
-        });
-      } else {
-        notificationController.error({
-          message: respDelete.message,
-        });
-      }
-    } catch (error: any) {
-      notificationController.error({
-        message: 'Có lỗi xảy ra vui lòng thử lại sau',
-        description: error.message,
-      });
-    }
-    onShow();
-  };
-
   const handlePageChange = (page: number) => {
     setFilter({ ...filter, page: page });
   };
@@ -85,6 +63,7 @@ const Show: React.FC<IProps> = ({ children, param, colums, permission }) => {
     {
       title: 'STT',
       dataIndex: 'stt',
+      align: 'right',
     },
     {
       title: 'Thao tác',
@@ -92,20 +71,7 @@ const Show: React.FC<IProps> = ({ children, param, colums, permission }) => {
       render: (record: any) => {
         return (
           <Space>
-            {path != '/users'
-              ? permission.delete && (
-                  <Tooltip placement="bottom" title="Xoá dữ liệu">
-                    <Popconfirm
-                      title="Bạn có muốn xoá không?"
-                      okText="Có"
-                      cancelText="Không"
-                      onConfirm={() => onDelete(record.id)}
-                    >
-                      <RestOutlined style={{ fontSize: '20px', cursor: 'pointer' }} />
-                    </Popconfirm>
-                  </Tooltip>
-                )
-              : ''}
+            {path != '/users' ? permission.delete && <Delete id={record.id} onShow={onShow} /> : ''}
             {permission.edit && (
               <Update id={record.id} onShow={onShow}>
                 {children}
@@ -124,14 +90,6 @@ const Show: React.FC<IProps> = ({ children, param, colums, permission }) => {
 
   return (
     <>
-      {/* <CustomTable
-        tableData={tableData}
-        loading={loading}
-        deleteData={onDelete}
-        updateData={onUpdate}
-        onEditRow={onShowModal}
-        checkPermission={checkPermission}
-      /> */}
       <Table
         columns={columns}
         dataSource={dataShow}

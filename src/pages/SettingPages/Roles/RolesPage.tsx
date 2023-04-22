@@ -5,14 +5,15 @@ import Create from '@app/components/customs/crud/Create';
 import Show from '@app/components/customs/crud/Show';
 import ExportExcel from '@app/components/customs/exportexcel/ExportExcel';
 import Filter from '@app/components/customs/filter/Filter';
+import { roleColumn } from '@app/components/customs/tables/columns';
 import { API_URL } from '@app/configs/api-configs';
+import { rolefilter } from '@app/configs/filter-configs';
 import { DataContext } from '@app/contexts/DataContext';
 import { getRoleUser } from '@app/utils/redux.util';
 import { Col, Row } from 'antd';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import RoleForm from './components/RoleForm';
-import { roleColumn } from '@app/components/customs/tables/columns';
 
 const Roles: React.FC = () => {
   const { t } = useTranslation();
@@ -29,41 +30,8 @@ const Roles: React.FC = () => {
     defaultInputValues: {},
   });
 
-  const option = [
-    {
-      value: 'id',
-      label: 'ID vai trò',
-      type: 'string',
-    },
-    {
-      value: 'code',
-      label: 'Mã vai trò',
-      type: 'string',
-    },
-    {
-      value: 'name',
-      label: 'Tên',
-      type: 'string',
-    },
-    {
-      value: 'description',
-      label: 'Mô tả',
-      type: 'string',
-    },
-    {
-      value: 'created_at',
-      label: 'Ngày tạo',
-      type: 'datetime',
-    },
-    {
-      value: 'updated_at',
-      label: 'Ngày cập nhật',
-      type: 'datetime',
-    },
-  ];
-
-  const initialValue = [
-    { field: 'code', operator: 'contain', value: '' },
+  const initialFilter = [
+    { field: 'id', operator: 'contain', value: '' },
     { field: 'name', operator: 'contain', value: '' },
   ];
 
@@ -77,20 +45,22 @@ const Roles: React.FC = () => {
               <Col span={4}>
                 <H3 className="typography-title">{page}</H3>
               </Col>
-              <Col span={3}>
-                <div style={{ display: 'flex', width: '100%', gap: '10px', justifyContent: 'flex-end' }}>
-                  {permission.export && <ExportExcel param={param} />}
-                  {permission.create && (
-                    <Create>
-                      <RoleForm isEditing={false} />
-                    </Create>
-                  )}
-                </div>
+              <Col span={6}>
+                <Row justify="end" gutter={6}>
+                  <Col>{permission.export && <ExportExcel param={param} />}</Col>
+                  <Col>
+                    {permission.create && (
+                      <Create>
+                        <RoleForm isEditing={false} />
+                      </Create>
+                    )}
+                  </Col>
+                </Row>
               </Col>
             </Row>
             <Row style={{ marginTop: '10px' }}>
               <Col span={24}>
-                <Filter initialValue={initialValue} option={option} setParam={setParam} />
+                <Filter initialValue={initialFilter} option={rolefilter} setParam={setParam} />
               </Col>
             </Row>
           </Card>

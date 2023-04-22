@@ -2,10 +2,11 @@ import { RestOutlined } from '@ant-design/icons';
 import { Button } from '@app/components/common/buttons/Button/Button';
 import { Select } from '@app/components/common/selects/Select/Select';
 import { Col, Form, Row } from 'antd';
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import FilterDateTime from './FilterDateTime';
 import FilterText from './FilterText';
 import moment from 'moment';
+import DeleteIcon from '@app/assets/icon-components/DeleteIcon';
 
 interface IProps {
   option: { value: string; label: string; type: string }[];
@@ -30,13 +31,6 @@ const Filter: React.FC<IProps> = ({ option, setParam, initialValue }) => {
   };
 
   const onFinsh = (values: any) => {
-    console.log(typeof values.filter[0].value);
-    console.log(typeof values.filter[1].value);
-    if (typeof values.filter[1].value === 'string') {
-      console.log('string OK');
-    } else {
-      console.log('string notOK');
-    }
     const f: any = {};
     values.filter.forEach((filter: any, i: any) => {
       f[`f[${i}][field]`] = filter.field;
@@ -63,33 +57,26 @@ const Filter: React.FC<IProps> = ({ option, setParam, initialValue }) => {
   };
 
   return (
-    <Form onFinish={onFinsh} layout="inline" style={{ justifyContent: 'space-between' }}>
+    <Form onFinish={onFinsh} layout="inline" style={{ flexWrap: 'nowrap' }}>
       <Form.List name="filter" initialValue={listFilter}>
         {(listFilter, { add, remove }) => (
           <Row gutter={[10, 10]}>
-            <Col span={24}>
-              {listFilter.map(({ key, name }, index) => (
-                <Row key={key} style={{ marginTop: '8px' }}>
-                  <Col span={8}>
-                    <Form.Item
-                      initialValue={option[0]}
-                      name={[name, 'field']}
-                      rules={[{ required: true, message: 'Missing first name' }]}
-                    >
+            {listFilter.map(({ key, name }, index) => (
+              <Col span={24} key={key}>
+                <Row>
+                  <Col span={6}>
+                    <Form.Item initialValue={option[0]} name={[name, 'field']}>
                       <Select options={option} placeholder="Lọc theo trường" onChange={onChangeField(index)} />
                     </Form.Item>
                   </Col>
                   <Col span={12}>{renderFilter(name, index)}</Col>
-                  <Col span={4}>
-                    <RestOutlined
-                      onClick={() => remove(name)}
-                      style={{ color: '#ff4d4f', fontSize: '24px', marginTop: '4px' }}
-                    />
+                  <Col span={6}>
+                    <DeleteIcon onClick={() => remove(name)} />
                   </Col>
                 </Row>
-              ))}
-            </Col>
-            <Col span={4}>
+              </Col>
+            ))}
+            <Col span={24}>
               <Form.Item>
                 <Button type="primary" onClick={() => (add(), handleClickAddRow())}>
                   Thêm trường lọc

@@ -1,3 +1,4 @@
+import { convertColor } from '@app/utils/converts';
 import numeral from 'numeral';
 
 export const roleColumn = [
@@ -24,6 +25,53 @@ export const roleColumn = [
     render: (record: string): string => {
       const date = new Date(record);
       return record ? date.toLocaleDateString('en-GB') : '';
+    },
+  },
+  {
+    title: 'Ngày cập nhật',
+    dataIndex: 'updatedAt',
+    align: 'right',
+    render: (record: string): string => {
+      const date = new Date(record);
+      return date.toLocaleDateString('en-GB');
+    },
+  },
+];
+
+export const PropductColumn = [
+  {
+    title: 'Mã',
+    dataIndex: 'code',
+  },
+  {
+    title: 'Tên',
+    dataIndex: 'name',
+  },
+  {
+    title: 'Giá',
+    dataIndex: 'price',
+    render: (record: number) => {
+      return `${record?.toLocaleString('en-US', { useGrouping: true }) || 0}đ`;
+    },
+  },
+  {
+    title: 'Nhóm sản phẩm',
+    dataIndex: 'product_group',
+    render: (record: { id: number; name: string }) => {
+      return record?.name;
+    },
+  },
+  {
+    title: 'Mô tả',
+    dataIndex: 'description',
+  },
+  {
+    title: 'Ngày tạo',
+    dataIndex: 'createdAt',
+    align: 'right',
+    render: (record: string): string => {
+      const date = new Date(record);
+      return date.toLocaleDateString('en-GB');
     },
   },
   {
@@ -123,6 +171,14 @@ export const saleColumn = [
   {
     title: 'Thứ tự',
     dataIndex: 'sale_process_index',
+    align: 'right',
+  },
+  {
+    title: 'Màu',
+    dataIndex: 'color',
+    render: (record: any) => {
+      return convertColor(record);
+    },
   },
   {
     title: 'Mô tả',
@@ -213,6 +269,13 @@ export const userColumn = [
   {
     title: 'Đơn vị',
     dataIndex: 'department',
+    render: (record: Department): string | null => {
+      return record?.name || null;
+    },
+  },
+  {
+    title: 'Phòng ban',
+    dataIndex: 'parent_department',
     render: (record: Department): string | null => {
       return record?.name || null;
     },

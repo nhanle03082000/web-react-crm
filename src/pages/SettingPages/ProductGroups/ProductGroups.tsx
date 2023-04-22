@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { column } from '@app/components/customs/tables/columns';
 import Create from '@app/components/customs/crud/Create';
 import ProductGroupsForm from './components/ProductGroupsForm';
+import { filterHaveCode } from '@app/configs/filter-configs';
 
 const ProductGroups: React.FC = () => {
   const { t } = useTranslation();
@@ -28,34 +29,6 @@ const ProductGroups: React.FC = () => {
     rolePermission: [],
     defaultInputValues: {},
   });
-
-  const option = [
-    {
-      value: 'code',
-      label: 'Mã',
-      type: 'string',
-    },
-    {
-      value: 'name',
-      label: 'Tên',
-      type: 'string',
-    },
-    {
-      value: 'description',
-      label: 'Mô tả',
-      type: 'string',
-    },
-    {
-      value: 'created_at',
-      label: 'Ngày tạo',
-      type: 'datetime',
-    },
-    {
-      value: 'updated_at',
-      label: 'Ngày cập nhật',
-      type: 'datetime',
-    },
-  ];
 
   const initialValue = [
     { field: 'code', operator: 'contain', value: '' },
@@ -86,7 +59,7 @@ const ProductGroups: React.FC = () => {
             </Row>
             <Row style={{ marginTop: '10px' }}>
               <Col span={24}>
-                <Filter initialValue={initialValue} option={option} setParam={setParam} />
+                <Filter initialValue={initialValue} option={filterHaveCode} setParam={setParam} />
               </Col>
             </Row>
           </Card>

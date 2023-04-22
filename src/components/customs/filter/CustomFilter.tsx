@@ -2,9 +2,10 @@ import { Button, Col, Row } from 'antd';
 import { useEffect, useState } from 'react';
 import FilterDateTime from '../../filter/FilterDateTime';
 import FilterText from '../../filter/FilterText';
-import * as S from '../Custom.styles';
+
 import moment from 'moment';
 import { Select } from '../../common/selects/Select/Select';
+import DeleteIcon from '@app/assets/icon-components/DeleteIcon';
 
 interface IFilterProps {
   setData: any;
@@ -108,7 +109,7 @@ const CustomFilter: React.FC<IFilterProps> = ({ setData, onFilter, option }) => 
       <Col span={20}>
         {listFilter.map((item: any, index: number) => {
           return (
-            <S.SelectWrapper key={index}>
+            <Row key={index}>
               {/* <CustomSelect option={option} defaultInputValue={item.field} onChange={} /> */}
               <Select
                 defaultValue={item.field || 'Lọc theo trường'}
@@ -118,19 +119,19 @@ const CustomFilter: React.FC<IFilterProps> = ({ setData, onFilter, option }) => 
               />
               {renderFilter(index, item.operator)}
               <Button size="small" onClick={() => deleteFilter(index)} className="button-delete">
-                <S.Delete />
+                <DeleteIcon />
               </Button>
-            </S.SelectWrapper>
+            </Row>
           );
         })}
-        <S.ButtonAdd className="button-add" size="small" onClick={handleClickAddRow}>
+        <Button type="primary" className="button-add" size="small" onClick={handleClickAddRow}>
           +
-        </S.ButtonAdd>
+        </Button>
       </Col>
       <Col span={4} style={{ textAlign: 'end' }}>
-        <S.ButtonFilter onClick={onFilter} size="small">
+        <Button onClick={onFilter} size="small">
           Lọc
-        </S.ButtonFilter>
+        </Button>
       </Col>
     </Row>
   );

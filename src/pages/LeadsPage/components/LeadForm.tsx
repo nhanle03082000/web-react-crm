@@ -153,9 +153,12 @@ const LeadForm: React.FC<IProps> = ({ isEditing }) => {
           <Form.Item
             name="headquarters_phone"
             label="Số điện thoại tại trụ sở chính"
-            rules={[{ required: true, message: 'SĐT doanh nghiệp không được bỏ trống!' }]}
+            rules={[
+              { required: true, message: 'SĐT doanh nghiệp không được bỏ trống!' },
+              { max: 10, message: 'Số điện thoại phải có độ dài tối đa 10 số!' },
+            ]}
           >
-            <Input placeholder="Nhập SĐT doanh nghiệp" size="small" />
+            <Input type="number" placeholder="Nhập SĐT doanh nghiệp" size="small" />
           </Form.Item>
         </Col>
       </Row>

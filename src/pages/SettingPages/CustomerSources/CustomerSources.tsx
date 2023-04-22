@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import CustomerSourceForm from './components/CustomerSourceForm';
 import { columnSouce } from '@app/components/customs/tables/columns';
 import Create from '@app/components/customs/crud/Create';
+import { filter } from '@app/configs/filter-configs';
 
 const CustomerSources: React.FC = () => {
   const { t } = useTranslation();
@@ -28,29 +29,6 @@ const CustomerSources: React.FC = () => {
     rolePermission: [],
     defaultInputValues: {},
   });
-
-  const option = [
-    {
-      value: 'name',
-      label: 'Tên',
-      type: 'string',
-    },
-    {
-      value: 'description',
-      label: 'Mô tả',
-      type: 'string',
-    },
-    {
-      value: 'created_at',
-      label: 'Ngày tạo',
-      type: 'datetime',
-    },
-    {
-      value: 'updated_at',
-      label: 'Ngày cập nhật',
-      type: 'datetime',
-    },
-  ];
 
   const initialValue = [
     { field: 'name', operator: 'contain', value: '' },
@@ -73,7 +51,7 @@ const CustomerSources: React.FC = () => {
                   &nbsp;&nbsp;
                   {permission.create && (
                     <Create>
-                      <CustomerSourceForm isEditing={false} />
+                      <CustomerSourceForm />
                     </Create>
                   )}
                 </div>
@@ -81,7 +59,7 @@ const CustomerSources: React.FC = () => {
             </Row>
             <Row style={{ marginTop: '10px' }}>
               <Col span={24}>
-                <Filter initialValue={initialValue} option={option} setParam={setParam} />
+                <Filter initialValue={initialValue} option={filter} setParam={setParam} />
               </Col>
             </Row>
           </Card>
@@ -90,7 +68,7 @@ const CustomerSources: React.FC = () => {
           <Card padding="1rem">
             {permission.index && (
               <Show param={param} colums={columnSouce} permission={permission}>
-                <CustomerSourceForm isEditing={true} />
+                <CustomerSourceForm />
               </Show>
             )}
           </Card>

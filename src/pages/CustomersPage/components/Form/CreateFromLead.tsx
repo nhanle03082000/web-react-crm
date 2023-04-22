@@ -6,7 +6,6 @@ import {
   getCustomerSourcesList,
   getDistrictsList,
   getProvincesList,
-  onDeleteById,
 } from '@app/api/app/api';
 import { apiInstance } from '@app/api/app/api_core';
 import { Card } from '@app/components/common/Card/Card';
@@ -37,7 +36,7 @@ interface IProps {
 const CreateFromLead: React.FC<IProps> = ({ titleButton, defaultValues }) => {
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { page, state, setIsLoad, show, setShow } = useContext(DataContext);
+  const { page, setIsLoad, show, setShow } = useContext(DataContext);
   const path = '/customers';
   const [provinces, setProvinces] = useState<ISelectOption[]>([{ value: '', label: '' }]);
   const [districts, setDistricts] = useState<ISelectOption[]>([{ value: '', label: '' }]);

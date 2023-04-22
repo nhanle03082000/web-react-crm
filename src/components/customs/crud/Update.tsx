@@ -7,7 +7,7 @@ import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
 import { ConvertTextRoles } from '@app/utils/converts';
-import { Button, Form, Row, Tooltip } from 'antd';
+import { Button, Form, Row } from 'antd';
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import CustomLoading from '../CustomLoading';
@@ -22,7 +22,7 @@ const Update: React.FC<IProps> = ({ children, id, onShow }) => {
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { path, page, state, setState } = useContext(DataContext);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const onDataById = async () => {
     setIsLoading(true);
@@ -56,7 +56,7 @@ const Update: React.FC<IProps> = ({ children, id, onShow }) => {
       ...values,
       is_active: true,
     };
-    state.rolePermission ? (data = { ...data, permission: JSON.stringify(state.rolePermission) }) : data;
+    path === '/roles' ? (data = { ...data, permission: JSON.stringify(state.rolePermission) }) : data;
     try {
       const respUpdate: IRespApiSuccess = await apiInstance.put(`${API_BASE_URL}${path}/${id}`, data);
       if (respUpdate.code === 200) {
@@ -81,9 +81,7 @@ const Update: React.FC<IProps> = ({ children, id, onShow }) => {
 
   return (
     <UpdateStyles>
-      <Tooltip placement="bottom" title="Sửa dữ liệu">
-        <EditOutlined onClick={showModal} style={{ fontSize: '20px', cursor: 'pointer' }} />
-      </Tooltip>
+      <EditOutlined onClick={showModal} style={{ fontSize: '20px', cursor: 'pointer' }} title="sửa" />
       <Modal
         width={1000}
         title={`Sửa ${page}`}
@@ -92,14 +90,21 @@ const Update: React.FC<IProps> = ({ children, id, onShow }) => {
         maskClosable={false}
         footer={null}
       >
-        <Form form={form} onFinish={onUpdate} layout="vertical">
-          {isLoading ? <CustomLoading /> : children}
-          <Row gutter={[10, 10]} justify="end">
-            <Button size="small" type="primary" htmlType="submit">
-              Lưu
-            </Button>
-          </Row>
-        </Form>
+        <>
+          {isLoading && (
+            <div className="loading-overlay">
+              <CustomLoading />
+            </div>
+          )}
+          <Form form={form} onFinish={onUpdate} layout="vertical">
+            {children}
+            <Row gutter={[10, 10]} justify="end">
+              <Button size="small" type="primary" htmlType="submit">
+                Lưu
+              </Button>
+            </Row>
+          </Form>
+        </>
       </Modal>
     </UpdateStyles>
   );

@@ -7,7 +7,6 @@ import { H4 } from '@app/components/common/typography/H4/H4';
 import { Col, Row, Typography } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import moment from 'moment';
-import numeral from 'numeral';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';

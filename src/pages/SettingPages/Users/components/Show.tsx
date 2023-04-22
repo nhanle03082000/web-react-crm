@@ -85,6 +85,7 @@ const Show: React.FC<IProps> = ({ children, param, colums, permission }) => {
     {
       title: 'STT',
       dataIndex: 'stt',
+      align: 'right',
     },
     {
       title: 'Thao tác',

@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import UserForm from './components/UserForm';
 import { userColumn } from '@app/components/customs/tables/columns';
 import Show from './components/Show';
+import { userFilter } from '@app/configs/filter-configs';
 
 const Users: React.FC = () => {
   const { t } = useTranslation();
@@ -28,38 +29,9 @@ const Users: React.FC = () => {
     defaultInputValues: {},
   });
 
-  const option = [
-    {
-      value: 'username',
-      label: 'Tài khoản',
-      type: 'string',
-    },
-    {
-      value: 'name',
-      label: 'Tên',
-      type: 'string',
-    },
-    { value: 'am_code', label: 'Mã AM', type: 'string' },
-    {
-      value: 'phone',
-      label: 'Số điện thoại',
-      type: 'string',
-    },
-    {
-      value: 'department',
-      label: 'Đơn vị',
-      type: 'string',
-    },
-    {
-      value: 'role',
-      label: 'Vai trò',
-      type: 'string',
-    },
-  ];
-
   const initialValue = [
-    { field: 'name', operator: 'contain', value: '' },
-    { field: 'department', operator: 'contain', value: '' },
+    { field: 'department.name', operator: 'contain', value: '' },
+    { field: 'parent_department.name', operator: 'contain', value: '' },
   ];
 
   return (
@@ -80,7 +52,7 @@ const Users: React.FC = () => {
             </Row>
             <Row style={{ marginTop: '10px' }}>
               <Col span={24}>
-                <Filter initialValue={initialValue} option={option} setParam={setParam} />
+                <Filter initialValue={initialValue} option={userFilter} setParam={setParam} />
               </Col>
             </Row>
           </Card>

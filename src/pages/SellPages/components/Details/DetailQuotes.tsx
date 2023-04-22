@@ -490,13 +490,6 @@ const DetailQuotesStyles = styled.div`
     line-height: 26px;
     font-size: 14px;
   }
-  .ant-select-single:not(.ant-select-customize-input) .ant-select-selector,
-  .ant-select-single:not(.ant-select-customize-input) .ant-select-selector .ant-select-selection-search-input {
-    height: 30px;
-  }
-  .ant-select-single .ant-select-selector .ant-select-selection-placeholder {
-    line-height: 26px;
-  }
 `;
 
 export default DetailQuotes;

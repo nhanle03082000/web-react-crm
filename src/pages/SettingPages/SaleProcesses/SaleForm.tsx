@@ -1,49 +1,50 @@
 import { Input, TextArea } from '@app/components/common/inputs/Input/Input';
 import { Select } from '@app/components/common/selects/Select/Select';
-import { Col, Form, Radio, Row } from 'antd';
+import { listColor, type } from '@app/configs/select-configs';
+import { Col, Form, Row } from 'antd';
 import React from 'react';
 
-interface IProps {
-  isEditing: boolean;
-}
-
-const SaleForm: React.FC<IProps> = ({ isEditing }) => {
-  const listColor = [
-    { label: 'red', value: 'red' },
-    { label: 'orange', value: 'orange' },
-    { label: 'yellow', value: 'yellow' },
-    { label: 'green', value: 'green' },
-    { label: 'blue', value: 'blue' },
-    { label: 'purple', value: 'purple' },
-  ];
+const SaleForm: React.FC = () => {
   return (
     <Row gutter={12}>
       <Col span={12}>
         <Row gutter={24}>
           <Col span={24}>
-            <Form.Item name="name" label="Tên quy trình">
+            <Form.Item
+              name="name"
+              label="Tên quy trình"
+              rules={[{ required: true, message: 'Tên quy trình không được bỏ trống!' }]}
+            >
               <Input placeholder="Nhập tên quy trình" size="small" />
             </Form.Item>
           </Col>
           <Col span={24}>
-            <Form.Item name="color" label="Màu">
+            <Form.Item
+              name="color"
+              label="Màu"
+              rules={[{ required: true, message: 'Màu không được bỏ trống!' }]}
+              initialValue={listColor[0].value}
+            >
               <Select options={listColor} />
             </Form.Item>
           </Col>
           <Col span={24}>
-            <Form.Item name="type" label="Loại">
-              <Select
-                placeholder="Chọn loại"
-                options={[
-                  { value: 'leads', label: 'Tiềm năng' },
-                  { value: 'customer', label: 'Khách hàng' },
-                ]}
-              />
+            <Form.Item
+              name="type"
+              label="Loại"
+              rules={[{ required: true, message: 'Loại không được bỏ trống!' }]}
+              initialValue={type[0].value}
+            >
+              <Select placeholder="Chọn loại" options={type} />
             </Form.Item>
           </Col>
           <Col span={24}>
-            <Form.Item name="sale_process_index" label="Thứ tự">
-              <Input placeholder="Nhập số" size="small" />
+            <Form.Item
+              name="sale_process_index"
+              label="Thứ tự"
+              rules={[{ required: true, message: 'Thứ tự không được bỏ trống!' }]}
+            >
+              <Input type="number" placeholder="Nhập số" size="small" />
             </Form.Item>
           </Col>
         </Row>

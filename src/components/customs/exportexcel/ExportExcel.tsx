@@ -1,21 +1,21 @@
+import ExcelIcon from '@app/assets/icons/Excel.svg';
 import { Button } from '@app/components/common/buttons/Button/Button';
 import { API_BASE_URL } from '@app/configs/api-configs';
+import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
 import { getToken } from '@app/utils/redux.util';
 import axios from 'axios';
 import fileDownload from 'js-file-download';
+import moment from 'moment';
 import React, { useContext } from 'react';
-import ExcelIcon from '@app/assets/icons/Excel.svg';
 import styled from 'styled-components';
-import { Tooltip } from 'antd';
-import { DataContext } from '@app/contexts/DataContext';
 
 interface IProps {
   param: string | null;
 }
 
 const ExportExcel: React.FC<IProps> = ({ param = '' }) => {
-  const { path } = useContext(DataContext);
+  const { page, path } = useContext(DataContext);
   const onExport = async () => {
     const token = getToken();
     axios({
@@ -29,9 +29,8 @@ const ExportExcel: React.FC<IProps> = ({ param = '' }) => {
       },
     })
       .then((res: any) => {
-        console.log(res);
         if (res.status === 200) {
-          fileDownload(res.data, `${path}.xlsx`);
+          fileDownload(res.data, `${page}-${moment(new Date()).format('DD/MM/YYYY')}.xlsx`);
         } else {
           notificationController.error({
             message: res.message,
@@ -47,11 +46,9 @@ const ExportExcel: React.FC<IProps> = ({ param = '' }) => {
 
   return (
     <ExportExcelStyles>
-      <Tooltip placement="bottomRight" title="Xuất dữ liệu bảng">
-        <Button onClick={onExport} type="primary">
-          <img src={ExcelIcon} alt="xuất file excel" />
-        </Button>
-      </Tooltip>
+      <Button onClick={onExport} type="primary" title="xuất dữ liệu">
+        <img src={ExcelIcon} alt="xuất file excel" />
+      </Button>
     </ExportExcelStyles>
   );
 };
@@ -61,8 +58,8 @@ const ExportExcelStyles = styled.div`
     border: none;
     padding: 0 8px;
     img {
-      width: 34px;
-      height: 34px;
+      width: 33px;
+      height: 33px;
     }
   }
 `;

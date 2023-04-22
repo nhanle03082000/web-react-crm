@@ -108,7 +108,7 @@ export const ConvertTextRoles = (key: any): any => {
       return 'Thông tin liên hệ - Khách hàng';
       break;
     case 'customer_reminders':
-      return 'Nhắc nhỡ - Khách hàng';
+      return 'Nhắc nhở - Khách hàng';
       break;
     case 'tasks':
       return 'Công việc - Khách hàng';
@@ -136,6 +136,31 @@ export const ConvertTextRoles = (key: any): any => {
       break;
     default:
       return key;
+      break;
+  }
+};
+
+export const convertColor = (color: string) => {
+  switch (color) {
+    case 'red':
+      return 'Đỏ';
+      break;
+    case 'orange':
+      return 'Cam';
+      break;
+    case 'yellow':
+      return 'Vàng';
+      break;
+    case 'green':
+      return 'Xanh lá';
+      break;
+    case 'blue':
+      return 'Xanh dương';
+      break;
+    case 'purple':
+      return 'Tím';
+      break;
+    default:
       break;
   }
 };

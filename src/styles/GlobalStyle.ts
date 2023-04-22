@@ -82,9 +82,9 @@ export default createGlobalStyle`
 
   // notifications start
   .ant-notification-notice {
-    width: 36rem;
-    padding: 1rem;
-    min-height: 6rem;
+    min-width: 24rem;
+    padding: 0.4rem;
+    min-height: 4rem;
     
     .ant-notification-notice-with-icon .ant-notification-notice-message {
       margin-bottom: 0;

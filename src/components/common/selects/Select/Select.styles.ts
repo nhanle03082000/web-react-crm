@@ -60,7 +60,6 @@ export const Select = styled(AntSelect).withConfig({
   }
   &.ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
     height: 34px;
-    border-width: 2px;
     align-items: center;
   }
   &.ant-select-single .ant-select-selector .ant-select-selection-item {

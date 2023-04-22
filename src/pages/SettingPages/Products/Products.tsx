@@ -1,17 +1,18 @@
 import { Card } from '@app/components/common/Card/Card';
 import { PageTitle } from '@app/components/common/PageTitle/PageTitle';
 import { H3 } from '@app/components/common/typography/H3/H3';
+import Create from '@app/components/customs/crud/Create';
 import Show from '@app/components/customs/crud/Show';
 import ExportExcel from '@app/components/customs/exportexcel/ExportExcel';
 import Filter from '@app/components/customs/filter/Filter';
+import { PropductColumn } from '@app/components/customs/tables/columns';
 import { API_URL } from '@app/configs/api-configs';
+import { filterProduct } from '@app/configs/filter-configs';
 import { DataContext } from '@app/contexts/DataContext';
 import { getRoleUser } from '@app/utils/redux.util';
 import { Col, Row } from 'antd';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { column } from '@app/components/customs/tables/columns';
-import Create from '@app/components/customs/crud/Create';
 import ProductsForm from './components/ProductForm';
 
 const Products: React.FC = () => {
@@ -28,34 +29,6 @@ const Products: React.FC = () => {
     rolePermission: [],
     defaultInputValues: {},
   });
-
-  const option = [
-    {
-      value: 'code',
-      label: 'Mã',
-      type: 'string',
-    },
-    {
-      value: 'name',
-      label: 'Tên',
-      type: 'string',
-    },
-    {
-      value: 'description',
-      label: 'Mô tả',
-      type: 'string',
-    },
-    {
-      value: 'created_at',
-      label: 'Ngày tạo',
-      type: 'datetime',
-    },
-    {
-      value: 'updated_at',
-      label: 'Ngày cập nhật',
-      type: 'datetime',
-    },
-  ];
 
   const initialValue = [
     { field: 'code', operator: 'contain', value: '' },
@@ -86,7 +59,7 @@ const Products: React.FC = () => {
             </Row>
             <Row style={{ marginTop: '10px' }}>
               <Col span={24}>
-                <Filter initialValue={initialValue} option={option} setParam={setParam} />
+                <Filter initialValue={initialValue} option={filterProduct} setParam={setParam} />
               </Col>
             </Row>
           </Card>
@@ -94,7 +67,7 @@ const Products: React.FC = () => {
         <Col span={24}>
           <Card padding="1rem">
             {permission.index && (
-              <Show param={param} colums={column} permission={permission}>
+              <Show param={param} colums={PropductColumn} permission={permission}>
                 <ProductsForm isEditing={true} />
               </Show>
             )}

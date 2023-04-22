@@ -8,6 +8,7 @@ import { IRespApiSuccess } from '@app/interfaces/interfaces';
 import { Form, Row } from 'antd';
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
+import CustomLoading from '../CustomLoading';
 
 interface IProps {
   children: React.ReactNode;
@@ -16,6 +17,7 @@ interface IProps {
 const Create: React.FC<IProps> = ({ children }) => {
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setisLoading] = useState(false);
   const { path, page, state, setIsLoad, setShow, show } = useContext(DataContext);
 
   const showModal = () => {
@@ -30,6 +32,7 @@ const Create: React.FC<IProps> = ({ children }) => {
   };
 
   const onCreate = async (values: any) => {
+    setisLoading(true);
     let data = {
       ...values,
       is_active: true,
@@ -52,6 +55,7 @@ const Create: React.FC<IProps> = ({ children }) => {
         description: error.message,
       });
     }
+    setisLoading(false);
     setShow(!show);
     setIsModalOpen(false);
     form.resetFields();
@@ -70,14 +74,21 @@ const Create: React.FC<IProps> = ({ children }) => {
         size="large"
         footer={null}
       >
-        <Form form={form} onFinish={onCreate} layout="vertical">
-          {children}
-          <Row gutter={[10, 0]} justify="end">
-            <Button size="small" type="primary" htmlType="submit">
-              Lưu
-            </Button>
-          </Row>
-        </Form>
+        <>
+          {isLoading && (
+            <div className="loading-overlay">
+              <CustomLoading />
+            </div>
+          )}
+          <Form form={form} onFinish={onCreate} layout="vertical">
+            {children}
+            <Row gutter={[10, 0]} justify="end">
+              <Button size="small" type="primary" htmlType="submit">
+                Lưu
+              </Button>
+            </Row>
+          </Form>
+        </>
       </Modal>
     </CreateStyles>
   );

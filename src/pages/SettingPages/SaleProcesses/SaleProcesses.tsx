@@ -13,6 +13,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { saleColumn } from '@app/components/customs/tables/columns';
 import SaleForm from './SaleForm';
+import { saleFilter } from '@app/configs/filter-configs';
 
 const SaleProcesses: React.FC = () => {
   const { t } = useTranslation();
@@ -29,35 +30,7 @@ const SaleProcesses: React.FC = () => {
     defaultInputValues: {},
   });
 
-  const option = [
-    {
-      value: 'name',
-      label: 'Tên',
-      type: 'string',
-    },
-    {
-      value: 'sale_process_index',
-      label: 'Thứ tự',
-      type: 'string',
-    },
-    {
-      value: 'description',
-      label: 'Mô tả',
-      type: 'string',
-    },
-    {
-      value: 'created_at',
-      label: 'Ngày tạo',
-      type: 'datetime',
-    },
-    {
-      value: 'updated_at',
-      label: 'Ngày cập nhật',
-      type: 'datetime',
-    },
-  ];
-
-  const initialValue = [
+  const initialFilter = [
     { field: 'name', operator: 'contain', value: '' },
     { field: 'sale_process_index', operator: 'contain', value: '' },
   ];
@@ -73,19 +46,19 @@ const SaleProcesses: React.FC = () => {
                 <H3 className="typography-title">{page}</H3>
               </Col>
               <Col span={12}>
-                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Row justify="end" gutter={6}>
                   {permission.export && <ExportExcel param={param} />}&nbsp;&nbsp;
                   {permission.create && (
                     <Create>
-                      <SaleForm isEditing={false} />
+                      <SaleForm />
                     </Create>
                   )}
-                </div>
+                </Row>
               </Col>
             </Row>
             <Row style={{ marginTop: '10px' }}>
               <Col span={24}>
-                <Filter initialValue={initialValue} option={option} setParam={setParam} />
+                <Filter initialValue={initialFilter} option={saleFilter} setParam={setParam} />
               </Col>
             </Row>
           </Card>
@@ -94,7 +67,7 @@ const SaleProcesses: React.FC = () => {
           <Card padding="1rem">
             {permission.index && (
               <Show param={param} colums={saleColumn} permission={permission}>
-                <SaleForm isEditing={true} />
+                <SaleForm />
               </Show>
             )}
           </Card>

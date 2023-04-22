@@ -1,11 +1,28 @@
 import { css } from 'styled-components';
 
 export const customStyle = css`
-  .typography-title {
+  .uppercase {
     text-transform: uppercase;
+  }
+  .text-center {
+    text-align: center;
   }
   .ant-form-item-control-input {
     min-height: unset;
+  }
+  .loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 99;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    color: #fff;
   }
   .button-back {
     border: none;
@@ -40,8 +57,6 @@ export const customStyle = css`
     border-width: 1px;
     padding: 4px 0;
   }
-  .select-product {
-  }
   textarea::placeholder,
   .ant-select-selection-placeholder,
   .ant-picker-input > input::placeholder {
@@ -51,5 +66,10 @@ export const customStyle = css`
   .ant-select-selection-placeholder {
     line-height: 30px !important;
     font-size: 12px !important;
+  }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
 `;

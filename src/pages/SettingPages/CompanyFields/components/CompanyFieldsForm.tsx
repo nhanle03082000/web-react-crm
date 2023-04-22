@@ -2,14 +2,14 @@ import { Input, TextArea } from '@app/components/common/inputs/Input/Input';
 import { Form } from 'antd';
 import React from 'react';
 
-interface IProps {
-  isEditing: boolean;
-}
-
-const CompanyFieldsForm: React.FC<IProps> = ({ isEditing }) => {
+const CompanyFieldsForm: React.FC = () => {
   return (
     <>
-      <Form.Item name="name" label="Tên lĩnh vực">
+      <Form.Item
+        name="name"
+        label="Tên lĩnh vực"
+        rules={[{ required: true, message: 'Tên lĩnh vực không được bỏ trống!' }]}
+      >
         <Input placeholder="Nhập tên lĩnh vực" size="small" />
       </Form.Item>
       <Form.Item name="description" label="Mô tả">

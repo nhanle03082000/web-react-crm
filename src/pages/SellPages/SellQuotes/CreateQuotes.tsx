@@ -13,7 +13,6 @@ import { IRespApiSuccess } from '@app/interfaces/interfaces';
 import { Card, Col, DatePicker, Form, Row } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
 import CustomLoading from '@app/components/customs/CustomLoading';
 import { useNavigate } from 'react-router-dom';
 
@@ -177,7 +176,7 @@ const CreateQuotes: React.FC = () => {
   };
 
   return (
-    <EditDetailStyles>
+    <>
       {isLoading ? (
         <CustomLoading />
       ) : (
@@ -256,7 +255,7 @@ const CreateQuotes: React.FC = () => {
                 <Row>
                   <Col span={24}>
                     <br />
-                    <H4>Thông tin sản phẩm</H4>
+                    <H4 type="secondary">Thông tin sản phẩm</H4>
                     <Form.List name="detail" initialValue={newArr}>
                       {(quote_detail, { add, remove }) => {
                         return (
@@ -400,57 +399,8 @@ const CreateQuotes: React.FC = () => {
           </Row>
         </Form>
       )}
-    </EditDetailStyles>
+    </>
   );
 };
-
-const EditDetailStyles = styled.div`
-  h4 {
-    color: var(--primary-color) !important;
-  }
-  .ant-modal-title {
-    text-align: left;
-    text-transform: uppercase;
-    font-size: 24px;
-    line-height: 28px;
-  }
-  div {
-    font-size: 16px;
-    font-weight: 400;
-  }
-  textarea.ant-input {
-    resize: none;
-    transition: all 0.3s !important;
-    font-size: 16px !important;
-    border: none;
-    ::placeholder {
-      color: #ccc;
-    }
-    :focus {
-      box-shadow: none;
-    }
-  }
-  .button-send {
-    border: none;
-    margin-left: 24px;
-  }
-  .form-note {
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    padding: 10px;
-  }
-  .detail-watch {
-    cursor: pointer;
-    color: var(--primary-color);
-    border: none;
-    outline: none;
-    font-size: 18px;
-  }
-  .button-edit {
-    float: right;
-    border: none;
-    padding: 0;
-  }
-`;
 
 export default CreateQuotes;

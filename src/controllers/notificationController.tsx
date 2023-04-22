@@ -12,6 +12,7 @@ type NotificationProps = ArgsProps;
 const openSuccessNotification = (config: NotificationProps): void => {
   notification.success({
     ...config,
+    duration: 3,
     message: <div className={`title ${!config.description && `title-only`}`}>{config.message}</div>,
     description: config.description ? <div className="description">{config.description}</div> : <EmptyDescription />,
     className: config.description ? '' : 'notification-without-description',
@@ -21,6 +22,7 @@ const openSuccessNotification = (config: NotificationProps): void => {
 const openInfoNotification = (config: NotificationProps): void => {
   notification.info({
     ...config,
+    duration: 3,
     message: <div className={`title ${!config.description && `title-only`}`}>{config.message}</div>,
     description: config.description ? <div className="description">{config.description}</div> : <EmptyDescription />,
     className: config.description ? '' : 'notification-without-description',
@@ -30,6 +32,7 @@ const openInfoNotification = (config: NotificationProps): void => {
 const openWarningNotification = (config: NotificationProps): void => {
   notification.warning({
     ...config,
+    duration: 3,
     message: <div className={`title ${!config.description && `title-only`}`}>{config.message}</div>,
     description: config.description ? <div className="description">{config.description}</div> : <EmptyDescription />,
     className: config.description ? '' : 'notification-without-description',
@@ -39,6 +42,7 @@ const openWarningNotification = (config: NotificationProps): void => {
 const openErrorNotification = (config: NotificationProps): void => {
   notification.error({
     ...config,
+    duration: 3,
     message: <div className={`title ${!config.description && `title-only`}`}>{config.message}</div>,
     description: config.description ? <div className="description">{config.description}</div> : <EmptyDescription />,
     className: config.description ? '' : 'notification-without-description',

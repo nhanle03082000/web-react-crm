@@ -13,6 +13,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { columnSouce } from '@app/components/customs/tables/columns';
 import CompanyCareersForm from './components/CompanyCareersForm';
+import { filter } from '@app/configs/filter-configs';
 
 const CompanyCareers: React.FC = () => {
   const { t } = useTranslation();
@@ -28,29 +29,6 @@ const CompanyCareers: React.FC = () => {
     rolePermission: [],
     defaultInputValues: {},
   });
-
-  const option = [
-    {
-      value: 'name',
-      label: 'Tên',
-      type: 'string',
-    },
-    {
-      value: 'description',
-      label: 'Mô tả',
-      type: 'string',
-    },
-    {
-      value: 'created_at',
-      label: 'Ngày tạo',
-      type: 'datetime',
-    },
-    {
-      value: 'updated_at',
-      label: 'Ngày cập nhật',
-      type: 'datetime',
-    },
-  ];
 
   const initialValue = [
     { field: 'name', operator: 'contain', value: '' },
@@ -72,7 +50,7 @@ const CompanyCareers: React.FC = () => {
                   {permission.export && <ExportExcel param={param} />} &nbsp;&nbsp;
                   {permission.create && (
                     <Create>
-                      <CompanyCareersForm isEditing={false} />
+                      <CompanyCareersForm />
                     </Create>
                   )}
                 </div>
@@ -80,7 +58,7 @@ const CompanyCareers: React.FC = () => {
             </Row>
             <Row style={{ marginTop: '10px' }}>
               <Col span={24}>
-                <Filter initialValue={initialValue} option={option} setParam={setParam} />
+                <Filter initialValue={initialValue} option={filter} setParam={setParam} />
               </Col>
             </Row>
           </Card>
@@ -89,7 +67,7 @@ const CompanyCareers: React.FC = () => {
           <Card padding="1rem">
             {permission.index && (
               <Show param={param} colums={columnSouce} permission={permission}>
-                <CompanyCareersForm isEditing={true} />
+                <CompanyCareersForm />
               </Show>
             )}
           </Card>

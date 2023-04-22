@@ -1,15 +1,16 @@
 import { apiInstance } from '@app/api/app/api_core';
+import { Card } from '@app/components/common/Card/Card';
 import { PageTitle } from '@app/components/common/PageTitle/PageTitle';
+import { InputPassword } from '@app/components/common/inputs/InputPassword/InputPassword';
+import { Select } from '@app/components/common/selects/Select/Select';
+import { H3 } from '@app/components/common/typography/H3/H3';
 import { API_BASE_URL, API_URL } from '@app/configs/api-configs';
 import { notificationController } from '@app/controllers/notificationController';
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
-import { Select } from '@app/components/common/selects/Select/Select';
-import { Button, Col, Form, Input, Row, Space } from 'antd';
+import { getRoleUser } from '@app/utils/redux.util';
+import { Button, Col, Form, Input, Row } from 'antd';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import * as S from './EmailSettings.styles';
-import { getRoleUser } from '@app/utils/redux.util';
-import { InputPassword } from '@app/components/common/inputs/InputPassword/InputPassword';
 
 const EmailSettings: React.FC = () => {
   const [form] = Form.useForm();
@@ -65,10 +66,10 @@ const EmailSettings: React.FC = () => {
     <>
       <PageTitle>{t('namepage.email')}</PageTitle>
       {permission.index && (
-        <S.EmailSettings>
+        <Row>
           <Col xs={24}>
-            <S.Card>
-              <Space style={{ marginBottom: '16px' }}>{t('namepage.email')}</Space>
+            <Card padding="1.25rem">
+              <H3 className="typography-title">{t('namepage.email')}</H3>
               <Form form={form} layout="vertical" onFinish={postMail}>
                 <Row gutter={[16, 16]}>
                   <Col span={12}>
@@ -138,9 +139,9 @@ const EmailSettings: React.FC = () => {
                   )}
                 </Row>
               </Form>
-            </S.Card>
+            </Card>
           </Col>
-        </S.EmailSettings>
+        </Row>
       )}
     </>
   );
