@@ -10,6 +10,7 @@ import { Popconfirm, Space, Tooltip, Typography } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as MailIcon } from '@app/assets/icons/mail.svg';
+import DeleteIcon from '@app/assets/icon-components/DeleteIcon';
 
 interface IProps {
   param: string | null;
@@ -126,27 +127,22 @@ const Show: React.FC<IProps> = ({ param, colums, visibleColumns, path }) => {
       render: (record: any) => {
         return (
           <Space>
-            <Tooltip placement="bottom" title="Xoá dữ liệu">
-              <Popconfirm
-                title="Bạn có muốn xoá không?"
-                okText="Có"
-                cancelText="Không"
-                onConfirm={() => onDelete(record.id)}
-              >
-                <RestOutlined style={{ fontSize: '20px', cursor: 'pointer' }} />
-              </Popconfirm>
-            </Tooltip>
-            <Tooltip placement="bottom" title="Xem chi tiết">
-              <EyeOutlined style={{ fontSize: '20px', cursor: 'pointer' }} onClick={() => handleClick(record.id)} />
-            </Tooltip>
-            <Tooltip placement="bottom" title="Gởi email">
-              <Typography.Link
-                onClick={() => sendMail(record.id)}
-                // style={checkPermission?.edit ? { display: 'unset' } : { display: 'none' }}
-              >
-                <MailIcon />
-              </Typography.Link>
-            </Tooltip>
+            <Popconfirm
+              title="Bạn có muốn xoá không?"
+              okText="Có"
+              cancelText="Không"
+              onConfirm={() => onDelete(record.id)}
+            >
+              <DeleteIcon />
+            </Popconfirm>
+
+            <EyeOutlined
+              title="chi tiết"
+              style={{ fontSize: '20px', cursor: 'pointer' }}
+              onClick={() => handleClick(record.id)}
+            />
+
+            <MailIcon title="gửi mail" onClick={() => sendMail(record.id)} />
           </Space>
         );
       },

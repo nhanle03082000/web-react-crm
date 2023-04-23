@@ -59,6 +59,9 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data, amount, children }) => 
 
   const onUpdate = async (values: any) => {
     setIsLoading(true);
+    for (let i = 0; i < values.detail.length; i++) {
+      delete values.detail[i].sum_vat;
+    }
     const data1 = {
       ...values,
       quote_date: moment(new Date(values.quote_date).toUTCString()).format('YYYY-MM-DD'),
@@ -96,19 +99,22 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data, amount, children }) => 
       {isLoading ? (
         <CustomLoading />
       ) : (
-        <Form form={form} onFinish={onUpdate}>
+        <Form form={form} onFinish={onUpdate} layout="vertical">
           <Row>
             <Col span={24}>
               <Row gutter={10}>
                 <Col span={24}>
-                  <H5>Mã báo giá</H5>
-                  <Form.Item name="code" rules={[{ required: true, message: 'Mã báo giá không được bỏ trống!' }]}>
+                  {/* <Form.Item
+                    label="Mã báo giá"
+                    name="code"
+                    rules={[{ required: true, message: 'Mã báo giá không được bỏ trống!' }]}
+                  >
                     <Input placeholder="Nhập tên doanh nghiệp" size="small" disabled />
-                  </Form.Item>
+                  </Form.Item> */}
                 </Col>
                 <Col span={12}>
-                  <H5>Khách hàng</H5>
                   <Form.Item
+                    label="Khách hàng"
                     name="customer_id"
                     rules={[{ required: true, message: 'Khách hàng không được bỏ trống!' }]}
                   >
@@ -116,8 +122,11 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data, amount, children }) => 
                   </Form.Item>
                 </Col>
                 <Col span={12}>
-                  <H5>Ngày báo giá</H5>
-                  <Form.Item name="quote_date" rules={[{ required: true, message: 'Mã báo giá không được bỏ trống!' }]}>
+                  <Form.Item
+                    label="Ngày báo giá"
+                    name="quote_date"
+                    rules={[{ required: true, message: 'Mã báo giá không được bỏ trống!' }]}
+                  >
                     <DatePicker
                       format="DD/MM/YYYY"
                       placeholder="Chọn ngày báo giá"
@@ -127,8 +136,8 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data, amount, children }) => 
                   </Form.Item>
                 </Col>
                 <Col span={12}>
-                  <H5>Tên doanh nghiệp</H5>
                   <Form.Item
+                    label="Tên doanh nghiệp"
                     name="company_name"
                     rules={[{ required: true, message: 'Tên doanh nghiệp không được bỏ trống!' }]}
                   >
@@ -136,14 +145,17 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data, amount, children }) => 
                   </Form.Item>
                 </Col>
                 <Col span={12}>
-                  <H5>Mã số thuế</H5>
-                  <Form.Item name="tax_code" rules={[{ required: true, message: 'Mã số thuê không được bỏ trống!' }]}>
+                  <Form.Item
+                    label="Mã số thuế"
+                    name="tax_code"
+                    rules={[{ required: true, message: 'Mã số thuê không được bỏ trống!' }]}
+                  >
                     <Input placeholder="Nhập mã số thuê" size="small" />
                   </Form.Item>
                 </Col>
                 <Col span={12}>
-                  <H5>Email khách hàng</H5>
                   <Form.Item
+                    label="Email khách hàng"
                     name="email"
                     rules={[{ required: true, message: 'Email khách hàng không được bỏ trống!' }]}
                   >
@@ -151,8 +163,8 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data, amount, children }) => 
                   </Form.Item>
                 </Col>
                 <Col span={12}>
-                  <H5>Số điện thoại khách hàng</H5>
                   <Form.Item
+                    label="Số điện thoại khách hàng"
                     name="phone_number"
                     rules={[{ required: true, message: 'Số điện thoại khách hàng không được bỏ trống!' }]}
                   >

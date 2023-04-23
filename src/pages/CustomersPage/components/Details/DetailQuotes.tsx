@@ -21,10 +21,10 @@ const DetailQuotes: React.FC<IProps> = ({ id, setActiveTab }) => {
   useEffect(() => {
     async function getData() {
       const result = await getDataById(id, '/quotes');
-      result[0].quote_detail.map((item: any, index: number) => {
+      result.quote_detail.map((item: any, index: number) => {
         return (item.stt = index + 1);
       });
-      setData(result[0]);
+      setData(result);
     }
     getData();
   }, [id]);
@@ -82,13 +82,6 @@ const DetailQuotes: React.FC<IProps> = ({ id, setActiveTab }) => {
               <Row gutter={[10, 10]}>
                 <Col span={24}>
                   <H4>Thông tin chung</H4>
-                </Col>
-                <Col span={12} style={{ display: 'flex', alignItems: 'end' }}>
-                  <Typography.Title level={5} style={{ margin: '0 20px 0 0' }}>
-                    Mã báo giá:
-                  </Typography.Title>
-                  &nbsp;
-                  <Typography.Text>{data.code}</Typography.Text>
                 </Col>
                 <Col span={12} style={{ display: 'flex', alignItems: 'end' }}>
                   <Typography.Title level={5} style={{ margin: '0 20px 0 0' }}>

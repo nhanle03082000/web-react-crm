@@ -59,6 +59,9 @@ const CreateQuotes: React.FC = () => {
 
   const onCreate = async (values: any) => {
     setIsLoading(true);
+    for (let i = 0; i < values.detail.length; i++) {
+      delete values.detail[i].sum_vat;
+    }
     const data1 = {
       ...values,
       quote_date: moment(new Date(values.quote_date).toUTCString()).format('YYYY-MM-DD'),
@@ -123,24 +126,27 @@ const CreateQuotes: React.FC = () => {
 
     let thanhtien_truocvat = 0;
     let thanhtien_sauvat = 0;
+    let tien_thue = 0;
 
     switch (name) {
       case 'quantity':
         data.quantity = value;
+        tien_thue = (value * Number(data.price || 0) * Number(data.vat || 0)) / 100;
         thanhtien_truocvat = value * Number(data.price || 0);
-        thanhtien_sauvat = thanhtien_truocvat + thanhtien_truocvat * (Number(data.vat || 0) / 100);
+        thanhtien_sauvat = thanhtien_truocvat + tien_thue;
         break;
-
       case 'price':
         data.price = value;
+        tien_thue = (value * Number(data.price || 0) * Number(data.quantity || 0)) / 100;
         thanhtien_truocvat = value * Number(data.quantity || 0);
-        thanhtien_sauvat = thanhtien_truocvat + thanhtien_truocvat * (Number(data.vat || 0) / 100);
+        thanhtien_sauvat = thanhtien_truocvat + tien_thue;
         break;
 
       case 'vat':
         data.vat = value;
+        tien_thue = (value * Number(data.price || 0) * Number(data.quantity || 0)) / 100;
         thanhtien_truocvat = Number(data.price || 0) * Number(data.quantity || 0);
-        thanhtien_sauvat = thanhtien_truocvat + thanhtien_truocvat * (Number(value || 0) / 100);
+        thanhtien_sauvat = thanhtien_truocvat + tien_thue;
         break;
 
       default:
@@ -149,6 +155,7 @@ const CreateQuotes: React.FC = () => {
 
     data.amount_before_tax = thanhtien_truocvat;
     data.amount = thanhtien_sauvat;
+    data.sum_vat = tien_thue;
 
     newArr[index] = data;
     setNewArr([...newArr]);
@@ -180,7 +187,7 @@ const CreateQuotes: React.FC = () => {
       {isLoading ? (
         <CustomLoading />
       ) : (
-        <Form form={form} onFinish={onCreate}>
+        <Form form={form} onFinish={onCreate} layout="vertical">
           <Row>
             <Col span={24}>
               <Button className="button-back" onClick={onBack}>
@@ -191,8 +198,8 @@ const CreateQuotes: React.FC = () => {
               <Card>
                 <Row gutter={10}>
                   <Col span={12}>
-                    <H5>Khách hàng</H5>
                     <Form.Item
+                      label="Khách hàng"
                       name="customer_id"
                       rules={[{ required: true, message: 'Khách hàng không được bỏ trống!' }]}
                     >
@@ -205,12 +212,13 @@ const CreateQuotes: React.FC = () => {
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <H5>Ngày báo giá</H5>
                     <Form.Item
+                      label="Ngày báo giá"
                       name="quote_date"
                       rules={[{ required: true, message: 'Mã báo giá không được bỏ trống!' }]}
                     >
                       <DatePicker
+                        disabled
                         format="DD/MM/YYYY"
                         placeholder="Chọn ngày báo giá"
                         size="small"
@@ -219,36 +227,40 @@ const CreateQuotes: React.FC = () => {
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <H5>Tên doanh nghiệp</H5>
                     <Form.Item
+                      label="Tên doanh nghiệp"
                       name="company_name"
                       rules={[{ required: true, message: 'Tên doanh nghiệp không được bỏ trống!' }]}
                     >
-                      <Input placeholder="Nhập tên doanh nghiệp" size="small" />
+                      <Input disabled placeholder="Nhập tên doanh nghiệp" size="small" />
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <H5>Mã số thuế</H5>
-                    <Form.Item name="tax_code" rules={[{ required: true, message: 'Mã số thuê không được bỏ trống!' }]}>
-                      <Input placeholder="Nhập mã số thuê" size="small" />
-                    </Form.Item>
-                  </Col>
-                  <Col span={12}>
-                    <H5>Email khách hàng</H5>
+                    <H5></H5>
                     <Form.Item
+                      label="Mã số thuế"
+                      name="tax_code"
+                      rules={[{ required: true, message: 'Mã số thuê không được bỏ trống!' }]}
+                    >
+                      <Input disabled placeholder="Nhập mã số thuê" size="small" />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Email khách hàng"
                       name="email"
                       rules={[{ required: true, message: 'Email khách hàng không được bỏ trống!' }]}
                     >
-                      <Input placeholder="Nhập email khách hàng" size="small" />
+                      <Input disabled placeholder="Nhập email khách hàng" size="small" />
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <H5>Số điện thoại khách hàng</H5>
                     <Form.Item
+                      label="Số điện thoại khách hàng"
                       name="phone_number"
                       rules={[{ required: true, message: 'Số điện thoại khách hàng không được bỏ trống!' }]}
                     >
-                      <Input placeholder="Nhập số điện thoại khách hàng" size="small" />
+                      <Input disabled placeholder="Nhập số điện thoại khách hàng" size="small" />
                     </Form.Item>
                   </Col>
                 </Row>
@@ -305,41 +317,37 @@ const CreateQuotes: React.FC = () => {
                                   <Col span={4}>
                                     <Form.Item
                                       name={[name, 'quantity']}
-                                      rules={[{ required: true, message: 'Thong loi o day' }]}
+                                      rules={[{ required: true, message: 'Số lượng không được bỏ trống' }]}
                                       {...restField}
                                     >
                                       <Input onBlur={getAmount('quantity', index, add, remove)} />
                                     </Form.Item>
                                   </Col>
                                   <Col span={4}>
-                                    <Form.Item name={[name, 'price']} {...restField}>
+                                    <Form.Item
+                                      name={[name, 'price']}
+                                      {...restField}
+                                      rules={[{ required: true, message: 'Số lượng không được bỏ trống' }]}
+                                    >
                                       <Input onBlur={getAmount('price', index, add, remove)} />
                                     </Form.Item>
                                   </Col>
                                   <Col span={4}>
                                     <Form.Item
                                       name={[name, 'vat']}
-                                      // rules={[{ required: true, message: 'Thong loi o day' }]}
+                                      rules={[{ required: true, message: 'Thuế không được bỏ trống' }]}
                                       {...restField}
                                     >
                                       <Input onBlur={getAmount('vat', index, add, remove)} />
                                     </Form.Item>
                                   </Col>
                                   <Col span={4}>
-                                    <Form.Item
-                                      name={[name, 'amount_before_tax']}
-                                      // rules={[{ required: true, message: 'Thong loi o day' }]}
-                                      {...restField}
-                                    >
+                                    <Form.Item name={[name, 'amount_before_tax']} {...restField}>
                                       <Input disabled />
                                     </Form.Item>
                                   </Col>
                                   <Col span={3}>
-                                    <Form.Item
-                                      name={[name, 'amount']}
-                                      // rules={[{ required: true, message: 'Thong loi o day' }]}
-                                      {...restField}
-                                    >
+                                    <Form.Item name={[name, 'amount']} {...restField}>
                                       <Input disabled />
                                     </Form.Item>
                                   </Col>

@@ -16,6 +16,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import EditDetail from './EditDetail';
+import DeleteIcon from '@app/assets/icon-components/DeleteIcon';
 
 const DetailQuotes: React.FC = () => {
   const [data, setData] = useState<any>([]);
@@ -55,6 +56,9 @@ const DetailQuotes: React.FC = () => {
       result?.quote_detail?.map((item: any, index: number) => {
         return (item.stt = index + 1);
       });
+      result.quote_detail.map((item: any) => {
+        return (item.sum_vat = (item.quantity * item.price * item.vat) / 100);
+      });
       setData(result);
       setDataTable(result?.quote_detail);
       setIsLoading(false);
@@ -83,7 +87,8 @@ const DetailQuotes: React.FC = () => {
       product_id: dataChange.id,
       quantity: dataChange.quantity || 1,
       vat: dataChange.vat || 10,
-      price: dataChange.price || 0,
+      sum_vat: (dataChange.quantity * dataChange.price * dataChange.vat) / 100 || 100,
+      price: dataChange.price || 1000,
       amount_before_tax: dataChange.amount_before_tax || 0,
       amount: dataChange.amount || 0,
       stt: index + 1,
@@ -94,29 +99,33 @@ const DetailQuotes: React.FC = () => {
   };
 
   const getAmount = (name: string, index: number, add: any, remove: any) => (evt: any) => {
+    console.log(dataTable);
     const value = Number(evt.target.value) || 0;
     const data: any = dataTable[index];
 
     let thanhtien_truocvat = 0;
     let thanhtien_sauvat = 0;
+    let tien_thue = 0;
 
     switch (name) {
       case 'quantity':
         data.quantity = value;
+        tien_thue = (value * Number(data.price || 0) * Number(data.vat || 0)) / 100;
         thanhtien_truocvat = value * Number(data.price || 0);
-        thanhtien_sauvat = thanhtien_truocvat + thanhtien_truocvat * (Number(data.vat || 0) / 100);
+        thanhtien_sauvat = thanhtien_truocvat + tien_thue;
         break;
-
       case 'price':
         data.price = value;
+        tien_thue = (value * Number(data.price || 0) * Number(data.quantity || 0)) / 100;
         thanhtien_truocvat = value * Number(data.quantity || 0);
-        thanhtien_sauvat = thanhtien_truocvat + thanhtien_truocvat * (Number(data.vat || 0) / 100);
+        thanhtien_sauvat = thanhtien_truocvat + tien_thue;
         break;
 
       case 'vat':
         data.vat = value;
+        tien_thue = (value * Number(data.price || 0) * Number(data.quantity || 0)) / 100;
         thanhtien_truocvat = Number(data.price || 0) * Number(data.quantity || 0);
-        thanhtien_sauvat = thanhtien_truocvat + thanhtien_truocvat * (Number(value || 0) / 100);
+        thanhtien_sauvat = thanhtien_truocvat + tien_thue;
         break;
 
       default:
@@ -124,6 +133,7 @@ const DetailQuotes: React.FC = () => {
     }
 
     data.amount_before_tax = thanhtien_truocvat;
+    data.sum_vat = tien_thue;
     data.amount = thanhtien_sauvat;
     dataTable[index] = data;
     setDataTable([...dataTable]);
@@ -163,6 +173,14 @@ const DetailQuotes: React.FC = () => {
       align: 'right',
     },
     {
+      title: 'Tiền thuế',
+      dataIndex: 'vat',
+      align: 'right',
+      render: (_text: string, record: any) => {
+        return record.quantity * record.price * (record.vat / 100);
+      },
+    },
+    {
       title: 'Thành tiền trước thuế',
       dataIndex: 'amount_before_tax',
       align: 'right',
@@ -184,7 +202,7 @@ const DetailQuotes: React.FC = () => {
     let before_tax = 0;
     let after_tax = 0;
     let tax = 0;
-    console.log('Chạy tới đây');
+    console.log(dataTable.length);
     for (let i = 0; i < dataTable.length; i++) {
       before_tax += Number(dataTable[i].amount_before_tax);
       after_tax += Number(dataTable[i].amount);
@@ -232,22 +250,25 @@ const DetailQuotes: React.FC = () => {
                           return (
                             <>
                               <Row gutter={10}>
-                                <Col span={4}>
+                                <Col span={3}>
                                   <H5>Sản phẩm</H5>
                                 </Col>
-                                <Col span={4}>
+                                <Col span={3}>
                                   <H5>Số lượng</H5>
                                 </Col>
-                                <Col span={4}>
+                                <Col span={3}>
                                   <H5>Đơn giá</H5>
                                 </Col>
-                                <Col span={4}>
+                                <Col span={3}>
                                   <H5>Vat%</H5>
                                 </Col>
-                                <Col span={4}>
-                                  <H5>Thành tiền trước thuế</H5>
-                                </Col>
                                 <Col span={3}>
+                                  <H5>Tiền thuế</H5>
+                                </Col>
+                                <Col span={4}>
+                                  <H5>Tiền trước thuế</H5>
+                                </Col>
+                                <Col span={4}>
                                   <H5>Thành tiền</H5>
                                 </Col>
                                 <Col span={1}>
@@ -259,7 +280,7 @@ const DetailQuotes: React.FC = () => {
                                 // console.log('@@ dataTable > ', dataTable[index]);
                                 return (
                                   <Row key={key} gutter={10} style={{ marginBottom: '10px' }}>
-                                    <Col span={4}>
+                                    <Col span={3}>
                                       <Form.Item
                                         name={[name, 'product_id']}
                                         rules={[{ required: true, message: 'error' }]}
@@ -273,35 +294,55 @@ const DetailQuotes: React.FC = () => {
                                         />
                                       </Form.Item>
                                     </Col>
-                                    <Col span={4}>
+                                    <Col span={3}>
                                       <Form.Item
                                         name={[name, 'quantity']}
-                                        rules={[{ required: true, message: 'Thong loi o day' }]}
+                                        rules={[{ required: true, message: 'Số lượng không được bỏ trống' }]}
                                         {...restField}
                                       >
                                         <Input
                                           defaultValue={dataTable[index]?.quantity}
+                                          type="number"
                                           onBlur={getAmount('quantity', index, add, remove)}
                                         />
                                       </Form.Item>
                                     </Col>
-                                    <Col span={4}>
-                                      <Form.Item name={[name, 'price']} {...restField}>
+                                    <Col span={3}>
+                                      <Form.Item
+                                        name={[name, 'price']}
+                                        {...restField}
+                                        rules={[{ required: true, message: 'Giá không được bỏ trống' }]}
+                                      >
                                         <Input
                                           defaultValue={dataTable[index]?.price}
+                                          type="number"
                                           onBlur={getAmount('price', index, add, remove)}
                                         />
                                       </Form.Item>
                                     </Col>
-                                    <Col span={4}>
+                                    <Col span={3}>
                                       <Form.Item
                                         name={[name, 'vat']}
+                                        rules={[{ required: true, message: 'Thuế không được bỏ trống' }]}
+                                        {...restField}
+                                      >
+                                        <Input
+                                          defaultValue={dataTable[index]?.vat}
+                                          type="number"
+                                          onBlur={getAmount('vat', index, add, remove)}
+                                        />
+                                      </Form.Item>
+                                    </Col>
+                                    <Col span={3}>
+                                      <Form.Item
+                                        name={[name, 'sum_vat']}
                                         // rules={[{ required: true, message: 'Thong loi o day' }]}
                                         {...restField}
                                       >
                                         <Input
                                           defaultValue={dataTable[index]?.vat}
-                                          onBlur={getAmount('vat', index, add, remove)}
+                                          onBlur={getAmount('sum_vat', index, add, remove)}
+                                          disabled
                                         />
                                       </Form.Item>
                                     </Col>
@@ -314,7 +355,7 @@ const DetailQuotes: React.FC = () => {
                                         <Input defaultValue={dataTable[index]?.amount_before_tax} disabled />
                                       </Form.Item>
                                     </Col>
-                                    <Col span={3}>
+                                    <Col span={4}>
                                       <Form.Item
                                         name={[name, 'amount']}
                                         // rules={[{ required: true, message: 'Thong loi o day' }]}
@@ -324,12 +365,15 @@ const DetailQuotes: React.FC = () => {
                                       </Form.Item>
                                     </Col>
                                     <Col span={1}>
-                                      <RestOutlined
+                                      <DeleteIcon
                                         onClick={() => {
                                           console.log('remove(name) > ', name);
                                           remove(name);
+                                          dataTable.splice(1, 1);
+                                          setDataTable([...dataTable]);
+                                          console.log(dataTable);
                                         }}
-                                        style={{ color: '#ff4d4f', fontSize: '24px', marginTop: '4px' }}
+                                        color="red"
                                       />
                                     </Col>
                                   </Row>
@@ -340,6 +384,7 @@ const DetailQuotes: React.FC = () => {
                                   add(defaultDetail);
                                   dataTable.push(defaultDetail);
                                   setDataTable([...dataTable]);
+                                  console.log(dataTable);
                                 }}
                               >
                                 Thêm sản phẩm
@@ -354,13 +399,6 @@ const DetailQuotes: React.FC = () => {
                   <>
                     <Col span={12} style={{ display: 'flex', alignItems: 'end' }}>
                       <Typography.Title level={5} style={{ margin: '0 20px 0 0' }}>
-                        Mã báo giá:
-                      </Typography.Title>
-                      &nbsp;
-                      <Typography.Text>{data.code}</Typography.Text>
-                    </Col>
-                    <Col span={12} style={{ display: 'flex', alignItems: 'end' }}>
-                      <Typography.Title level={5} style={{ margin: '0 20px 0 0' }}>
                         Ngày báo giá:
                       </Typography.Title>
                       &nbsp;
@@ -370,28 +408,28 @@ const DetailQuotes: React.FC = () => {
                     </Col>
                     <Col span={12} style={{ display: 'flex', alignItems: 'end' }}>
                       <Typography.Title level={5} style={{ margin: '0 20px 0 0' }}>
-                        Tên doanh nghiệp
+                        Tên doanh nghiệp:
                       </Typography.Title>
                       &nbsp;
                       <Typography.Text>{data.company_name}</Typography.Text>
                     </Col>
                     <Col span={12} style={{ display: 'flex', alignItems: 'end' }}>
                       <Typography.Title level={5} style={{ margin: '0 20px 0 0' }}>
-                        Khách hàng
+                        Tên khách hàng:
                       </Typography.Title>
                       &nbsp;
                       <Typography.Text>{data.customer?.name}</Typography.Text>
                     </Col>
                     <Col span={12} style={{ display: 'flex', alignItems: 'end' }}>
                       <Typography.Title level={5} style={{ margin: '0 20px 0 0' }}>
-                        Mã số thuế
+                        Mã số thuế:
                       </Typography.Title>
                       &nbsp;
                       <Typography.Text>{data.tax_code}</Typography.Text>
                     </Col>
                     <Col span={12} style={{ display: 'flex', alignItems: 'end' }}>
                       <Typography.Title level={5} style={{ margin: '0 20px 0 0' }}>
-                        Email khách hàng
+                        Email khách hàng:
                       </Typography.Title>
                       &nbsp;
                       <Typography.Text>{data.email}</Typography.Text>
@@ -405,7 +443,7 @@ const DetailQuotes: React.FC = () => {
                     </Col>
                     <Col span={12} style={{ display: 'flex', alignItems: 'end' }}>
                       <Typography.Title level={5} style={{ margin: '0 20px 0 0' }}>
-                        Nhân viên phụ trách
+                        Nhân viên phụ trách:
                       </Typography.Title>
                       &nbsp;
                       <Typography.Text>{data.employee?.name}</Typography.Text>
@@ -419,11 +457,11 @@ const DetailQuotes: React.FC = () => {
                     </Col>
                     <Col span={12} style={{ display: 'flex', alignItems: 'end' }}>
                       <Typography.Title level={5} style={{ margin: '0 20px 0 0' }}>
-                        Tổng cộng
+                        Tổng cộng:
                       </Typography.Title>
                       &nbsp;
                       <Typography.Text>
-                        {data.total_amount?.toLocaleString('en-US', { useGrouping: true })}
+                        {data.total_amount?.toLocaleString('en-US', { useGrouping: true })}đ
                       </Typography.Text>
                     </Col>
                   </>

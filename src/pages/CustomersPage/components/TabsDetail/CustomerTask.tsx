@@ -1,27 +1,26 @@
-import { PlusOutlined, RestOutlined } from '@ant-design/icons';
 import { apiInstance } from '@app/api/app/api_core';
-import { Modal } from '@app/components/common/Modal/Modal';
+import DeleteIcon from '@app/assets/icon-components/DeleteIcon';
 import { Popconfirm } from '@app/components/common/Popconfirm/Popconfirm';
 import { Table } from '@app/components/common/Table/Table';
-import { Button } from '@app/components/common/buttons/Button/Button';
-import { Input } from '@app/components/common/inputs/Input/Input';
 import CustomPagination from '@app/components/customs/CustomPagination';
 import { API_BASE_URL, API_URL } from '@app/configs/api-configs';
 import { notificationController } from '@app/controllers/notificationController';
 import { IFilter, IRespApiSuccess } from '@app/interfaces/interfaces';
-import { Col, Form, Row, Tooltip, Typography } from 'antd';
+import { Space } from 'antd';
 import { ColumnsType } from 'antd/es/table';
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
+import FormTask from '../Form/FormTask';
+import { CreateModal, UpdateModal } from './CustomerContacts';
 
 interface IProps {
-  id: number;
+  employee_id: number;
+  customer_id: number;
 }
 
-const CustomerNote: React.FC<IProps> = ({ id }) => {
-  const [form] = Form.useForm();
-  const path = API_URL.CUSTOMERNOTES;
+const CustomerTask: React.FC<IProps> = ({ employee_id, customer_id }) => {
+  const path = API_URL.CUSTOMERTASK;
   const [dataContacts, setDataContacts] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const [filter, setFilter] = useState<IFilter>({
@@ -29,7 +28,7 @@ const CustomerNote: React.FC<IProps> = ({ id }) => {
     limit: 20,
     total: 0,
     sort_direction: 'desc',
-    sort_column: 'created_at',
+    sort_column: 'tasks.createdAt',
   });
 
   const handlePageChange = (page: number) => {
@@ -39,41 +38,6 @@ const CustomerNote: React.FC<IProps> = ({ id }) => {
   const f = Object.entries(filter)
     .map(([key, value]: any) => `${key}=${value}`)
     .join('&');
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  const onCreate = async (values: any) => {
-    const data = {
-      ...values,
-      customer_id: id,
-      is_active: true,
-    };
-    try {
-      const respUsers: IRespApiSuccess = await apiInstance.post(`${API_BASE_URL}${path}`, data);
-      if (respUsers.code === 200) {
-        notificationController.success({
-          message: 'Tạo thành công',
-        });
-        getCustomerContactsList();
-        handleCancel();
-      } else {
-        notificationController.error({
-          message: respUsers.message,
-        });
-      }
-    } catch (error: any) {
-      notificationController.error({
-        message: 'Có lỗi xảy ra vui lòng thử lại sau',
-        description: error.message,
-      });
-    }
-  };
 
   const onDelete = async (idData: number) => {
     // if (checkPermission?.delete) {
@@ -105,39 +69,90 @@ const CustomerNote: React.FC<IProps> = ({ id }) => {
     },
     {
       // title: t('tables.actions'),
-      align: 'center',
       title: 'Thao tác',
       dataIndex: 'actions',
+      align: 'center',
       render: (_: any, record: any) => {
         return (
-          <Tooltip placement="bottom" title="Xoá dữ liệu">
+          <Space>
+            <UpdateModal
+              path={path}
+              page="công việc"
+              getList={getCustomerContactsList}
+              id={customer_id}
+              initValue={{
+                ...record,
+                start_time: moment(record.start_time),
+                end_time: moment(record.end_time),
+                status: record.status ? 1 : 0,
+              }}
+            >
+              <FormTask isEditing={true} />
+            </UpdateModal>
             <Popconfirm
               title="Bạn có muốn xoá không?"
               okText="Có"
               cancelText="Không"
               onConfirm={() => onDelete(record.id)}
             >
-              <Typography.Link
-              //  style={checkPermission?.delete ? { display: 'unset' } : { display: 'none' }}
-              >
-                <RestOutlined style={{ color: 'red' }} />
-              </Typography.Link>
+              <DeleteIcon style={{ color: 'red' }} />
             </Popconfirm>
-          </Tooltip>
+          </Space>
         );
       },
     },
     {
-      title: 'Nội dung',
-      dataIndex: 'note',
+      title: 'Tiêu đề công việc',
+      dataIndex: 'title',
     },
     {
-      title: 'Ngày tạo',
-      dataIndex: 'createdAt',
+      title: 'Nội dung công việc',
+      dataIndex: 'content',
+    },
+    {
+      title: 'Ngày bắt đầu',
+      dataIndex: 'start_time',
       align: 'right',
       render: (record: string): string => {
         const date = new Date(record);
-        return date.toLocaleDateString('en-GB');
+        return moment(date).format('DD/MM/YYYY HH:mm:ss');
+      },
+    },
+    {
+      title: 'Ngày kết thúc',
+      dataIndex: 'end_time',
+      align: 'right',
+      render: (record: string): string => {
+        const date = new Date(record);
+        return moment(date).format('DD/MM/YYYY HH:mm:ss');
+      },
+    },
+    {
+      title: 'Người tạo',
+      dataIndex: 'employee',
+      align: 'left',
+      render: (record: { name: string; id: number }): string => {
+        return record.name;
+      },
+    },
+    {
+      title: 'Trạng thái',
+      dataIndex: 'status',
+      align: 'right',
+      render: (record: number): any => {
+        switch (record) {
+          case 0:
+            return 'Đang thực hiện';
+            break;
+          case 1:
+            return 'Hoàn thành';
+            break;
+          case 2:
+            return 'Quá hạn';
+            break;
+          default:
+            break;
+        }
       },
     },
   ];
@@ -146,7 +161,7 @@ const CustomerNote: React.FC<IProps> = ({ id }) => {
     setIsLoading(true);
     try {
       const respContacts: IRespApiSuccess = await apiInstance.get(
-        `${API_BASE_URL}${path}?f[0][field]=customer_id&f[0][operator]=contain&f[0][value]=${id}&${f}`,
+        `${API_BASE_URL}${path}?f[0][field]=customer_id&f[0][operator]=equal&f[0][value]=${customer_id}&${f}`,
       );
       if (respContacts.code === 200) {
         respContacts.data.collection.map((item: any, index: number) => {
@@ -163,7 +178,7 @@ const CustomerNote: React.FC<IProps> = ({ id }) => {
     setIsLoading(false);
   };
   useEffect(() => {
-    if (id != 0) {
+    if (employee_id != 0) {
       getCustomerContactsList();
     }
   }, []);
@@ -187,39 +202,11 @@ const CustomerNote: React.FC<IProps> = ({ id }) => {
           onPageChange={handlePageChange}
         />
       )}
-      <Button type="primary" onClick={showModal} icon={<PlusOutlined />}>
-        Thêm
-      </Button>
-      <Modal
-        centered
-        footer={false}
-        title="THÊM GHI CHÚ"
-        open={isModalOpen}
-        onCancel={handleCancel}
-        maskClosable={false}
-        width={700}
-      >
-        <Form form={form} onFinish={onCreate} autoComplete="off" layout="vertical">
-          <Row gutter={[12, 0]}>
-            <Col span={24}>
-              <Form.Item
-                label="Nội dung ghi chú"
-                name="note"
-                rules={[{ required: true, message: 'Ghi chú không được để trống' }]}
-              >
-                <Input placeholder="Nhập ghi chú" />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={[10, 0]} justify="start" className="footer">
-            <Button size="small" type="primary" htmlType="submit">
-              Lưu
-            </Button>
-          </Row>
-        </Form>
-      </Modal>
+      <CreateModal path={path} page="công việc" getList={getCustomerContactsList} id={customer_id}>
+        <FormTask isEditing={false} />
+      </CreateModal>
     </>
   );
 };
 
-export default CustomerNote;
+export default CustomerTask;

@@ -1,37 +1,32 @@
-import { PlusOutlined, RestOutlined } from '@ant-design/icons';
-import { getProductList } from '@app/api/app/api';
 import { apiInstance } from '@app/api/app/api_core';
-import { Modal } from '@app/components/common/Modal/Modal';
+import DeleteIcon from '@app/assets/icon-components/DeleteIcon';
 import { Popconfirm } from '@app/components/common/Popconfirm/Popconfirm';
 import { Table } from '@app/components/common/Table/Table';
-import { Button } from '@app/components/common/buttons/Button/Button';
-import { Select } from '@app/components/common/selects/Select/Select';
 import CustomPagination from '@app/components/customs/CustomPagination';
 import { API_BASE_URL, API_URL } from '@app/configs/api-configs';
 import { notificationController } from '@app/controllers/notificationController';
 import { IFilter, IRespApiSuccess } from '@app/interfaces/interfaces';
-import { Col, Form, Input, Row, Tooltip, Typography } from 'antd';
+import { Space } from 'antd';
 import { ColumnsType } from 'antd/es/table';
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
+import FormReminder from '../Form/FormReminder';
+import { CreateModal, UpdateModal } from './CustomerContacts';
 
 interface IProps {
   id: number;
 }
 
-const CustomerProduct: React.FC<IProps> = ({ id }) => {
-  const [form] = Form.useForm();
-  const path = API_URL.CUSTOMERPRODUCTS;
+const CustomerReminder: React.FC<IProps> = ({ id }) => {
+  const path = API_URL.CUSTOMERREMINDERS;
   const [dataContacts, setDataContacts] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [product, setProduct] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
   const [filter, setFilter] = useState<IFilter>({
     page: 1,
     limit: 20,
     total: 0,
     sort_direction: 'desc',
-    sort_column: 'customer_products.createdAt',
+    sort_column: 'customer_reminders.createdAt',
   });
 
   const handlePageChange = (page: number) => {
@@ -41,42 +36,6 @@ const CustomerProduct: React.FC<IProps> = ({ id }) => {
   const f = Object.entries(filter)
     .map(([key, value]: any) => `${key}=${value}`)
     .join('&');
-
-  const showModal = async () => {
-    setIsModalOpen(true);
-    const productList = await getProductList();
-    setProduct(productList);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  const onCreate = async (values: any) => {
-    const data = {
-      customer_id: id,
-      ...values,
-    };
-    try {
-      const respUsers: IRespApiSuccess = await apiInstance.post(`${API_BASE_URL}${path}`, data);
-      if (respUsers.code === 200) {
-        notificationController.success({
-          message: 'Tạo thành công',
-        });
-        getCustomerContactsList();
-        handleCancel();
-      } else {
-        notificationController.error({
-          message: respUsers.message,
-        });
-      }
-    } catch (error: any) {
-      notificationController.error({
-        message: 'Có lỗi xảy ra vui lòng thử lại sau',
-        description: error.message,
-      });
-    }
-  };
 
   const onDelete = async (idData: number) => {
     // if (checkPermission?.delete) {
@@ -105,50 +64,61 @@ const CustomerProduct: React.FC<IProps> = ({ id }) => {
     {
       title: 'STT',
       dataIndex: 'stt',
+      align: 'right',
     },
     {
       // title: t('tables.actions'),
-      title: 'Hành động',
+      title: 'Thao tác',
       dataIndex: 'actions',
       align: 'center',
       render: (_: any, record: any) => {
         return (
-          <Tooltip placement="bottom" title="Xoá dữ liệu">
+          <Space>
+            <UpdateModal
+              path={path}
+              page="nhắc nhở"
+              getList={getCustomerContactsList}
+              id={id}
+              initValue={{
+                ...record,
+                alert_at: moment(record.alert_at),
+              }}
+            >
+              <FormReminder isEditing={true} />
+            </UpdateModal>
             <Popconfirm
               title="Bạn có muốn xoá không?"
               okText="Có"
               cancelText="Không"
               onConfirm={() => onDelete(record.id)}
             >
-              <Typography.Link
-              //  style={checkPermission?.delete ? { display: 'unset' } : { display: 'none' }}
-              >
-                <RestOutlined style={{ color: 'red' }} />
-              </Typography.Link>
+              <DeleteIcon style={{ color: 'red' }} />
             </Popconfirm>
-          </Tooltip>
+          </Space>
         );
       },
     },
     {
-      title: 'Tên giải pháp',
-      dataIndex: 'product',
-      render: (record: { name: string; id: number }): string => {
-        return record.name;
-      },
+      title: 'Tiêu đề nhắc nhở',
+      dataIndex: 'title',
     },
     {
+      title: 'Nội dung',
+      dataIndex: 'content',
+    },
+    {
+      title: 'Thời gian nhắc',
+      dataIndex: 'alert_at',
       align: 'right',
-      title: 'Ngày tạo',
-      dataIndex: 'createdAt',
       render: (record: string): string => {
         const date = new Date(record);
-        return date.toLocaleDateString('en-GB');
+        return moment(date).format('YYYY/MM/DD HH:mm:ss');
       },
     },
     {
-      title: 'Người cập nhật',
+      title: 'Người tạo',
       dataIndex: 'employee',
+      align: 'left',
       render: (record: { name: string; id: number }): string => {
         return record.name;
       },
@@ -157,6 +127,7 @@ const CustomerProduct: React.FC<IProps> = ({ id }) => {
 
   const getCustomerContactsList = async () => {
     setIsLoading(true);
+
     try {
       const respContacts: IRespApiSuccess = await apiInstance.get(
         `${API_BASE_URL}${path}?f[0][field]=customer_id&f[0][operator]=contain&f[0][value]=${id}&${f}`,
@@ -200,42 +171,11 @@ const CustomerProduct: React.FC<IProps> = ({ id }) => {
           onPageChange={handlePageChange}
         />
       )}
-      <Button type="primary" onClick={showModal} icon={<PlusOutlined />}>
-        Thêm
-      </Button>
-      <Modal
-        centered
-        footer={false}
-        title="THÊM GIẢI PHÁP"
-        open={isModalOpen}
-        onCancel={handleCancel}
-        maskClosable={false}
-        width={700}
-      >
-        <Form form={form} onFinish={onCreate} autoComplete="off" layout="vertical">
-          <Row gutter={[12, 0]}>
-            <Col span={24}>
-              <Form.Item
-                label="Tên giải pháp"
-                name="product_id"
-                rules={[{ required: true, message: 'Giải pháp không được để trống' }]}
-              >
-                <Select className="select-product" options={product} placeholder="Chọn giải pháp" />
-              </Form.Item>
-              <Form.Item label="Mô tả" name="description">
-                <Input placeholder="Nhập mô tả" defaultValue={''} />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={[10, 0]} justify="start" className="footer">
-            <Button size="small" type="primary" htmlType="submit">
-              Lưu
-            </Button>
-          </Row>
-        </Form>
-      </Modal>
+      <CreateModal path={path} page="nhắc nhở" getList={getCustomerContactsList} id={id}>
+        <FormReminder isEditing={false} />
+      </CreateModal>
     </>
   );
 };
 
-export default CustomerProduct;
+export default CustomerReminder;

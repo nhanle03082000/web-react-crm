@@ -45,6 +45,7 @@ const CustomerInteractions: React.FC<IProps> = ({ id }) => {
     {
       title: 'STT',
       dataIndex: 'stt',
+      align: 'right',
     },
     {
       title: 'Loại',

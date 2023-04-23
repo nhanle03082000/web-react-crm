@@ -38,6 +38,7 @@ const CustomerOrder: React.FC<IProps> = ({ id, handleDetailsOrder }) => {
     {
       title: 'STT',
       dataIndex: 'stt',
+      align: 'right',
     },
     {
       title: 'Thao tác',
