@@ -25,6 +25,7 @@ const CustomersMain: React.FC = () => {
   const [saleProcesses, setSaleProcesses] = useState<any>([]);
   const { page } = useContext(DataContext);
   const [param, setParam] = useState('');
+  const [activeButtonSale, setActiveButtonSale] = useState<number>(-1);
   const [visibleColumns, setVisibleColumns] = useState<string[]>([
     'STT',
     'Mã số thuế',
@@ -54,7 +55,8 @@ const CustomersMain: React.FC = () => {
     { field: 'company_name', operator: 'contain', value: '' },
   ];
 
-  const onFilterChange = (id: number) => {
+  const onFilterChange = (id: number, index: number) => {
+    setActiveButtonSale(index);
     const f: any = {};
     if (id === 0) {
       setParam('');
@@ -122,18 +124,22 @@ const CustomersMain: React.FC = () => {
               <Col>
                 <Space>Bước bán hàng: &nbsp;</Space>
                 <Space>
-                  <Button onClick={() => onFilterChange(0)} style={{ borderRadius: '20px', marginRight: '8px' }}>
+                  <Button
+                    onClick={() => onFilterChange(0, -1)}
+                    className={`sale-button ${activeButtonSale === -1 ? 'sale-focus' : ''} `}
+                    style={{ borderRadius: '20px', marginRight: '8px' }}
+                  >
                     Tất cả
                   </Button>
                 </Space>
                 <Space>
-                  {saleProcesses.map((item: any) => {
+                  {saleProcesses.map((item: any, index: number) => {
                     return (
                       <Button
-                        className="sale-button"
+                        className={`sale-button ${activeButtonSale === index ? 'sale-focus' : ''} `}
                         key={item.id}
                         style={{ backgroundColor: item.color, color: '#fff', borderRadius: '20px', border: 'none' }}
-                        onClick={() => onFilterChange(item.id)}
+                        onClick={() => onFilterChange(item.id, index)}
                       >
                         <div className="sale-total">{item.total}</div>
                         {item.name}

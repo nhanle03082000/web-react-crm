@@ -42,12 +42,12 @@ const SellQuotes: React.FC = () => {
 
   const option = [
     {
-      value: 'tax_code',
+      value: 'quotes.tax_code',
       label: 'Mã số thuế',
       type: 'string',
     },
     {
-      value: 'company_name',
+      value: 'quotes.company_name',
       label: 'Tên doanh nghiệp',
       type: 'string',
     },
@@ -57,70 +57,25 @@ const SellQuotes: React.FC = () => {
       type: 'string',
     },
     {
-      value: 'headquarters_phone',
-      label: 'Số điện thoại doanh nghiệp',
-      type: 'string',
-    },
-    {
       value: 'headquarters_email',
       label: 'Email doanh nghiệp',
       type: 'string',
     },
     {
       value: 'email',
-      label: 'Email cá nhân',
+      label: 'Email khách hàng',
       type: 'string',
     },
     {
-      value: 'customer_source.id',
-      label: 'Nguồn gốc',
-      type: 'string',
-    },
-    {
-      value: 'company_field.id',
-      label: 'Lĩnh vực',
-      type: 'string',
-    },
-    {
-      value: 'sale_process.id',
-      label: 'Quy trình bán hàng',
-      type: 'string',
-    },
-    {
-      value: 'employee.shop_code',
-      label: 'Theo đơn vị',
-      type: 'string',
-    },
-    {
-      value: 'headquarters_address',
-      label: 'Địa chỉ',
-      type: 'string',
-    },
-    {
-      value: 'province.id',
-      label: 'Tỉnh/TP',
-      type: 'string',
-    },
-    {
-      value: 'district.id',
-      label: 'Quận/Huyện',
-      type: 'string',
-    },
-    {
-      value: 'area.id',
-      label: 'Phường/Xã',
-      type: 'string',
-    },
-    {
-      value: 'created_at',
+      value: 'quotes.createdAt',
       label: 'Ngày tạo',
       type: 'datetime',
     },
   ];
 
   const initialValue = [
-    { field: 'tax_code', operator: 'contain', value: '' },
-    { field: 'company_name', operator: 'contain', value: '' },
+    { field: 'quotes.tax_code', operator: 'contain', value: '' },
+    { field: 'quotes.company_name', operator: 'contain', value: '' },
   ];
 
   return (

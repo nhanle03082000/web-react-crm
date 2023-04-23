@@ -78,4 +78,7 @@ export const customStyle = css`
   .border-left {
     border-left: 1px solid #ccc;
   }
+  .sale-focus {
+    opacity: 0.5;
+  }
 `;

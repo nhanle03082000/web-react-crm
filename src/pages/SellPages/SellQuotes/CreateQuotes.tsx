@@ -1,19 +1,20 @@
-import { LeftOutlined, RestOutlined } from '@ant-design/icons';
+import { LeftOutlined } from '@ant-design/icons';
 import { getCustomersList, getProductList } from '@app/api/app/api';
 import { apiInstance } from '@app/api/app/api_core';
+import DeleteIcon from '@app/assets/icon-components/DeleteIcon';
 import { Button } from '@app/components/common/buttons/Button/Button';
 import { Input } from '@app/components/common/inputs/Input/Input';
-import { API_URL } from '@app/configs/api-configs';
 import { Select } from '@app/components/common/selects/Select/Select';
 import { H4 } from '@app/components/common/typography/H4/H4';
 import { H5 } from '@app/components/common/typography/H5/H5';
-import { API_BASE_URL } from '@app/configs/api-configs';
+import CustomLoading from '@app/components/customs/CustomLoading';
+import { API_BASE_URL, API_URL } from '@app/configs/api-configs';
 import { notificationController } from '@app/controllers/notificationController';
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
+import { maxValueRule, minValueRule } from '@app/utils/utils';
 import { Card, Col, DatePicker, Form, Row } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import CustomLoading from '@app/components/customs/CustomLoading';
 import { useNavigate } from 'react-router-dom';
 
 const CreateQuotes: React.FC = () => {
@@ -97,6 +98,8 @@ const CreateQuotes: React.FC = () => {
       return item.id === values;
     });
 
+    console.log(dataChange);
+
     const dataFinal = {
       id: dataChange.id,
       product_id: dataChange.id,
@@ -110,7 +113,6 @@ const CreateQuotes: React.FC = () => {
     newArr[index] = dataFinal;
     add(dataFinal);
     setNewArr([...newArr]);
-    // setDataTable([...dataTable]);
   };
 
   const onChangeCustomer = (value: any) => {
@@ -131,22 +133,22 @@ const CreateQuotes: React.FC = () => {
     switch (name) {
       case 'quantity':
         data.quantity = value;
-        tien_thue = (value * Number(data.price || 0) * Number(data.vat || 0)) / 100;
         thanhtien_truocvat = value * Number(data.price || 0);
-        thanhtien_sauvat = thanhtien_truocvat + tien_thue;
+        thanhtien_sauvat = thanhtien_truocvat + thanhtien_truocvat * (Number(data.vat || 0) / 100);
+        tien_thue = thanhtien_sauvat - thanhtien_truocvat;
         break;
       case 'price':
         data.price = value;
-        tien_thue = (value * Number(data.price || 0) * Number(data.quantity || 0)) / 100;
         thanhtien_truocvat = value * Number(data.quantity || 0);
-        thanhtien_sauvat = thanhtien_truocvat + tien_thue;
+        thanhtien_sauvat = thanhtien_truocvat + thanhtien_truocvat * (Number(data.vat || 0) / 100);
+        tien_thue = thanhtien_sauvat - thanhtien_truocvat;
         break;
 
       case 'vat':
         data.vat = value;
-        tien_thue = (value * Number(data.price || 0) * Number(data.quantity || 0)) / 100;
         thanhtien_truocvat = Number(data.price || 0) * Number(data.quantity || 0);
-        thanhtien_sauvat = thanhtien_truocvat + tien_thue;
+        thanhtien_sauvat = thanhtien_truocvat + thanhtien_truocvat * (Number(data.vat || 0) / 100);
+        tien_thue = thanhtien_sauvat - thanhtien_truocvat;
         break;
 
       default:
@@ -168,13 +170,12 @@ const CreateQuotes: React.FC = () => {
     let before_tax = 0;
     let after_tax = 0;
     let tax = 0;
-    console.log(newArr);
     for (let i = 0; i < newArr.length; i++) {
       before_tax += Number(newArr[i].amount_before_tax);
       after_tax += Number(newArr[i].amount);
-      tax += after_tax - before_tax;
     }
 
+    tax = after_tax - before_tax;
     setAmount({ before_tax: before_tax, after_tax: after_tax, tax: tax });
   };
 
@@ -273,22 +274,25 @@ const CreateQuotes: React.FC = () => {
                         return (
                           <>
                             <Row gutter={10}>
-                              <Col span={4}>
+                              <Col span={3}>
                                 <H5>Sản phẩm</H5>
                               </Col>
-                              <Col span={4}>
+                              <Col span={3}>
                                 <H5>Số lượng</H5>
                               </Col>
-                              <Col span={4}>
+                              <Col span={3}>
                                 <H5>Đơn giá</H5>
                               </Col>
-                              <Col span={4}>
+                              <Col span={3}>
                                 <H5>Vat%</H5>
                               </Col>
-                              <Col span={4}>
-                                <H5>Thành tiền trước thuế</H5>
-                              </Col>
                               <Col span={3}>
+                                <H5>Tiền thuế</H5>
+                              </Col>
+                              <Col span={4}>
+                                <H5>Tiền trước thuế</H5>
+                              </Col>
+                              <Col span={4}>
                                 <H5>Thành tiền</H5>
                               </Col>
                               <Col span={1}>
@@ -296,11 +300,9 @@ const CreateQuotes: React.FC = () => {
                               </Col>
                             </Row>
                             {quote_detail.map(({ key, name, ...restField }: any, index) => {
-                              // console.log(key, name, restField);
-                              // console.log('@@ dataTable > ', dataTable[index]);
                               return (
                                 <Row key={key} gutter={10} style={{ marginBottom: '10px' }}>
-                                  <Col span={4}>
+                                  <Col span={3}>
                                     <Form.Item
                                       name={[name, 'product_id']}
                                       rules={[{ required: true, message: 'error' }]}
@@ -314,50 +316,78 @@ const CreateQuotes: React.FC = () => {
                                       />
                                     </Form.Item>
                                   </Col>
-                                  <Col span={4}>
+                                  <Col span={3}>
                                     <Form.Item
                                       name={[name, 'quantity']}
-                                      rules={[{ required: true, message: 'Số lượng không được bỏ trống' }]}
+                                      rules={[
+                                        { required: true, message: 'Số lượng không được bỏ trống' },
+                                        minValueRule,
+                                      ]}
                                       {...restField}
                                     >
-                                      <Input onBlur={getAmount('quantity', index, add, remove)} />
+                                      <Input
+                                        defaultValue={newArr[index]?.quantity}
+                                        type="number"
+                                        onBlur={getAmount('quantity', index, add, remove)}
+                                      />
                                     </Form.Item>
                                   </Col>
-                                  <Col span={4}>
+                                  <Col span={3}>
                                     <Form.Item
                                       name={[name, 'price']}
                                       {...restField}
-                                      rules={[{ required: true, message: 'Số lượng không được bỏ trống' }]}
+                                      rules={[{ required: true, message: 'Giá không được bỏ trống' }, minValueRule]}
                                     >
-                                      <Input onBlur={getAmount('price', index, add, remove)} />
+                                      <Input
+                                        size="small"
+                                        defaultValue={newArr[index]?.price}
+                                        type="number"
+                                        min={1}
+                                        onBlur={getAmount('price', index, add, remove)}
+                                      />
                                     </Form.Item>
                                   </Col>
-                                  <Col span={4}>
+                                  <Col span={3}>
                                     <Form.Item
                                       name={[name, 'vat']}
-                                      rules={[{ required: true, message: 'Thuế không được bỏ trống' }]}
+                                      rules={[
+                                        { required: true, message: 'Thuế không được bỏ trống' },
+                                        minValueRule,
+                                        maxValueRule,
+                                      ]}
                                       {...restField}
                                     >
-                                      <Input onBlur={getAmount('vat', index, add, remove)} />
+                                      <Input
+                                        defaultValue={newArr[index]?.vat}
+                                        type="number"
+                                        onBlur={getAmount('vat', index, add, remove)}
+                                      />
+                                    </Form.Item>
+                                  </Col>
+                                  <Col span={3}>
+                                    <Form.Item name={[name, 'sum_vat']} {...restField}>
+                                      <Input defaultValue={newArr[index]?.sum_vat} disabled />
                                     </Form.Item>
                                   </Col>
                                   <Col span={4}>
                                     <Form.Item name={[name, 'amount_before_tax']} {...restField}>
-                                      <Input disabled />
+                                      <Input defaultValue={newArr[index]?.amount_before_tax} disabled />
                                     </Form.Item>
                                   </Col>
-                                  <Col span={3}>
+                                  <Col span={4}>
                                     <Form.Item name={[name, 'amount']} {...restField}>
-                                      <Input disabled />
+                                      <Input defaultValue={newArr[index]?.amount} disabled />
                                     </Form.Item>
                                   </Col>
                                   <Col span={1}>
-                                    <RestOutlined
+                                    <DeleteIcon
                                       onClick={() => {
                                         console.log('remove(name) > ', name);
                                         remove(name);
+                                        newArr.splice(1, 1);
+                                        setNewArr([...newArr]);
                                       }}
-                                      style={{ color: '#ff4d4f', fontSize: '24px', marginTop: '4px' }}
+                                      color="red"
                                     />
                                   </Col>
                                 </Row>

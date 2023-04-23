@@ -9,6 +9,24 @@ import mastercard from '@app/assets/images/card-issuers/mastercard.png';
 import maestro from '@app/assets/images/card-issuers/maestro.png';
 import { CurrencyTypeEnum } from '@app/interfaces/interfaces';
 
+export const minValueRule = {
+  validator(rule: any, value: any) {
+    if (value >= 1) {
+      return Promise.resolve();
+    }
+    return Promise.reject('Giá trị phải lớn hơn hoặc bằng 1');
+  },
+};
+
+export const maxValueRule = {
+  validator(rule: any, value: any) {
+    if (value <= 10) {
+      return Promise.resolve();
+    }
+    return Promise.reject('Giá trị phải nhỏ hơn hoặc bằng 10');
+  },
+};
+
 export const camelize = (string: string): string => {
   return string
     .split(' ')
