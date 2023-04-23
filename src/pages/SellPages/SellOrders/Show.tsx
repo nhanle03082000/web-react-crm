@@ -1,4 +1,4 @@
-import { EyeOutlined, RestOutlined } from '@ant-design/icons';
+import { EyeOutlined } from '@ant-design/icons';
 import { apiInstance } from '@app/api/app/api_core';
 import DeleteIcon from '@app/assets/icon-components/DeleteIcon';
 import { Table } from '@app/components/common/Table/Table';
@@ -7,7 +7,7 @@ import { API_BASE_URL } from '@app/configs/api-configs';
 import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
 import { IFilter, IRespApiSuccess } from '@app/interfaces/interfaces';
-import { Popconfirm, Space, Tooltip } from 'antd';
+import { Popconfirm, Space } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
