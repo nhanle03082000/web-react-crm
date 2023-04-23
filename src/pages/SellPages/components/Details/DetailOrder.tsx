@@ -31,6 +31,7 @@ const DetailOrder: React.FC = () => {
     {
       title: 'STT',
       dataIndex: 'stt',
+      align: 'right',
     },
     {
       title: 'Tên gói',

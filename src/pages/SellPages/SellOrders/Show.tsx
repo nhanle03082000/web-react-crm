@@ -1,5 +1,6 @@
 import { EyeOutlined, RestOutlined } from '@ant-design/icons';
 import { apiInstance } from '@app/api/app/api_core';
+import DeleteIcon from '@app/assets/icon-components/DeleteIcon';
 import { Table } from '@app/components/common/Table/Table';
 import CustomPagination from '@app/components/customs/CustomPagination';
 import { API_BASE_URL } from '@app/configs/api-configs';
@@ -101,19 +102,19 @@ const Show: React.FC<IProps> = ({ param, colums, path }) => {
       render: (record: any) => {
         return (
           <Space>
-            <Tooltip placement="bottom" title="Xoá dữ liệu">
-              <Popconfirm
-                title="Bạn có muốn xoá không?"
-                okText="Có"
-                cancelText="Không"
-                onConfirm={() => onDelete(record.id)}
-              >
-                <RestOutlined style={{ fontSize: '20px', cursor: 'pointer' }} />
-              </Popconfirm>
-            </Tooltip>
-            <Tooltip placement="bottom" title="Xem chi tiết">
-              <EyeOutlined style={{ fontSize: '20px', cursor: 'pointer' }} onClick={() => handleClick(record.id)} />
-            </Tooltip>
+            <Popconfirm
+              title="Bạn có muốn xoá không?"
+              okText="Có"
+              cancelText="Không"
+              onConfirm={() => onDelete(record.id)}
+            >
+              <DeleteIcon />
+            </Popconfirm>
+            <EyeOutlined
+              title="Chi tiết"
+              style={{ fontSize: '20px', cursor: 'pointer' }}
+              onClick={() => handleClick(record.id)}
+            />
           </Space>
         );
       },

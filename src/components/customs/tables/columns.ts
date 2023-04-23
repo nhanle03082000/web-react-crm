@@ -532,7 +532,7 @@ export const columnOrder = [
     dataIndex: 'customer',
     align: 'left',
     render: (record: any) => {
-      return record.name || null;
+      return record?.name || null;
     },
   },
   {
