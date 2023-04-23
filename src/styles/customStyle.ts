@@ -72,4 +72,10 @@ export const customStyle = css`
     -webkit-appearance: none;
     margin: 0;
   }
+  .border {
+    border: 1px solid #ccc;
+  }
+  .border-left {
+    border-left: 1px solid #ccc;
+  }
 `;

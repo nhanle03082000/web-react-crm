@@ -129,7 +129,11 @@ const CustomersForm: React.FC<IProps> = ({ isEditing }) => {
     <>
       <Row gutter={[16, 16]}>
         <Col span={12}>
-          <Form.Item name="name" label="Họ tên" rules={[{ required: true, message: 'Họ tên không được bỏ trống!' }]}>
+          <Form.Item
+            name="name"
+            label="Họ tên người đại diện"
+            rules={[{ required: true, message: 'Họ tên không được bỏ trống!' }]}
+          >
             <Input placeholder="Nhập họ tên người đại diện" size="small" />
           </Form.Item>
         </Col>
@@ -145,7 +149,11 @@ const CustomersForm: React.FC<IProps> = ({ isEditing }) => {
       </Row>
       <Row gutter={[16, 16]}>
         <Col span={12}>
-          <Form.Item name="phone_number" label="Số điện thoại di động">
+          <Form.Item
+            name="phone_number"
+            label="SĐT người đại diện"
+            rules={[{ max: 10, message: 'SĐT phải có độ dài tối đa 10 số!' }]}
+          >
             <Input placeholder="Nhập SĐT cá nhân" size="small" />
           </Form.Item>
         </Col>
@@ -153,7 +161,10 @@ const CustomersForm: React.FC<IProps> = ({ isEditing }) => {
           <Form.Item
             name="headquarters_phone"
             label="Số điện thoại tại trụ sở chính"
-            rules={[{ required: true, message: 'SĐT doanh nghiệp không được bỏ trống!' }]}
+            rules={[
+              { required: true, message: 'SĐT không được bỏ trống!' },
+              { max: 10, message: 'SĐT phải có độ dài tối đa 10 số!' },
+            ]}
           >
             <Input placeholder="Nhập SĐT doanh nghiệp" size="small" />
           </Form.Item>
@@ -238,8 +249,12 @@ const CustomersForm: React.FC<IProps> = ({ isEditing }) => {
       </Row>
       <Row gutter={[16, 0]}>
         <Col span={12}>
-          <Form.Item name="sale_process_id" label="Quy trình bán hàng">
-            <Select options={saleProcesses} placeholder="Chọn quy trình bán hàng" />
+          <Form.Item
+            name="sale_process_id"
+            label="Quy trình"
+            rules={[{ required: true, message: 'Quy trình không được bỏ trống!' }]}
+          >
+            <Select options={saleProcesses} placeholder="Chọn quy trình" />
           </Form.Item>
         </Col>
         <Col span={12}>

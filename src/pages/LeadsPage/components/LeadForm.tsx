@@ -129,7 +129,11 @@ const LeadForm: React.FC<IProps> = ({ isEditing }) => {
     <>
       <Row gutter={[16, 16]}>
         <Col span={12}>
-          <Form.Item name="name" label="Họ tên" rules={[{ required: true, message: 'Họ tên không được bỏ trống!' }]}>
+          <Form.Item
+            name="name"
+            label="Họ tên người đại diện"
+            rules={[{ required: true, message: 'Họ tên không được bỏ trống!' }]}
+          >
             <Input placeholder="Nhập họ tên người đại diện" size="small" />
           </Form.Item>
         </Col>
@@ -147,8 +151,8 @@ const LeadForm: React.FC<IProps> = ({ isEditing }) => {
         <Col span={12}>
           <Form.Item
             name="phone_number"
-            label="Số điện thoại di động"
-            rules={[{ max: 10, message: 'Số điện thoại phải có độ dài tối đa 10 số!' }]}
+            label="SĐT người đại diện"
+            rules={[{ max: 10, message: 'SĐT phải có độ dài tối đa 10 số!' }]}
           >
             <Input placeholder="Nhập SĐT cá nhân" size="small" />
           </Form.Item>
@@ -156,10 +160,10 @@ const LeadForm: React.FC<IProps> = ({ isEditing }) => {
         <Col span={12}>
           <Form.Item
             name="headquarters_phone"
-            label="Số điện thoại tại trụ sở chính"
+            label="SĐT tại trụ sở chính"
             rules={[
-              { required: true, message: 'SĐT doanh nghiệp không được bỏ trống!' },
-              { max: 10, message: 'Số điện thoại phải có độ dài tối đa 10 số!' },
+              { required: true, message: 'SĐT không được bỏ trống!' },
+              { max: 10, message: 'SĐT phải có độ dài tối đa 10 số!' },
             ]}
           >
             <Input type="number" placeholder="Nhập SĐT doanh nghiệp" size="small" />

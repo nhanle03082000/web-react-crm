@@ -7,7 +7,6 @@ import { columnOrder } from '@app/components/customs/tables/columns';
 import { API_URL } from '@app/configs/api-configs';
 import { Col, Row } from 'antd';
 import React, { useState } from 'react';
-import CustomColumns from '../components/CustomColumns';
 import CustomersForm from '../components/CustomersForm';
 import Show from './Show';
 
@@ -114,24 +113,6 @@ const SellOrders: React.FC = () => {
     { field: 'tax_code', operator: 'contain', value: '' },
     { field: 'company_name', operator: 'contain', value: '' },
   ];
-
-  const onFilterChange = (id: number) => {
-    const f: any = {};
-    if (id === 0) {
-      setParam('');
-      return;
-    }
-    const listFilter = [{ field: '', operator: '', value: '' }];
-    listFilter.forEach((filter: any, i: any) => {
-      f[`f[${i}][field]`] = 'sale_process.id';
-      f[`f[${i}][operator]`] = 'equal';
-      f[`f[${i}][value]`] = id;
-    });
-    const param = Object.entries(f)
-      .map(([key, value]: any) => `${key}=${value}`)
-      .join('&');
-    setParam(param);
-  };
 
   return (
     <>

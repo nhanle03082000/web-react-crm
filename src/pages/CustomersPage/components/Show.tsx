@@ -1,15 +1,16 @@
-import { EyeOutlined, RestOutlined } from '@ant-design/icons';
+import { EyeOutlined } from '@ant-design/icons';
 import { apiInstance } from '@app/api/app/api_core';
+import DeleteIcon from '@app/assets/icon-components/DeleteIcon';
 import { Table } from '@app/components/common/Table/Table';
 import CustomPagination from '@app/components/customs/CustomPagination';
 import { API_BASE_URL } from '@app/configs/api-configs';
 import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
 import { IFilter, IRespApiSuccess } from '@app/interfaces/interfaces';
-import { Popconfirm, Space, Tooltip } from 'antd';
+import { Popconfirm, Space } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
-import DetailModal from './Details/DetailModal';
 import { useNavigate } from 'react-router-dom';
+import DetailModal from './Details/DetailModal';
 
 interface IProps {
   param: string | null;
@@ -20,7 +21,7 @@ interface IProps {
 }
 
 const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns }) => {
-  const { path, isLoad, show } = useContext(DataContext);
+  const { path, show } = useContext(DataContext);
   const [dataShow, setDataShow] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [filter, setFilter] = useState<IFilter>({
@@ -101,19 +102,19 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns }
       render: (record: any) => {
         return (
           <Space>
-            <Tooltip placement="bottom" title="Xoá dữ liệu">
-              <Popconfirm
-                title="Bạn có muốn xoá không?"
-                okText="Có"
-                cancelText="Không"
-                onConfirm={() => onDelete(record.id)}
-              >
-                <RestOutlined style={{ fontSize: '20px', cursor: 'pointer' }} />
-              </Popconfirm>
-            </Tooltip>
-            <Tooltip placement="bottom" title="Xem chi tiết">
-              <EyeOutlined style={{ fontSize: '20px', cursor: 'pointer' }} onClick={() => handleClick(record.id)} />
-            </Tooltip>
+            <Popconfirm
+              title="Bạn có muốn xoá không?"
+              okText="Có"
+              cancelText="Không"
+              onConfirm={() => onDelete(record.id)}
+            >
+              <DeleteIcon title="Xoá dữ liệu" style={{ fontSize: '20px', cursor: 'pointer' }} />
+            </Popconfirm>
+            <EyeOutlined
+              title="Xem chi tiết"
+              style={{ fontSize: '20px', cursor: 'pointer' }}
+              onClick={() => handleClick(record.id)}
+            />
           </Space>
         );
       },
@@ -129,7 +130,7 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns }
 
   useEffect(() => {
     onShow();
-  }, [param, filter.page, isLoad, show]);
+  }, [param, filter.page, show]);
 
   const handleSelectChange = (selectedRowKeys: React.Key[]) => {
     setListIdLead(selectedRowKeys);

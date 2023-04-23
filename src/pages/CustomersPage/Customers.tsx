@@ -9,11 +9,10 @@ const Customers: React.FC = () => {
   const { t } = useTranslation();
   const path = API_URL.CUSTOMER;
   const page = t('namepage.khachhang');
-  const [isLoad, setIsLoad] = useState<boolean>(false);
   const [show, setShow] = useState(false);
   const [state, setState] = useState<any>();
   return (
-    <DataContext.Provider value={{ path, page, state, setState, isLoad, show, setShow }}>
+    <DataContext.Provider value={{ path, page, state, setState, show, setShow }}>
       <PageTitle>{page}</PageTitle>
       <Outlet />
     </DataContext.Provider>

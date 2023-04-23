@@ -7,7 +7,7 @@ import { API_BASE_URL } from '@app/configs/api-configs';
 import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
 import { IFilter, IRespApiSuccess } from '@app/interfaces/interfaces';
-import { Space, Tooltip } from 'antd';
+import { Space } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DetailModal from '../../LeadsPage/components/Details/DetailModal';
@@ -73,6 +73,7 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns, 
     {
       title: 'STT',
       dataIndex: 'stt',
+      align: 'right',
     },
     {
       title: 'Thao tác',
@@ -82,9 +83,11 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns, 
           <Space>
             {permission.delete && <Delete onShow={onShow} id={record.id} />}
             {permission.show && (
-              <Tooltip placement="bottom" title="Xem chi tiết">
-                <EyeOutlined style={{ fontSize: '20px', cursor: 'pointer' }} onClick={() => handleClick(record.id)} />
-              </Tooltip>
+              <EyeOutlined
+                title="Xem chi tiết"
+                style={{ fontSize: '20px', cursor: 'pointer' }}
+                onClick={() => handleClick(record.id)}
+              />
             )}
           </Space>
         );
@@ -110,10 +113,12 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns, 
     onChange: handleSelectChange,
   };
 
+  const columnLocal = JSON.parse(localStorage.getItem('column_lead') || JSON.stringify(visibleColumns));
+
   return (
     <>
       <Table
-        columns={columns.filter((column: any) => visibleColumns.includes(column.title))}
+        columns={columns.filter((column: any) => columnLocal.includes(column.title))}
         dataSource={dataShow}
         pagination={false}
         scroll={{ x: 800 }}

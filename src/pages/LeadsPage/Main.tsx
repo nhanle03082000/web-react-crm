@@ -29,6 +29,9 @@ const Main: React.FC = () => {
   const [visibleColumns, setVisibleColumns] = useState<string[]>([
     'STT',
     'Mã số thuế',
+    'Tỉnh/Thành phố',
+    'Quận/Huyện',
+    'Phường/Xã',
     'Nguồn gốc',
     'Thao tác',
     'Doanh nghiệp',
@@ -41,11 +44,10 @@ const Main: React.FC = () => {
     'Email cá nhân',
     'Lĩnh vực hoạt động',
     'Địa chỉ trụ sở chính',
-    'Tỉnh/Thành phố',
-    'Quận/Huyện',
-    'Phường/Xã',
+    'Ngày tạo',
+    'Ngày cập nhật',
   ]);
-  const download = '/files/lead.xlsx';
+  const download = '/files/file_mau_import.xlsx';
   const [listIdLead, setListIdLead] = useState([]);
 
   const initialValue = [

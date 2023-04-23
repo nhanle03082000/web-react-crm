@@ -1,4 +1,4 @@
-import { EditOutlined, LeftOutlined, RestOutlined, SendOutlined } from '@ant-design/icons';
+import { EditOutlined, LeftOutlined, SendOutlined } from '@ant-design/icons';
 import { onDeleteById } from '@app/api/app/api';
 import { apiInstance } from '@app/api/app/api_core';
 import { onCreateNote } from '@app/api/app/api_create';
@@ -14,13 +14,14 @@ import { notificationController } from '@app/controllers/notificationController'
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
 import CreateFromLead from '@app/pages/CustomersPage/components/Form/CreateFromLead';
 import { getRoleUser } from '@app/utils/redux.util';
-import { Button, Col, Form, Row, Typography } from 'antd';
+import { Button, Col, Form, Row } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import UpdateLead from '../UpdateLead';
 import CustomLoading from '@app/components/customs/CustomLoading';
+import DeleteIcon from '@app/assets/icon-components/DeleteIcon';
 
 const Detail: React.FC = () => {
   const { path } = useContext(DataContext);
@@ -109,20 +110,64 @@ const Detail: React.FC = () => {
                 <Col span={24}>
                   <Card padding="1.25rem">
                     <Row gutter={[4, 4]}>
+                      <Col span={24}>
+                        <H4 className="uppercase">Thông tin tổ chức</H4>
+                      </Col>
                       <Col span={8}>
-                        <H5>Tên DN</H5>
+                        <H5>Tên doanh nghiệp</H5>
                         <div>{data?.company_name}</div>
                       </Col>
                       <Col span={8}>
                         <H5>Mã số thuế</H5>
                         <div>{data?.tax_code}</div>
                       </Col>
-                      <Col span={8}>
+                      <Col span={6}>
+                        <H5>Lĩnh vực</H5>
+                        <div>{data?.company_field?.name}</div>
+                      </Col>
+                      <Col span={2}>
                         {permission.edit && (
                           <Button className="button-edit" onClick={onEdit}>
                             <EditOutlined style={{ fontSize: '24px', color: 'var(--primary-color)' }} />
                           </Button>
                         )}
+                      </Col>
+                      <Col span={8}>
+                        <H5>SĐT doanh nghiệp</H5>
+                        <div>{data?.headquarters_phone}</div>
+                      </Col>
+                      <Col span={8}>
+                        <H5>Email doanh nghiệp</H5>
+                        <div>{data?.headquarters_email}</div>
+                      </Col>
+                      <Col span={8}>
+                        <H5>Nguồn gốc</H5>
+                        <div>{data?.customer_source?.name}</div>
+                      </Col>
+                      <Col span={8}>
+                        <H5>Quy trình bán hàng</H5>
+                        <div>{data?.sale_process?.name}</div>
+                      </Col>
+                      <Col span={8}>
+                        <H5>Tỉnh/TP</H5>
+                        <div>{data?.province?.name}</div>
+                      </Col>
+                      <Col span={8}>
+                        <H5>Quận/Huyện</H5>
+                        <div>{data?.district?.name}</div>
+                      </Col>
+                      <Col span={8}>
+                        <H5>Phường/Xã</H5>
+                        <div>{data?.area?.name}</div>
+                      </Col>
+                      <Col span={8}>
+                        <H5>Địa chỉ</H5>
+                        <div>{data?.headquarters_address}</div>
+                      </Col>
+                    </Row>
+                    <Row style={{ marginTop: '10px' }} gutter={[4, 4]}>
+                      <Col span={24}>
+                        <H4 className="uppercase">Thông tin cá nhân</H4>
                       </Col>
                       <Col span={8}>
                         <H5>Họ tên người đại diện</H5>
@@ -137,54 +182,15 @@ const Detail: React.FC = () => {
                         <div>{data?.email}</div>
                       </Col>
                     </Row>
-                    <Row gutter={[4, 4]} style={{ marginTop: '24px' }}>
-                      <Col span={8}>
-                        <H5>Số điện thoại doanh nhiệp</H5>
-                        <div>{data?.headquarters_phone}</div>
-                      </Col>
-                      <Col span={8}>
-                        <H5>Email doanh nhiệp</H5>
-                        <div>{data?.headquarters_email}</div>
-                      </Col>
-                      <Col span={8}></Col>
-                      <Col span={8}>
-                        <H5>Lĩnh vực doanh nghiệp</H5>
-                        <div>{data?.company_field?.name}</div>
-                      </Col>
-                      <Col span={8}>
-                        <H5>Nguồn gốc</H5>
-                        <div>{data?.customer_source?.name}</div>
-                      </Col>
-                      <Col span={8}>
-                        <H5>Quy trình bán hàng</H5>
-                        <div>{data?.sale_process?.name}</div>
-                      </Col>
-                    </Row>
-                    <Row gutter={[4, 4]} style={{ marginTop: '24px' }}>
-                      <Col span={8}>
-                        <H5>Tỉnh/TP</H5>
-                        <div>{data?.province?.name}</div>
-                      </Col>
-                      <Col span={8}>
-                        <H5>Quận/Huyện</H5>
-                        <div>{data?.district?.name}</div>
-                      </Col>
-                      <Col span={8}>
-                        <H5>Phường/Xã</H5>
-                        <div>{data?.area?.name}</div>
-                      </Col>
-                      <Col span={24}>
-                        <H5>Địa chỉ</H5>
-                        <div>{data?.headquarters_address}</div>
-                      </Col>
-                    </Row>
                     <Row>
                       {permissionLeadNotes.index && (
                         <Col span={24} style={{ marginTop: '12px' }}>
-                          <H4>Ghi chú</H4>
-                          <div>
-                            <H5>Nội dung</H5>
-                          </div>
+                          <H4 className="uppercase">Ghi chú</H4>
+                          {dataNote.length > 0 && (
+                            <div>
+                              <H5>Nội dung</H5>
+                            </div>
+                          )}
                           {dataNote?.map((item: any) => {
                             return (
                               <Fragment key={item.id}>
@@ -203,11 +209,9 @@ const Detail: React.FC = () => {
                                         cancelText="Không"
                                         onConfirm={() => onDelete(item.id)}
                                       >
-                                        <Typography.Link>
-                                          <RestOutlined
-                                            style={{ fontSize: '20px', cursor: 'pointer', color: '#FF5B5B' }}
-                                          />
-                                        </Typography.Link>
+                                        <div style={{ marginTop: '5px' }}>
+                                          <DeleteIcon color="red" />
+                                        </div>
                                       </Popconfirm>
                                     </Col>
                                   )}
@@ -234,7 +238,7 @@ const Detail: React.FC = () => {
                             <Row>
                               <Col span={23}>
                                 <Form.Item name="note">
-                                  <TextArea rows={4} placeholder="Thêm ghi chú" />
+                                  <TextArea rows={2} placeholder="Thêm ghi chú" />
                                 </Form.Item>
                               </Col>
                               <Col span={1}>

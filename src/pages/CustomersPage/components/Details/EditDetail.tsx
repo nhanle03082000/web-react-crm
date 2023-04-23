@@ -4,7 +4,6 @@ import {
   getCustomerSourcesList,
   getDistrictsList,
   getProvincesList,
-  getSaleProcessesList,
 } from '@app/api/app/api';
 import { apiInstance } from '@app/api/app/api_core';
 import { Card } from '@app/components/common/Card/Card';
@@ -12,7 +11,6 @@ import { Button } from '@app/components/common/buttons/Button/Button';
 import { Input } from '@app/components/common/inputs/Input/Input';
 import { Select } from '@app/components/common/selects/Select/Select';
 import { H4 } from '@app/components/common/typography/H4/H4';
-import { H5 } from '@app/components/common/typography/H5/H5';
 import { API_BASE_URL, API_URL } from '@app/configs/api-configs';
 import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
@@ -182,17 +180,18 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data }) => {
 
   return (
     <EditDetailStyles>
-      <Form form={form} onFinish={onUpdate}>
+      <Form form={form} onFinish={onUpdate} layout="vertical">
         <Row>
           <Col span={24}>
             <Card padding="1.25rem">
-              <Row gutter={[4, 4]}>
+              <Row gutter={[12, 0]}>
                 <Col span={24}>
-                  <H4>Thông tin chung</H4>
+                  <H4 className="uppercase">Thông tin tổ chức</H4>
                 </Col>
+
                 <Col span={8}>
-                  <H5>Tên DN</H5>
                   <Form.Item
+                    label="Tên doanh nghiệp"
                     name="company_name"
                     rules={[{ required: true, message: 'Tên doanh nghiệp không được bỏ trống!' }]}
                   >
@@ -200,105 +199,125 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data }) => {
                   </Form.Item>
                 </Col>
                 <Col span={8}>
-                  <H5>Mã số thuế</H5>
-                  <Form.Item name="tax_code" rules={[{ required: true, message: 'Mã số thuế không được bỏ trống!' }]}>
+                  <Form.Item
+                    label="Mã số thuế"
+                    name="tax_code"
+                    rules={[{ required: true, message: 'Mã số thuế không được bỏ trống!' }]}
+                  >
                     <Input placeholder="Nhập mã số thuế" size="small" disabled={true} />
                   </Form.Item>
                 </Col>
-                <Col span={8}></Col>
                 <Col span={8}>
-                  <H5>Họ tên người đại diện</H5>
-                  <Form.Item name="name" rules={[{ required: true, message: 'Họ tên không được bỏ trống!' }]}>
-                    <Input placeholder="Nhập họ tên người đại diện" size="small" />
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
-                  <H5>SĐT di động</H5>
-                  <Form.Item name="phone_number">
-                    <Input placeholder="Nhập SĐT cá nhân" size="small" />
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
-                  <H5>Email cá nhân</H5>
-                  <Form.Item name="email">
-                    <Input placeholder="Nhập email cá nhân" size="small" />
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={[4, 4]} style={{ marginTop: '24px' }}>
-                <Col span={24}>
-                  <H4>Thông tin tổ chức</H4>
-                </Col>
-                <Col span={8}>
-                  <H5>Số điện thoại doanh nhiệp</H5>
                   <Form.Item
-                    name="headquarters_phone"
-                    rules={[{ required: true, message: 'SĐT doanh nghiệp không được bỏ trống!' }]}
+                    name="customer_source_id"
+                    label="Nguồn gốc"
+                    rules={[{ required: true, message: 'Nguồn gốc không được bỏ trống!' }]}
                   >
-                    <Input placeholder="Nhập SĐT doanh nghiệp" size="small" />
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
-                  <H5>Email doanh nhiệp</H5>
-                  <Form.Item
-                    name="headquarters_email"
-                    rules={[{ required: true, message: 'SĐT doanh nghiệp không được bỏ trống!' }]}
-                  >
-                    <Input placeholder="Nhập SĐT doanh nghiệp" size="small" />
-                  </Form.Item>
-                </Col>
-                <Col span={8}></Col>
-                <Col span={8}>
-                  <H5>Lĩnh vực doanh nghiệp</H5>
-                  <Form.Item
-                    name="company_field_id"
-                    rules={[{ required: true, message: 'Lĩnh vực DN không được bỏ trống!' }]}
-                  >
-                    <Select options={companyFields} placeholder="Chọn lĩnh vực" />
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
-                  <H5>Nguồn gốc</H5>
-                  <Form.Item name="customer_source_id">
                     <Select options={customerSources} placeholder="Chọn nguồn gốc" />
                   </Form.Item>
                 </Col>
                 <Col span={8}>
-                  <H5>Quy trình bán hàng</H5>
-                  <Form.Item name="sale_process_id">
+                  <Form.Item
+                    name="headquarters_phone"
+                    label="SĐT doanh nghiệp"
+                    rules={[
+                      { required: true, message: 'SĐT doanh nghiệp không được bỏ trống!' },
+                      { max: 10, message: 'Số điện thoại phải có độ dài tối đa 10 số!' },
+                    ]}
+                  >
+                    <Input placeholder="Nhập SĐT doanh nghiệp" size="small" />
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item
+                    label="Email doanh nghiệp"
+                    name="headquarters_email"
+                    rules={[{ required: true, message: 'Email doanh nghiệp không được bỏ trống!' }]}
+                  >
+                    <Input placeholder="Nhập email doanh nghiệp" size="small" />
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item
+                    label="Lĩnh vực"
+                    name="company_field_id"
+                    rules={[{ required: true, message: 'Lĩnh vực không được bỏ trống!' }]}
+                  >
+                    <Select options={companyFields} placeholder="Chọn lĩnh vực" />
+                  </Form.Item>
+                </Col>
+
+                <Col span={8}>
+                  <Form.Item
+                    name="sale_process_id"
+                    label="Quy trình bán hàng"
+                    rules={[{ required: true, message: 'Quy trình không được bỏ trống!' }]}
+                  >
                     <Select options={saleProcesses} placeholder="Chọn quy trình bán hàng" />
                   </Form.Item>
                 </Col>
-              </Row>
-              <Row gutter={[4, 4]} style={{ marginTop: '24px' }}>
-                <Col span={24}>
-                  <H4>Thông tin địa chỉ</H4>
-                </Col>
                 <Col span={8}>
-                  <H5>Tỉnh/TP</H5>
-                  <Form.Item name="headquarters_province_id">
+                  <Form.Item
+                    name="headquarters_province_id"
+                    label="Tỉnh/TP"
+                    rules={[{ required: true, message: 'Tỉnh/TP không được bỏ trống!' }]}
+                  >
                     <Select options={provinces} onChange={onChangeProvinces} placeholder="Chọn tỉnh/TP" />
                   </Form.Item>
                 </Col>
                 <Col span={8}>
-                  <H5>Quận/Huyện</H5>
-                  <Form.Item name="headquarters_district_id">
+                  <Form.Item
+                    name="headquarters_district_id"
+                    label="Quận/Huyện"
+                    rules={[{ required: true, message: 'Tỉnh/TP không được bỏ trống!' }]}
+                  >
                     <Select options={districts} onChange={onChangeDistricts} placeholder="Chọn quận/Huyện" />
                   </Form.Item>
                 </Col>
                 <Col span={8}>
-                  <H5>Phường/Xã</H5>
-                  <Form.Item name="headquarters_area_id">
+                  <Form.Item
+                    name="headquarters_area_id"
+                    label="Phường/Xã"
+                    rules={[{ required: true, message: 'Tỉnh/TP không được bỏ trống!' }]}
+                  >
                     <Select options={areas} placeholder="Chọn phường/Xã" />
                   </Form.Item>
                 </Col>
-                <Col span={24}>
-                  <H5>Địa chỉ</H5>
+                <Col span={16}>
                   <Form.Item
                     name="headquarters_address"
+                    label="Địa chỉ trụ sở chính"
                     rules={[{ required: true, message: 'Địa chỉ trụ sở chính không được bỏ trống!' }]}
                   >
-                    <Input placeholder="Nhập địa chỉ trụ sở chính" size="small" />
+                    <Input placeholder="Nhập số nhà, đường" size="small" />
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row gutter={[12, 0]} style={{ marginTop: '10px' }}>
+                <Col span={24}>
+                  <H4 className="uppercase">Thông tin cá nhân</H4>
+                </Col>
+                <Col span={8}>
+                  <Form.Item
+                    name="name"
+                    label="Họ tên người đại diện"
+                    rules={[{ required: true, message: 'Họ tên không được bỏ trống!' }]}
+                  >
+                    <Input placeholder="Nhập họ tên người đại diện" size="small" />
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item
+                    label="SĐT người đại diện"
+                    name="phone_number"
+                    rules={[{ max: 10, message: 'Số điện thoại phải có độ dài tối đa 10 số!' }]}
+                  >
+                    <Input placeholder="Nhập SĐT" size="small" />
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item name="email" label="Email người đại diện">
+                    <Input placeholder="Nhập email" size="small" />
                   </Form.Item>
                 </Col>
                 <Col style={{ display: 'flex' }}>

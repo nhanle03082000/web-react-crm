@@ -8,14 +8,11 @@ import {
   getProvincesList,
 } from '@app/api/app/api';
 import { apiInstance } from '@app/api/app/api_core';
-import { Card } from '@app/components/common/Card/Card';
 import { Modal } from '@app/components/common/Modal/Modal';
 import { Button } from '@app/components/common/buttons/Button/Button';
 import { Select } from '@app/components/common/selects/Select/Select';
-import { H3 } from '@app/components/common/typography/H3/H3';
 import { H4 } from '@app/components/common/typography/H4/H4';
-import { H5 } from '@app/components/common/typography/H5/H5';
-import { API_BASE_URL, API_URL } from '@app/configs/api-configs';
+import { API_BASE_URL } from '@app/configs/api-configs';
 import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
@@ -322,9 +319,9 @@ const CreateFromLead: React.FC<IProps> = ({ titleButton, defaultValues }) => {
                   </Form.Item>
                 </Col>
               </Row>
-              <Row gutter={[4, 4]}>
+              <Row gutter={[12, 0]}>
                 <Col span={24}>
-                  <H4>Thông tin địa chỉ</H4>
+                  <H4 className="uppercase">Thông tin địa chỉ</H4>
                 </Col>
                 <Col span={8}>
                   <Form.Item

@@ -14,12 +14,12 @@ interface IProps {
   param: string | null;
   colums: any;
   children: React.ReactNode;
-  setListIdLead: any;
-  visibleColumns: any;
+  setListIdLead?: any;
+  visibleColumns?: any;
   path: string;
 }
 
-const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns, path }) => {
+const Show: React.FC<IProps> = ({ param, colums, path }) => {
   const { isLoad } = useContext(DataContext);
   const [dataShow, setDataShow] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -78,29 +78,6 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns, 
       });
     }
     onShow();
-  };
-
-  const sendMail = async (id: number) => {
-    setIsLoading(true);
-    console.log(id);
-    try {
-      const respUsers: IRespApiSuccess = await apiInstance.post(`${API_BASE_URL}${path}/send`, { id: id });
-      if (respUsers.code === 200) {
-        notificationController.success({
-          message: 'Gửi thành công',
-        });
-      } else {
-        notificationController.error({
-          message: respUsers.message,
-        });
-      }
-    } catch (error: any) {
-      notificationController.error({
-        message: 'Có lỗi xảy ra vui lòng thử lại sau',
-        description: error.message,
-      });
-    }
-    setIsLoading(false);
   };
 
   const handlePageChange = (page: number) => {

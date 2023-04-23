@@ -98,48 +98,58 @@ const DetailModal: React.FC<IProps> = ({ id, contentButton }) => {
         footer={null}
       >
         <Row gutter={10}>
-          <Col span={12}>
-            <H5>Họ tên</H5>
-            <div>{state?.name}</div>
+          <Col span={24}>
+            <H4 className="uppercase">Thông tin tổ chức</H4>
           </Col>
-          <Col span={12}>
-            <H5>Mã số thuế</H5>
-            <div>{state?.tax_code}</div>
-          </Col>
-          <Col span={12}>
+          <Col span={8}>
             <H5>Tên doanh nghiệp</H5>
             <div>{state?.company_name}</div>
           </Col>
-          <Col span={12}>
+          <Col span={8}>
+            <H5>Mã số thuế</H5>
+            <div>{state?.tax_code}</div>
+          </Col>
+          <Col span={8} style={{ whiteSpace: 'break-spaces' }}>
             <H5>Địa chỉ doanh nghiệp</H5>
             <div>{state?.headquarters_address}</div>
           </Col>
-          <Col span={12}>
-            <H5>SĐT di động</H5>
-            <div>{state?.phone_number || 'chưa có'}</div>
-          </Col>
-          <Col span={12}>
+          <Col span={8}>
             <H5>SĐT doanh nhiệp</H5>
-            <div>{state?.headquarters_phone || 'chưa có'}</div>
+            <div>{state?.headquarters_phone}</div>
           </Col>
-          <Col span={12}>
-            <H5>Email cá nhân</H5>
-            <div>{state?.email || 'chưa có'}</div>
-          </Col>
-          <Col span={12}>
+          <Col span={8}>
             <H5>Email doanh nhiệp</H5>
-            <div>{state?.headquarters_email || 'chưa có'}</div>
+            <div>{state?.headquarters_email}</div>
           </Col>
-          <Col span={12}>
+          <Col span={8}>
             <H5>Nguồn gốc</H5>
-            <div>{state?.customer_source?.name || 'chưa có'}</div>
+            <div>{state?.customer_source?.name}</div>
+          </Col>
+        </Row>
+        <Row style={{ marginTop: '10px' }}>
+          <Col span={24}>
+            <H4 className="uppercase">Thông tin cá nhân</H4>
+          </Col>
+          <Col span={8}>
+            <H5>Họ tên</H5>
+            <div>{state?.name}</div>
+          </Col>
+          <Col span={8}>
+            <H5>SĐT di động</H5>
+            <div>{state?.phone_number}</div>
+          </Col>
+          <Col span={8}>
+            <H5>Email cá nhân</H5>
+            <div>{state?.email}</div>
           </Col>
           {permissionLeadNotes.index && (
             <Col span={24} style={{ marginTop: '12px' }}>
               <H4>Ghi chú</H4>
-              <div>
-                <H5>Nội dung</H5>
-              </div>
+              {dataNote.length > 0 && (
+                <div>
+                  <H5>Nội dung</H5>
+                </div>
+              )}
               {dataNote.map((item: any) => {
                 return (
                   <Fragment key={item.id}>
@@ -187,7 +197,7 @@ const DetailModal: React.FC<IProps> = ({ id, contentButton }) => {
                 <Row>
                   <Col span={22}>
                     <Form.Item name="note">
-                      <TextArea rows={4} placeholder="Thêm ghi chú" />
+                      <TextArea rows={2} placeholder="Thêm ghi chú" />
                     </Form.Item>
                   </Col>
                   <Col span={2}>

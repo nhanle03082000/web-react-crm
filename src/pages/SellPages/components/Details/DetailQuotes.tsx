@@ -52,11 +52,11 @@ const DetailQuotes: React.FC = () => {
     async function getData() {
       setIsLoading(true);
       const result = await getDataById(Number(id), '/quotes');
-      result[0]?.quote_detail?.map((item: any, index: number) => {
+      result?.quote_detail?.map((item: any, index: number) => {
         return (item.stt = index + 1);
       });
-      setData(result[0]);
-      setDataTable(result[0]?.quote_detail);
+      setData(result);
+      setDataTable(result?.quote_detail);
       setIsLoading(false);
     }
     getData();

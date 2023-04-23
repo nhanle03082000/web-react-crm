@@ -291,6 +291,34 @@ export const userColumn = [
 
 export const columnLead = [
   {
+    title: 'Tỉnh/Thành phố',
+    dataIndex: 'province',
+    render: (record: { id: number; name: string }): string | null => {
+      return record?.name || null;
+    },
+  },
+  {
+    title: 'Quận/Huyện',
+    dataIndex: 'district',
+    render: (record: { id: number; name: string }): string | null => {
+      return record?.name || null;
+    },
+  },
+  {
+    title: 'Phường/Xã',
+    dataIndex: 'area',
+    render: (record: { id: number; name: string }): string | null => {
+      return record?.name || null;
+    },
+  },
+  {
+    title: 'Nhân viên phụ trách',
+    dataIndex: 'employee',
+    render: (record: { id: number; name: string }): string | null => {
+      return record?.name || null;
+    },
+  },
+  {
     title: 'Tên doanh nghiệp',
     dataIndex: 'company_name',
   },
@@ -301,10 +329,12 @@ export const columnLead = [
   {
     title: 'SĐT di động',
     dataIndex: 'phone_number',
+    align: 'right',
   },
   {
     title: 'SĐT doanh nghiệp',
     dataIndex: 'headquarters_phone',
+    align: 'right',
   },
   {
     title: 'Email doanh nghiệp',
@@ -313,13 +343,6 @@ export const columnLead = [
   {
     title: 'Email người đại diện',
     dataIndex: 'email',
-  },
-  {
-    title: 'Nhân viên phụ trách',
-    dataIndex: 'employee',
-    render: (record: { id: number; name: string }): string | null => {
-      return record?.name || null;
-    },
   },
   {
     title: 'Nguồn gốc',
@@ -365,6 +388,24 @@ export const columnLead = [
     dataIndex: 'area',
     render: (record: { id: number; name: string }): string | null => {
       return record?.name || null;
+    },
+  },
+  {
+    title: 'Ngày tạo',
+    dataIndex: 'createdAt',
+    align: 'right',
+    render: (record: any): string => {
+      const date = new Date(record);
+      return date.toLocaleDateString('en-GB');
+    },
+  },
+  {
+    title: 'Ngày cập nhật',
+    dataIndex: 'updatedAt',
+    align: 'right',
+    render: (record: any): string => {
+      const date = new Date(record);
+      return date.toLocaleDateString('en-GB');
     },
   },
 ];

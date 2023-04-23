@@ -28,23 +28,25 @@ const CustomersMain: React.FC = () => {
   const [visibleColumns, setVisibleColumns] = useState<string[]>([
     'STT',
     'Mã số thuế',
+    'Tỉnh/Thành phố',
+    'Quận/Huyện',
+    'Phường/Xã',
+    'Nhân viên phụ trách',
     'Nguồn gốc',
     'Thao tác',
     'Doanh nghiệp',
     'Họ tên',
     'SĐT di động',
-    'Nhân viên phụ trách',
     'Quy trình bán hàng',
     'SĐT doanh nghiệp',
     'Email doanh nghiệp',
     'Email cá nhân',
     'Lĩnh vực hoạt động',
     'Địa chỉ trụ sở chính',
-    'Tỉnh/Thành phố',
-    'Quận/Huyện',
-    'Phường/Xã',
+    'Ngày tạo',
+    'Ngày cập nhật',
   ]);
-  const download = '/files/customer.xlsx';
+  const download = '/files/file_mau_import.xlsx';
   const [listIdLead, setListIdLead] = useState([]);
 
   const initialValue = [

@@ -15,12 +15,12 @@ interface IProps {
   param: string | null;
   colums: any;
   children: React.ReactNode;
-  setListIdLead: any;
+  setListIdLead?: any;
   visibleColumns: any;
   path: string;
 }
 
-const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns, path }) => {
+const Show: React.FC<IProps> = ({ param, colums, visibleColumns, path }) => {
   const { isLoad, show } = useContext(DataContext);
   const [dataShow, setDataShow] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
