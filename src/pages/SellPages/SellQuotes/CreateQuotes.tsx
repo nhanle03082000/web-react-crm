@@ -198,6 +198,9 @@ const CreateQuotes: React.FC = () => {
             <Col span={24}>
               <Card>
                 <Row gutter={10}>
+                  <Col span={24}>
+                    <H4 style={{ fontSize: '22px' }}>Thông tin chung</H4>
+                  </Col>
                   <Col span={12}>
                     <Form.Item
                       label="Khách hàng"

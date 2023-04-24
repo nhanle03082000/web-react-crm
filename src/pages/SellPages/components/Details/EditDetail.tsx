@@ -5,7 +5,6 @@ import { Input } from '@app/components/common/inputs/Input/Input';
 import { DatePicker } from '@app/components/common/pickers/DatePicker';
 import { Select } from '@app/components/common/selects/Select/Select';
 import { H4 } from '@app/components/common/typography/H4/H4';
-import { H5 } from '@app/components/common/typography/H5/H5';
 import CustomLoading from '@app/components/customs/CustomLoading';
 import { API_BASE_URL } from '@app/configs/api-configs';
 import { notificationController } from '@app/controllers/notificationController';
@@ -90,6 +89,13 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data, amount, children }) => 
     setIsLoading(false);
   };
 
+  const onChangeCustomer = (value: any) => {
+    const itemCus = customers.find((item) => {
+      if (item.value === value) return item;
+    });
+    form.setFieldsValue(itemCus);
+  };
+
   useEffect(() => {
     form.setFieldsValue(initialValues);
   }, [initialValues]);
@@ -118,7 +124,12 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data, amount, children }) => 
                     name="customer_id"
                     rules={[{ required: true, message: 'Khách hàng không được bỏ trống!' }]}
                   >
-                    <Select options={customers} placeholder="Chọn khách hàng" size="small" />
+                    <Select
+                      options={customers}
+                      placeholder="Chọn khách hàng"
+                      size="small"
+                      onChange={(value) => onChangeCustomer(value)}
+                    />
                   </Form.Item>
                 </Col>
                 <Col span={12}>
@@ -131,6 +142,7 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data, amount, children }) => 
                       format="DD/MM/YYYY"
                       placeholder="Chọn ngày báo giá"
                       size="small"
+                      disabled
                       style={{ width: '100%' }}
                     />
                   </Form.Item>
@@ -141,7 +153,7 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data, amount, children }) => 
                     name="company_name"
                     rules={[{ required: true, message: 'Tên doanh nghiệp không được bỏ trống!' }]}
                   >
-                    <Input placeholder="Nhập tên doanh nghiệp" size="small" />
+                    <Input placeholder="Nhập tên doanh nghiệp" size="small" disabled />
                   </Form.Item>
                 </Col>
                 <Col span={12}>
@@ -150,7 +162,7 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data, amount, children }) => 
                     name="tax_code"
                     rules={[{ required: true, message: 'Mã số thuê không được bỏ trống!' }]}
                   >
-                    <Input placeholder="Nhập mã số thuê" size="small" />
+                    <Input placeholder="Nhập mã số thuê" size="small" disabled />
                   </Form.Item>
                 </Col>
                 <Col span={12}>
@@ -159,7 +171,7 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data, amount, children }) => 
                     name="email"
                     rules={[{ required: true, message: 'Email khách hàng không được bỏ trống!' }]}
                   >
-                    <Input placeholder="Nhập email khách hàng" size="small" />
+                    <Input placeholder="Nhập email khách hàng" size="small" disabled />
                   </Form.Item>
                 </Col>
                 <Col span={12}>
@@ -168,7 +180,7 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data, amount, children }) => 
                     name="phone_number"
                     rules={[{ required: true, message: 'Số điện thoại khách hàng không được bỏ trống!' }]}
                   >
-                    <Input placeholder="Nhập số điện thoại khách hàng" size="small" />
+                    <Input placeholder="Nhập số điện thoại khách hàng" size="small" disabled />
                   </Form.Item>
                 </Col>
                 <Col span={24}>

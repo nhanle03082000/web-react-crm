@@ -3,10 +3,10 @@ import { Col, Form, Row } from 'antd';
 import React from 'react';
 
 interface Iprops {
-  isEditing: boolean;
+  isEditing?: boolean;
 }
 
-const FormContact: React.FC<Iprops> = ({ isEditing }) => {
+const FormContact: React.FC<Iprops> = () => {
   return (
     <Row gutter={[12, 0]}>
       <Col span={24}>

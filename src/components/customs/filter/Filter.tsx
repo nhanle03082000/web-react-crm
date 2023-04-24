@@ -1,13 +1,12 @@
-import { RestOutlined } from '@ant-design/icons';
+import DeleteIcon from '@app/assets/icon-components/DeleteIcon';
 import { Button } from '@app/components/common/buttons/Button/Button';
 import { Select } from '@app/components/common/selects/Select/Select';
+import { DataContext } from '@app/contexts/DataContext';
 import { Col, Form, Row } from 'antd';
-import React, { Fragment, useContext, useState } from 'react';
+import moment from 'moment';
+import React, { useContext, useState } from 'react';
 import FilterDateTime from './FilterDateTime';
 import FilterText from './FilterText';
-import moment from 'moment';
-import DeleteIcon from '@app/assets/icon-components/DeleteIcon';
-import { DataContext } from '@app/contexts/DataContext';
 
 interface IProps {
   option: { value: string; label: string; type: string }[];

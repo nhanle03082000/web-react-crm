@@ -375,7 +375,6 @@ const DetailQuotes: React.FC = () => {
                                   add(defaultDetail);
                                   dataTable.push(defaultDetail);
                                   setDataTable([...dataTable]);
-                                  console.log(dataTable);
                                 }}
                               >
                                 Thêm sản phẩm

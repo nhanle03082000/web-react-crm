@@ -1,5 +1,5 @@
 import { Input } from '@app/components/common/inputs/Input/Input';
-import { Col, DatePicker, Form, Row } from 'antd';
+import { Col, Form, Row } from 'antd';
 import React from 'react';
 
 interface Iprops {

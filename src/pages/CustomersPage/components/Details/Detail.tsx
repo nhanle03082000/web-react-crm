@@ -55,11 +55,8 @@ const Detail: React.FC = () => {
       setData(dataResult);
       setIsLoading(false);
     }
-    getData();
-    // if (!state) {
-    //   navigate('/customers', { replace: true });
-    // }
-  }, []);
+    !isEdit && getData();
+  }, [isEdit]);
 
   const [activeTab, setActiveTab] = useState(1);
 
