@@ -13,11 +13,13 @@ import React, { useContext, useEffect, useState } from 'react';
 import { columnLead } from '@app/components/customs/tables/columns';
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
 import { apiInstance } from '@app/api/app/api_core';
-import CustomColumns from './components/CustomColumns';
 import CustomersForm from './components/CustomersForm';
 import Show from './components/Show';
 import Assign from '@app/components/customs/assign/Assign';
 import { filterLead } from '@app/configs/filter-configs';
+import { useSelector } from 'react-redux';
+import { selectCustomerColumns, updateCustomerColumnStatus } from '@app/store/slices/columnSlice';
+import CustomColumns from '../../components/customs/tables/CustomColumns';
 
 const CustomersMain: React.FC = () => {
   // const userListPermission = JSON.parse(getRoleUser());
@@ -26,27 +28,7 @@ const CustomersMain: React.FC = () => {
   const { page } = useContext(DataContext);
   const [param, setParam] = useState('');
   const [activeButtonSale, setActiveButtonSale] = useState<number>(-1);
-  const [visibleColumns, setVisibleColumns] = useState<string[]>([
-    'STT',
-    'Mã số thuế',
-    'Tỉnh/Thành phố',
-    'Quận/Huyện',
-    'Phường/Xã',
-    'Nhân viên phụ trách',
-    'Nguồn gốc',
-    'Thao tác',
-    'Doanh nghiệp',
-    'Họ tên',
-    'SĐT di động',
-    'Quy trình bán hàng',
-    'SĐT doanh nghiệp',
-    'Email doanh nghiệp',
-    'Email cá nhân',
-    'Lĩnh vực hoạt động',
-    'Địa chỉ trụ sở chính',
-    'Ngày tạo',
-    'Ngày cập nhật',
-  ]);
+  const columns: any = useSelector(selectCustomerColumns);
   const download = '/files/file_mau_import.xlsx';
   const [listIdLead, setListIdLead] = useState([]);
 
@@ -95,7 +77,7 @@ const CustomersMain: React.FC = () => {
             </Col>
             <Col span={12}>
               <div style={{ display: 'flex', justifyContent: 'flex-end', columnGap: '5px' }}>
-                <CustomColumns columns={visibleColumns} setColumns={setVisibleColumns} />
+                <CustomColumns columns={columns} update={updateCustomerColumnStatus} />
                 <Upload accept=".pdf,.doc,.docx,.xls,.xlsx" maxCount={1}>
                   <Button type="primary" icon={<UploadOutlined />}>
                     Nhập từ file
@@ -154,7 +136,7 @@ const CustomersMain: React.FC = () => {
       </Col>
       <Col span={24}>
         <Card padding="1rem">
-          <Show param={param} colums={columnLead} setListIdLead={setListIdLead} visibleColumns={visibleColumns}>
+          <Show param={param} colums={columnLead} setListIdLead={setListIdLead}>
             <CustomersForm isEditing={true} />
           </Show>
         </Card>

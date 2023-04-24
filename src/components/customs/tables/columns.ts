@@ -327,7 +327,7 @@ export const columnLead = [
     dataIndex: 'name',
   },
   {
-    title: 'SĐT di động',
+    title: 'SĐT người đại diện',
     dataIndex: 'phone_number',
     align: 'right',
   },
@@ -370,27 +370,6 @@ export const columnLead = [
     dataIndex: 'headquarters_address',
   },
   {
-    title: 'Tỉnh/Thành phố',
-    dataIndex: 'province',
-    render: (record: { id: number; name: string }): string | null => {
-      return record?.name || null;
-    },
-  },
-  {
-    title: 'Quận/Huyện',
-    dataIndex: 'district',
-    render: (record: { id: number; name: string }): string | null => {
-      return record?.name || null;
-    },
-  },
-  {
-    title: 'Phường/Xã',
-    dataIndex: 'area',
-    render: (record: { id: number; name: string }): string | null => {
-      return record?.name || null;
-    },
-  },
-  {
     title: 'Ngày tạo',
     dataIndex: 'createdAt',
     align: 'right',
@@ -426,6 +405,11 @@ export const columnQuotes = [
     align: 'left',
   },
   {
+    title: 'Mã số thuế',
+    dataIndex: 'tax_code',
+    align: 'right',
+  },
+  {
     title: 'Khách hàng',
     dataIndex: 'customer',
     align: 'left',
@@ -434,16 +418,11 @@ export const columnQuotes = [
     },
   },
   {
-    title: 'Mã số thuế',
-    dataIndex: 'tax_code',
-    align: 'right',
-  },
-  {
     title: 'Email khách hàng',
     dataIndex: 'email',
   },
   {
-    title: 'Số điện thoại khách hàng',
+    title: 'SĐT khách hàng',
     align: 'right',
     dataIndex: 'phone_number',
   },
@@ -455,7 +434,7 @@ export const columnQuotes = [
     },
   },
   {
-    title: 'Số điện thoại nhân viên',
+    title: 'SĐT nhân viên',
     dataIndex: 'employee',
     align: 'right',
     render: (record: any): string | null => {
@@ -477,11 +456,11 @@ export const columnQuotes = [
       return date.toLocaleDateString('en-GB');
     },
   },
-  {
-    title: 'Mã báo giá',
-    dataIndex: 'code',
-    align: 'right',
-  },
+  // {
+  //   title: 'Mã báo giá',
+  //   dataIndex: 'code',
+  //   align: 'right',
+  // },
 ];
 
 export const columnOrder = [

@@ -12,7 +12,7 @@ import { API_BASE_URL, API_URL } from '@app/configs/api-configs';
 import { notificationController } from '@app/controllers/notificationController';
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
 import { maxValueRule, minValueRule } from '@app/utils/utils';
-import { Card, Col, DatePicker, Form, Row } from 'antd';
+import { Card, Col, DatePicker, Form, InputNumber, Row } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -24,7 +24,7 @@ const CreateQuotes: React.FC = () => {
     stt: 1,
     product_id: null,
     quantity: 1,
-    price: 0,
+    price: 1000,
     vat: 0,
     amount_before_tax: 0,
     amount: 0,
@@ -98,8 +98,6 @@ const CreateQuotes: React.FC = () => {
       return item.id === values;
     });
 
-    console.log(dataChange);
-
     const dataFinal = {
       id: dataChange.id,
       product_id: dataChange.id,
@@ -123,7 +121,7 @@ const CreateQuotes: React.FC = () => {
   };
 
   const getAmount = (name: string, index: number, add: any, remove: any) => (evt: any) => {
-    const value = Number(evt.target.value) || 0;
+    const value = Number(evt.target.value.replace(/,/g, '')) || 0;
     const data: any = newArr[index];
 
     let thanhtien_truocvat = 0;
@@ -181,6 +179,30 @@ const CreateQuotes: React.FC = () => {
 
   const onBack = () => {
     navigate(-1);
+  };
+
+  const formatter = (value: number | string | undefined) => {
+    if (!value) {
+      return '';
+    }
+
+    const stringValue = typeof value === 'string' ? value : value.toString();
+
+    return stringValue.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  };
+
+  const parser = (value: string | undefined): any => {
+    if (!value) {
+      return undefined;
+    }
+
+    const parsedValue = value.replace(/(,*)/g, '');
+
+    if (isNaN(Number(parsedValue))) {
+      return undefined;
+    }
+
+    return parseInt(parsedValue, 10);
   };
 
   return (
@@ -308,7 +330,7 @@ const CreateQuotes: React.FC = () => {
                                   <Col span={3}>
                                     <Form.Item
                                       name={[name, 'product_id']}
-                                      rules={[{ required: true, message: 'error' }]}
+                                      rules={[{ required: true, message: 'Vui lòng chọn sản phẩm' }]}
                                       {...restField}
                                     >
                                       <Select
@@ -328,10 +350,12 @@ const CreateQuotes: React.FC = () => {
                                       ]}
                                       {...restField}
                                     >
-                                      <Input
-                                        defaultValue={newArr[index]?.quantity}
-                                        type="number"
-                                        onBlur={getAmount('quantity', index, add, remove)}
+                                      <InputNumber
+                                        defaultValue={Number(newArr[index]?.quantity)}
+                                        size="small"
+                                        style={{ width: '100%' }}
+                                        formatter={formatter}
+                                        parser={parser}
                                       />
                                     </Form.Item>
                                   </Col>
@@ -339,13 +363,14 @@ const CreateQuotes: React.FC = () => {
                                     <Form.Item
                                       name={[name, 'price']}
                                       {...restField}
-                                      rules={[{ required: true, message: 'Giá không được bỏ trống' }, minValueRule]}
+                                      rules={[{ required: true, message: 'Giá không được bỏ trống' }]}
                                     >
-                                      <Input
+                                      <InputNumber
                                         size="small"
-                                        defaultValue={newArr[index]?.price}
-                                        type="number"
-                                        min={1}
+                                        style={{ width: '100%' }}
+                                        defaultValue={Number(newArr[index]?.price)}
+                                        formatter={formatter}
+                                        parser={parser}
                                         onBlur={getAmount('price', index, add, remove)}
                                       />
                                     </Form.Item>
@@ -369,17 +394,38 @@ const CreateQuotes: React.FC = () => {
                                   </Col>
                                   <Col span={3}>
                                     <Form.Item name={[name, 'sum_vat']} {...restField}>
-                                      <Input defaultValue={newArr[index]?.sum_vat} disabled />
+                                      <InputNumber
+                                        defaultValue={Number(newArr[index]?.sum_vat)}
+                                        disabled
+                                        size="small"
+                                        style={{ width: '100%' }}
+                                        formatter={formatter}
+                                        parser={parser}
+                                      />
                                     </Form.Item>
                                   </Col>
                                   <Col span={4}>
                                     <Form.Item name={[name, 'amount_before_tax']} {...restField}>
-                                      <Input defaultValue={newArr[index]?.amount_before_tax} disabled />
+                                      <InputNumber
+                                        defaultValue={Number(newArr[index]?.amount_before_tax)}
+                                        disabled
+                                        size="small"
+                                        style={{ width: '100%' }}
+                                        formatter={formatter}
+                                        parser={parser}
+                                      />
                                     </Form.Item>
                                   </Col>
                                   <Col span={4}>
                                     <Form.Item name={[name, 'amount']} {...restField}>
-                                      <Input defaultValue={newArr[index]?.amount} disabled />
+                                      <InputNumber
+                                        defaultValue={Number(newArr[index]?.amount)}
+                                        disabled
+                                        size="small"
+                                        style={{ width: '100%' }}
+                                        formatter={formatter}
+                                        parser={parser}
+                                      />
                                     </Form.Item>
                                   </Col>
                                   <Col span={1}>

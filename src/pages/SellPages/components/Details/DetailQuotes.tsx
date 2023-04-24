@@ -11,7 +11,7 @@ import { H4 } from '@app/components/common/typography/H4/H4';
 import { H5 } from '@app/components/common/typography/H5/H5';
 import CustomLoading from '@app/components/customs/CustomLoading';
 import { maxValueRule, minValueRule } from '@app/utils/utils';
-import { Col, Form, Row, Typography } from 'antd';
+import { Col, Form, InputNumber, Row, Typography } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
@@ -78,6 +78,30 @@ const DetailQuotes: React.FC = () => {
     setProduct(productList);
   };
 
+  const formatter = (value: number | string | undefined) => {
+    if (!value) {
+      return '';
+    }
+
+    const stringValue = typeof value === 'string' ? value : value.toString();
+
+    return stringValue.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  };
+
+  const parser = (value: string | undefined): any => {
+    if (!value) {
+      return undefined;
+    }
+
+    const parsedValue = value.replace(/(,*)/g, '');
+
+    if (isNaN(Number(parsedValue))) {
+      return undefined;
+    }
+
+    return parseInt(parsedValue, 10);
+  };
+
   const onChangeSelect = (values: any, index: number, add: any, remove: any) => {
     remove(index);
     const dataChange: any = product.find((item: any) => {
@@ -100,8 +124,7 @@ const DetailQuotes: React.FC = () => {
   };
 
   const getAmount = (name: string, index: number, add: any, remove: any) => (evt: any) => {
-    console.log(dataTable);
-    const value = Number(evt.target.value) || 0;
+    const value = Number(evt.target.value.replace(/,/g, '')) || 0;
     const data: any = dataTable[index];
 
     let thanhtien_truocvat = 0;
@@ -178,7 +201,8 @@ const DetailQuotes: React.FC = () => {
       dataIndex: 'vat',
       align: 'right',
       render: (_text: string, record: any) => {
-        return record.quantity * record.price * (record.vat / 100);
+        const vat = record.quantity * record.price * (record.vat / 100);
+        return vat?.toLocaleString('en-US', { useGrouping: true });
       },
     },
     {
@@ -282,7 +306,7 @@ const DetailQuotes: React.FC = () => {
                                     <Col span={3}>
                                       <Form.Item
                                         name={[name, 'product_id']}
-                                        rules={[{ required: true, message: 'error' }]}
+                                        rules={[{ required: true, message: 'Vui lòng chọn sản phẩm' }]}
                                         {...restField}
                                       >
                                         <Select
@@ -302,10 +326,12 @@ const DetailQuotes: React.FC = () => {
                                         ]}
                                         {...restField}
                                       >
-                                        <Input
-                                          defaultValue={dataTable[index]?.quantity}
-                                          type="number"
-                                          onBlur={getAmount('quantity', index, add, remove)}
+                                        <InputNumber
+                                          defaultValue={Number(dataTable[index]?.quantity)}
+                                          size="small"
+                                          style={{ width: '100%' }}
+                                          formatter={formatter}
+                                          parser={parser}
                                         />
                                       </Form.Item>
                                     </Col>
@@ -315,11 +341,12 @@ const DetailQuotes: React.FC = () => {
                                         {...restField}
                                         rules={[{ required: true, message: 'Giá không được bỏ trống' }, minValueRule]}
                                       >
-                                        <Input
+                                        <InputNumber
                                           size="small"
-                                          defaultValue={dataTable[index]?.price}
-                                          type="number"
-                                          min={1}
+                                          style={{ width: '100%' }}
+                                          defaultValue={Number(dataTable[index]?.price)}
+                                          formatter={formatter}
+                                          parser={parser}
                                           onBlur={getAmount('price', index, add, remove)}
                                         />
                                       </Form.Item>
@@ -343,17 +370,38 @@ const DetailQuotes: React.FC = () => {
                                     </Col>
                                     <Col span={3}>
                                       <Form.Item name={[name, 'sum_vat']} {...restField}>
-                                        <Input defaultValue={dataTable[index]?.vat} disabled />
+                                        <InputNumber
+                                          defaultValue={Number(dataTable[index]?.sum_vat)}
+                                          disabled
+                                          size="small"
+                                          style={{ width: '100%' }}
+                                          formatter={formatter}
+                                          parser={parser}
+                                        />
                                       </Form.Item>
                                     </Col>
                                     <Col span={4}>
                                       <Form.Item name={[name, 'amount_before_tax']} {...restField}>
-                                        <Input defaultValue={dataTable[index]?.amount_before_tax} disabled />
+                                        <InputNumber
+                                          defaultValue={Number(dataTable[index]?.amount_before_tax)}
+                                          disabled
+                                          size="small"
+                                          style={{ width: '100%' }}
+                                          formatter={formatter}
+                                          parser={parser}
+                                        />
                                       </Form.Item>
                                     </Col>
                                     <Col span={4}>
                                       <Form.Item name={[name, 'amount']} {...restField}>
-                                        <Input defaultValue={dataTable[index]?.amount} disabled />
+                                        <InputNumber
+                                          defaultValue={Number(dataTable[index]?.amount)}
+                                          disabled
+                                          size="small"
+                                          style={{ width: '100%' }}
+                                          formatter={formatter}
+                                          parser={parser}
+                                        />
                                       </Form.Item>
                                     </Col>
                                     <Col span={1}>

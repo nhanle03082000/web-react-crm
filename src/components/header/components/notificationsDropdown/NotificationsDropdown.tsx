@@ -1,18 +1,18 @@
 import { BellOutlined } from '@ant-design/icons';
 import { apiInstance } from '@app/api/app/api_core';
-import { Notification, notifications as fetchedNotifications } from '@app/api/notifications.api';
+import { Notification } from '@app/api/notifications.api';
 import { Badge } from '@app/components/common/Badge/Badge';
-import { Popover } from '@app/components/common/Popover/Popover';
 import { Button } from '@app/components/common/buttons/Button/Button';
-import { HeaderActionWrapper } from '@app/components/header/Header.styles';
+import { Popover } from '@app/components/common/Popover/Popover';
 import { NotificationsOverlay } from '@app/components/header/components/notificationsDropdown/NotificationsOverlay/NotificationsOverlay';
+import { HeaderActionWrapper } from '@app/components/header/Header.styles';
 import { API_BASE_URL } from '@app/configs/api-configs';
 import { notificationController } from '@app/controllers/notificationController';
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
 import React, { useState } from 'react';
 
 export const NotificationsDropdown: React.FC = () => {
-  const [notifications, setNotifications] = useState<Notification[]>(fetchedNotifications);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isOpened, setOpened] = useState(false);
   const path = '/notifications';
 

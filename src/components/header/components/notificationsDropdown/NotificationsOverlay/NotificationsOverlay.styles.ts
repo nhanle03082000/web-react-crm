@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { Divider, Row, Typography } from 'antd';
 import { Button } from 'components/common/buttons/Button/Button';
-import { media } from '@app/styles/themes/constants';
 
 export const MenuRow = styled(Row).withConfig({
   shouldForwardProp: (prop) => !['eventKey', 'warnKey'].includes(prop),
@@ -9,10 +8,6 @@ export const MenuRow = styled(Row).withConfig({
 
 export const NoticesOverlayMenu = styled.div`
   max-width: 15rem;
-
-  @media only screen and ${media.md} {
-    max-width: 25rem;
-  }
 `;
 
 export const SplitDivider = styled(Divider)`

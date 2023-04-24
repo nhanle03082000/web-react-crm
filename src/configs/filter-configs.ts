@@ -194,6 +194,26 @@ const filterLead = [
     type: 'string',
   },
   {
+    value: 'province.name',
+    label: 'Tỉnh/TP',
+    type: 'string',
+  },
+  {
+    value: 'district.name',
+    label: 'Quận/Huyện',
+    type: 'string',
+  },
+  {
+    value: 'area.name',
+    label: 'Phường/Xã',
+    type: 'string',
+  },
+  {
+    value: 'employee.name',
+    label: 'Nhân viên phụ trách',
+    type: 'string',
+  },
+  {
     value: 'company_name',
     label: 'Tên doanh nghiệp',
     type: 'string',
@@ -224,11 +244,6 @@ const filterLead = [
     type: 'string',
   },
   {
-    value: 'employee.name',
-    label: 'Nhân viên phụ trách',
-    type: 'string',
-  },
-  {
     value: 'customer_source.name',
     label: 'Nguồn gốc',
     type: 'string',
@@ -251,21 +266,6 @@ const filterLead = [
   {
     value: 'employee.shop_code',
     label: 'Theo đơn vị',
-    type: 'string',
-  },
-  {
-    value: 'province.name',
-    label: 'Tỉnh/TP',
-    type: 'string',
-  },
-  {
-    value: 'district.name',
-    label: 'Quận/Huyện',
-    type: 'string',
-  },
-  {
-    value: 'area.name',
-    label: 'Phường/Xã',
     type: 'string',
   },
 ];

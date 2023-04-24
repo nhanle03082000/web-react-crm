@@ -8,20 +8,20 @@ import { API_BASE_URL } from '@app/configs/api-configs';
 import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
 import { IFilter, IRespApiSuccess } from '@app/interfaces/interfaces';
+import { Column, selectQuotesColumns, updateQuotesColumnStatus } from '@app/store/slices/columnSlice';
 import { Popconfirm, Space } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 interface IProps {
   param: string | null;
   colums: any;
   children: React.ReactNode;
-  setListIdLead?: any;
-  visibleColumns: any;
   path: string;
 }
 
-const Show: React.FC<IProps> = ({ param, colums, visibleColumns, path }) => {
+const Show: React.FC<IProps> = ({ param, colums, path }) => {
   const { isLoad, show } = useContext(DataContext);
   const [dataShow, setDataShow] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -149,6 +149,25 @@ const Show: React.FC<IProps> = ({ param, colums, visibleColumns, path }) => {
     },
   ];
   columns.push(...colums);
+  const dispatch = useDispatch();
+
+  const columnss = useSelector(selectQuotesColumns);
+
+  const col = columnss.map((item: { name: string; status: boolean }) => {
+    if (item.status) {
+      return item.name;
+    }
+  });
+
+  useEffect(() => {
+    const savedColumns = localStorage.getItem('quotesColumns');
+    if (savedColumns) {
+      const parsedColumns = JSON.parse(savedColumns);
+      parsedColumns.forEach((column: Column, index: number) => {
+        dispatch(updateQuotesColumnStatus({ index, checked: column.status }));
+      });
+    }
+  }, [dispatch]);
 
   useEffect(() => {
     onShow();
@@ -157,7 +176,7 @@ const Show: React.FC<IProps> = ({ param, colums, visibleColumns, path }) => {
   return (
     <>
       <Table
-        columns={columns.filter((column: any) => visibleColumns.includes(column.title))}
+        columns={columns.filter((column: any) => col.includes(column.title))}
         dataSource={dataShow}
         pagination={false}
         scroll={{ x: 800 }}

@@ -11,17 +11,18 @@ import { Space } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DetailModal from '../../LeadsPage/components/Details/DetailModal';
+import { useDispatch, useSelector } from 'react-redux';
+import { Column, selectLeadColumns, updateLeadColumnStatus } from '@app/store/slices/columnSlice';
 
 interface IProps {
   param: string | null;
   colums: any;
   children: React.ReactNode;
   setListIdLead: any;
-  visibleColumns: any;
   permission: any;
 }
 
-const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns, permission }) => {
+const Show: React.FC<IProps> = ({ param, colums, setListIdLead, permission }) => {
   const { path, show } = useContext(DataContext);
   const [dataShow, setDataShow] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -32,6 +33,7 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns, 
     sort_direction: 'desc',
     sort_column: 'leads.createdAt',
   });
+  const dispatch = useDispatch();
 
   const f = Object.entries(filter)
     .map(([key, value]: any) => `${key}=${value}`)
@@ -113,12 +115,28 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, visibleColumns, 
     onChange: handleSelectChange,
   };
 
-  const columnLocal = JSON.parse(localStorage.getItem('column_lead') || JSON.stringify(visibleColumns));
+  const columnss = useSelector(selectLeadColumns);
+
+  const col = columnss.map((item: { name: string; status: boolean }) => {
+    if (item.status) {
+      return item.name;
+    }
+  });
+
+  useEffect(() => {
+    const savedColumns = localStorage.getItem('leadColumns');
+    if (savedColumns) {
+      const parsedColumns = JSON.parse(savedColumns);
+      parsedColumns.forEach((column: Column, index: number) => {
+        dispatch(updateLeadColumnStatus({ index, checked: column.status }));
+      });
+    }
+  }, [dispatch]);
 
   return (
     <>
       <Table
-        columns={columns.filter((column: any) => columnLocal.includes(column.title))}
+        columns={columns.filter((column: any) => col.includes(column.title))}
         dataSource={dataShow}
         pagination={false}
         scroll={{ x: 800 }}

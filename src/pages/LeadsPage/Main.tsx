@@ -16,9 +16,11 @@ import { IRespApiSuccess } from '@app/interfaces/interfaces';
 import { getRoleUser } from '@app/utils/redux.util';
 import { Col, Row, Space, Typography } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
-import CustomColumns from './components/CustomColumns';
+import CustomColumns from '../../components/customs/tables/CustomColumns';
 import LeadForm from './components/LeadForm';
 import Show from './components/Show';
+import { useSelector } from 'react-redux';
+import { selectLeadColumns, updateLeadColumnStatus } from '@app/store/slices/columnSlice';
 
 const Main: React.FC = () => {
   const { page, path } = useContext(DataContext);
@@ -27,30 +29,9 @@ const Main: React.FC = () => {
   const [saleProcesses, setSaleProcesses] = useState<any>([]);
   const [param, setParam] = useState('');
   const [activeButtonSale, setActiveButtonSale] = useState<number>(-1);
-  const [visibleColumns, setVisibleColumns] = useState<string[]>([
-    'STT',
-    'Mã số thuế',
-    'Tỉnh/Thành phố',
-    'Quận/Huyện',
-    'Phường/Xã',
-    'Nguồn gốc',
-    'Thao tác',
-    'Doanh nghiệp',
-    'Họ tên',
-    'SĐT di động',
-    'Nhân viên phụ trách',
-    'Quy trình bán hàng',
-    'SĐT doanh nghiệp',
-    'Email doanh nghiệp',
-    'Email cá nhân',
-    'Lĩnh vực hoạt động',
-    'Địa chỉ trụ sở chính',
-    'Ngày tạo',
-    'Ngày cập nhật',
-  ]);
   const download = '/files/file_mau_import.xlsx';
   const [listIdLead, setListIdLead] = useState([]);
-
+  const columns: any = useSelector(selectLeadColumns);
   const initialValue = [
     { field: 'tax_code', operator: 'contain', value: '' },
     { field: 'company_name', operator: 'contain', value: '' },
@@ -75,12 +56,15 @@ const Main: React.FC = () => {
     setParam(param);
   };
 
+  console.log(param);
+
   useEffect(() => {
     const getSaleProcessesList = async () => {
       try {
         const respSaleProcesses: IRespApiSuccess = await apiInstance.get(
           `${API_BASE_URL}${API_URL.SALEPROCESSES}?f[0][field]=type&f[0][operator]=contain&f[0][value]=leads&page=1&limit=10&sort_direction=asc&sort_column=sale_process_index`,
         );
+
         setSaleProcesses(respSaleProcesses.data.collection);
       } catch (error: any) {}
     };
@@ -96,7 +80,7 @@ const Main: React.FC = () => {
             </Col>
             <Col span={12}>
               <div style={{ display: 'flex', justifyContent: 'flex-end', columnGap: '5px' }}>
-                <CustomColumns columns={visibleColumns} setColumns={setVisibleColumns} />
+                <CustomColumns columns={columns} update={updateLeadColumnStatus} />
                 {permission.import && (
                   <>
                     <Upload accept=".pdf,.doc,.docx,.xls,.xlsx" maxCount={1}>
@@ -162,13 +146,7 @@ const Main: React.FC = () => {
       <Col span={24}>
         <Card padding="1rem">
           {permission.index && (
-            <Show
-              param={param}
-              colums={columnLead}
-              setListIdLead={setListIdLead}
-              visibleColumns={visibleColumns}
-              permission={permission}
-            >
+            <Show param={param} colums={columnLead} setListIdLead={setListIdLead} permission={permission}>
               <LeadForm isEditing={true} />
             </Show>
           )}

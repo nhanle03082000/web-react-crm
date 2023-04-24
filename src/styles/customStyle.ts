@@ -81,4 +81,7 @@ export const customStyle = css`
   .sale-focus {
     opacity: 0.5;
   }
+  .ant-input-number-handler-wrap {
+    display: none;
+  }
 `;

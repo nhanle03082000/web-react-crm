@@ -24,17 +24,12 @@ export const NotificationsOverlay: React.FC<NotificationsOverlayProps> = ({
         const type = notificationsSeverities.find((dbSeverity) => dbSeverity.id === notification.id)?.name;
 
         return (
-          <>
-            <Notification
-              key={index}
-              type={type || 'warning'}
-              title={notification.title}
-              description={notification.content}
-            />
+          <Row key={index} justify="space-between">
+            <Notification type={type || 'warning'} title={notification.title} description={notification.content} />
             <Typography.Link href={notification.link} target="_blank">
               Đi đến trang
             </Typography.Link>
-          </>
+          </Row>
         );
       }),
     [notifications, t],
@@ -49,7 +44,7 @@ export const NotificationsOverlay: React.FC<NotificationsOverlayProps> = ({
               {noticesList}
             </Space>
           ) : (
-            <S.Text>{t('header.notifications.noNotifications')}</S.Text>
+            <S.Text>Không có thông báo</S.Text>
           )}
         </Col>
         <Col span={24}>

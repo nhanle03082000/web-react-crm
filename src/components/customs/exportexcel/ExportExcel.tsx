@@ -19,9 +19,9 @@ const ExportExcel: React.FC<IProps> = ({ param = '' }) => {
   const onExport = async () => {
     const token = getToken();
     axios({
-      url: `${API_BASE_URL}${path}/export`,
+      url: `${API_BASE_URL}${path}/export?${param}`,
       method: 'GET',
-      params: param,
+      // params: param,
       responseType: 'blob',
       headers: {
         'Content-Type': 'application/json',

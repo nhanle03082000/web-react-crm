@@ -6,10 +6,12 @@ import ExportExcel from '@app/components/customs/exportexcel/ExportExcel';
 import Filter from '@app/components/customs/filter/Filter';
 import { columnQuotes } from '@app/components/customs/tables/columns';
 import { API_URL } from '@app/configs/api-configs';
+import CustomColumns from '@app/components/customs/tables/CustomColumns';
+import { selectQuotesColumns, updateQuotesColumnStatus } from '@app/store/slices/columnSlice';
 import { Col, Row } from 'antd';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import CustomColumns from '../components/CustomColumns';
 import CustomersForm from '../components/CustomersForm';
 import Show from './Show';
 
@@ -19,22 +21,7 @@ const SellQuotes: React.FC = () => {
   const path = API_URL.QUOTES;
   const page = 'Báo giá';
   const [param, setParam] = useState('');
-  const [visibleColumns, setVisibleColumns] = useState<string[]>([
-    'STT',
-    'Thao tác',
-    'Mã báo giá',
-    'Ngày báo giá',
-    'Tên doanh nghiệp',
-    'Khách hàng',
-    'Mã số thuế',
-    'Email khách hàng',
-    'Số điện thoại khách hàng',
-    'Nhân viên phụ trách',
-    'Số điện thoại nhân viên',
-    'Ngày tạo',
-    'Tổng cộng',
-  ]);
-
+  const columns: any = useSelector(selectQuotesColumns);
   const navigate = useNavigate();
   const onCreate = () => {
     navigate('/quotes/create');
@@ -90,7 +77,7 @@ const SellQuotes: React.FC = () => {
               </Col>
               <Col span={12}>
                 <div style={{ display: 'flex', justifyContent: 'flex-end', columnGap: '5px' }}>
-                  <CustomColumns columns={visibleColumns} setColumns={setVisibleColumns} />
+                  <CustomColumns columns={columns} update={updateQuotesColumnStatus} />
                   <Button className="button-create" onClick={onCreate} type="primary">
                     Thêm {page}
                   </Button>
@@ -107,7 +94,7 @@ const SellQuotes: React.FC = () => {
         </Col>
         <Col span={24}>
           <Card padding="1rem">
-            <Show param={param} colums={columnQuotes} setListIdLead={''} visibleColumns={visibleColumns} path={path}>
+            <Show param={param} colums={columnQuotes} path={path}>
               <CustomersForm isEditing={true} />
             </Show>
           </Card>
