@@ -20,6 +20,7 @@ const initialColumns: Column[] = [
   { name: 'Quận/Huyện', status: true },
   { name: 'Phường/Xã', status: true },
   { name: 'Nhân viên phụ trách', status: true },
+  { name: 'Tên doanh nghiệp', status: true },
   { name: 'SĐT di động', status: true },
   { name: 'SĐT doanh nghiệp', status: true },
   { name: 'Email doanh nghiệp', status: true },

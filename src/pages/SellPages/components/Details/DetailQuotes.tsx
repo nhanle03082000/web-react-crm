@@ -227,7 +227,6 @@ const DetailQuotes: React.FC = () => {
     let before_tax = 0;
     let after_tax = 0;
     let tax = 0;
-    console.log(dataTable.length);
     for (let i = 0; i < dataTable.length; i++) {
       before_tax += Number(dataTable[i].amount_before_tax);
       after_tax += Number(dataTable[i].amount);
@@ -332,6 +331,7 @@ const DetailQuotes: React.FC = () => {
                                           style={{ width: '100%' }}
                                           formatter={formatter}
                                           parser={parser}
+                                          onBlur={getAmount('quantity', index, add, remove)}
                                         />
                                       </Form.Item>
                                     </Col>
@@ -514,32 +514,36 @@ const DetailQuotes: React.FC = () => {
                 )}
                 <Col span={24}>
                   <Row gutter={10} justify={'end'} style={{ marginTop: '10px', textAlign: 'right' }}>
-                    <Col span={24}>
-                      <span>Tổng thành tiền trước thuế:</span> &nbsp;
-                      <span>
-                        {amount.before_tax === 0
-                          ? data.total_before_tax?.toLocaleString('en-US', { useGrouping: true })
-                          : amount.before_tax?.toLocaleString('en-US', { useGrouping: true })}
-                        đ
-                      </span>
+                    <Col span={6} style={{ textAlign: 'right' }}>
+                      <H5>Tổng thành tiền trước thuế:</H5>
                     </Col>
-                    <Col span={24}>
-                      <span>Tổng tiền thuế:</span> &nbsp;
-                      <span>
-                        {amount.tax === 0
-                          ? data.total_tax_amount?.toLocaleString('en-US', { useGrouping: true })
-                          : amount.tax?.toLocaleString('en-US', { useGrouping: true })}
-                        đ
-                      </span>
+                    <Col span={4}>
+                      {amount.before_tax === 0
+                        ? data.total_before_tax?.toLocaleString('en-US', { useGrouping: true })
+                        : amount.before_tax?.toLocaleString('en-US', { useGrouping: true })}
+                      đ
                     </Col>
-                    <Col span={24} style={{ fontWeight: 700 }}>
-                      <span>Tổng cộng:</span> &nbsp;
-                      <span>
-                        {amount.after_tax === 0
-                          ? data.total_amount?.toLocaleString('en-US', { useGrouping: true })
-                          : amount.after_tax?.toLocaleString('en-US', { useGrouping: true })}
-                        đ
-                      </span>
+                  </Row>
+                  <Row gutter={10} justify={'end'} style={{ marginTop: '10px', textAlign: 'right' }}>
+                    <Col span={6} style={{ textAlign: 'right' }}>
+                      <H5>Tổng tiền thuế:</H5>
+                    </Col>
+                    <Col span={4}>
+                      {amount.tax === 0
+                        ? data.total_tax_amount?.toLocaleString('en-US', { useGrouping: true })
+                        : amount.tax?.toLocaleString('en-US', { useGrouping: true })}
+                      đ
+                    </Col>
+                  </Row>
+                  <Row gutter={10} justify={'end'} style={{ marginTop: '10px', textAlign: 'right' }}>
+                    <Col span={6} style={{ textAlign: 'right' }}>
+                      <H5>Tổng cộng:</H5>
+                    </Col>
+                    <Col span={4}>
+                      {amount.after_tax === 0
+                        ? data.total_amount?.toLocaleString('en-US', { useGrouping: true })
+                        : amount.after_tax?.toLocaleString('en-US', { useGrouping: true })}
+                      đ
                     </Col>
                   </Row>
                 </Col>

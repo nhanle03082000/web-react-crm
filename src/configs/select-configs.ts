@@ -5,6 +5,7 @@ export const listColor = [
   { value: 'green', label: 'Xanh lá' },
   { value: 'blue', label: 'Xanh dương' },
   { value: 'purple', label: 'Tím' },
+  { value: 'gray', label: 'Xám' },
 ];
 
 export const type = [

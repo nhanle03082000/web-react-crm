@@ -8,6 +8,7 @@ import { API_BASE_URL } from '@app/configs/api-configs';
 import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
 import { IFilter, IRespApiSuccess } from '@app/interfaces/interfaces';
+import { appActions } from '@app/store/slices/appSlice';
 import { Column, selectQuotesColumns, updateQuotesColumnStatus } from '@app/store/slices/columnSlice';
 import { Popconfirm, Space } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
@@ -25,8 +26,7 @@ const Show: React.FC<IProps> = ({ param, colums, path }) => {
   const { isLoad, show } = useContext(DataContext);
   const [dataShow, setDataShow] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
-  console.log();
+  const dispatch = useDispatch();
   const [filter, setFilter] = useState<IFilter>({
     page: 1,
     limit: 20,
@@ -51,6 +51,7 @@ const Show: React.FC<IProps> = ({ param, colums, path }) => {
           return (item.stt = index + 1);
         });
         setDataShow(respUsers.data.collection);
+        dispatch(appActions.getDataTable(respUsers.data.collection));
       }
     } catch (error: any) {
       notificationController.error({
@@ -135,7 +136,6 @@ const Show: React.FC<IProps> = ({ param, colums, path }) => {
             >
               <DeleteIcon />
             </Popconfirm>
-
             <EyeOutlined
               title="chi tiết"
               style={{ fontSize: '20px', cursor: 'pointer' }}
@@ -149,7 +149,6 @@ const Show: React.FC<IProps> = ({ param, colums, path }) => {
     },
   ];
   columns.push(...colums);
-  const dispatch = useDispatch();
 
   const columnss = useSelector(selectQuotesColumns);
 

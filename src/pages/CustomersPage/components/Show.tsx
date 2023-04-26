@@ -7,6 +7,7 @@ import { API_BASE_URL } from '@app/configs/api-configs';
 import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
 import { IFilter, IRespApiSuccess } from '@app/interfaces/interfaces';
+import { appActions } from '@app/store/slices/appSlice';
 import { Column, selectCustomerColumns, updateCustomerColumnStatus } from '@app/store/slices/columnSlice';
 import { Popconfirm, Space } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
@@ -48,6 +49,7 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead }) => {
         respUsers.data.collection.map((item: any, index: number) => {
           return (item.stt = index + 1);
         });
+        dispatch(appActions.getDataTable(respUsers.data.collection));
         setDataShow(respUsers.data.collection);
       }
     } catch (error: any) {

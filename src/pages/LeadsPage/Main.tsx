@@ -56,8 +56,6 @@ const Main: React.FC = () => {
     setParam(param);
   };
 
-  console.log(param);
-
   useEffect(() => {
     const getSaleProcessesList = async () => {
       try {
@@ -127,7 +125,9 @@ const Main: React.FC = () => {
                   {saleProcesses.map((item: any, index: number) => {
                     return (
                       <Button
-                        className={`sale-button ${activeButtonSale === index ? 'sale-focus' : ''} `}
+                        className={`sale-button ${activeButtonSale === index ? 'sale-focus' : ''} ${
+                          item.color === 'yellow' ? 'text-black' : ''
+                        } `}
                         key={item.id}
                         style={{ backgroundColor: item.color, color: '#fff', borderRadius: '20px', border: 'none' }}
                         onClick={() => onFilterChange(item.id, index)}

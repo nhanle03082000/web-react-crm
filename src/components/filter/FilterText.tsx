@@ -26,7 +26,7 @@ const FilterText: React.FC<IFilterText> = ({ onChange, onChangeValue, defaultVal
 
   return (
     <>
-      <Select defaultValue={initValue} onChange={onChange} size="small" options={option} />
+      <Select defaultValue={initValue} mode="multiple" onChange={onChange} size="small" options={option} />
       <Input size="small" onChange={(e) => onChangeValue(e.target.value)} />
     </>
   );

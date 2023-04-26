@@ -84,4 +84,7 @@ export const customStyle = css`
   .ant-input-number-handler-wrap {
     display: none;
   }
+  .text-black {
+    color: #000 !important;
+  }
 `;

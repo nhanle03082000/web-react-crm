@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import DetailModal from '../../LeadsPage/components/Details/DetailModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { Column, selectLeadColumns, updateLeadColumnStatus } from '@app/store/slices/columnSlice';
+import { appActions } from '@app/store/slices/appSlice';
 
 interface IProps {
   param: string | null;
@@ -50,6 +51,7 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, permission }) =>
         respUsers.data.collection.map((item: any, index: number) => {
           return (item.stt = index + 1);
         });
+        dispatch(appActions.getDataTable(respUsers.data.collection));
         setDataShow(respUsers.data.collection);
       }
     } catch (error: any) {

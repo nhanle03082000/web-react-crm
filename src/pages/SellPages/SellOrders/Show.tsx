@@ -7,8 +7,10 @@ import { API_BASE_URL } from '@app/configs/api-configs';
 import { DataContext } from '@app/contexts/DataContext';
 import { notificationController } from '@app/controllers/notificationController';
 import { IFilter, IRespApiSuccess } from '@app/interfaces/interfaces';
+import { appActions } from '@app/store/slices/appSlice';
 import { Popconfirm, Space } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 interface IProps {
@@ -24,7 +26,7 @@ const Show: React.FC<IProps> = ({ param, colums, path }) => {
   const { isLoad } = useContext(DataContext);
   const [dataShow, setDataShow] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
+  const dispatch = useDispatch();
   const [filter, setFilter] = useState<IFilter>({
     page: 1,
     limit: 20,
@@ -49,6 +51,7 @@ const Show: React.FC<IProps> = ({ param, colums, path }) => {
           return (item.stt = index + 1);
         });
         setDataShow(respUsers.data.collection);
+        dispatch(appActions.getDataTable(respUsers.data.collection));
       }
     } catch (error: any) {
       notificationController.error({

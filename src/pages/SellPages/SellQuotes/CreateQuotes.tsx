@@ -356,6 +356,7 @@ const CreateQuotes: React.FC = () => {
                                         style={{ width: '100%' }}
                                         formatter={formatter}
                                         parser={parser}
+                                        onBlur={getAmount('quantity', index, add, remove)}
                                       />
                                     </Form.Item>
                                   </Col>

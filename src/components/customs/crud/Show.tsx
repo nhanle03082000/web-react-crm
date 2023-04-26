@@ -11,6 +11,8 @@ import Delete from './Delete';
 import Update from './Update';
 import { useAppDispatch, useAppSelector } from '@app/hooks/reduxHooks';
 import { startLoading, stopLoading } from '@app/utils/redux.util';
+import { appActions } from '@app/store/slices/appSlice';
+import { useDispatch } from 'react-redux';
 
 interface IProps {
   param: string | null;
@@ -32,6 +34,7 @@ const Show: React.FC<IProps> = ({ children, param, colums, permission, sortColum
     sort_direction: 'desc',
     sort_column: sortColumn ? sortColumn : 'created_at',
   });
+  const dispatch = useDispatch();
 
   const f = Object.entries(filter)
     .map(([key, value]: any) => `${key}=${value}`)
@@ -46,6 +49,7 @@ const Show: React.FC<IProps> = ({ children, param, colums, permission, sortColum
       if (respUsers.code === 200) {
         setFilter({ ...filter, total: respUsers.data.total });
         setShowData(respUsers.data.collection);
+        dispatch(appActions.getDataTable(respUsers.data.collection));
       }
     } catch (error: any) {
       notificationController.error({

@@ -229,11 +229,11 @@ const UpdateLead: React.FC<Iprops> = ({ setIsEdit, isEdit, data }) => {
                   </Col>
                   <Col span={8}>
                     <Form.Item
-                      name="customer_source_id"
-                      label="Nguồn gốc"
-                      rules={[{ required: true, message: 'Nguồn gốc không được bỏ trống!' }]}
+                      label="Lĩnh vực"
+                      name="company_field_id"
+                      rules={[{ required: true, message: 'Lĩnh vực không được bỏ trống!' }]}
                     >
-                      <Select options={customerSources} placeholder="Chọn nguồn gốc" />
+                      <Select options={companyFields} placeholder="Chọn lĩnh vực" />
                     </Form.Item>
                   </Col>
                   <Col span={8}>
@@ -259,14 +259,13 @@ const UpdateLead: React.FC<Iprops> = ({ setIsEdit, isEdit, data }) => {
                   </Col>
                   <Col span={8}>
                     <Form.Item
-                      label="Lĩnh vực"
-                      name="company_field_id"
-                      rules={[{ required: true, message: 'Lĩnh vực không được bỏ trống!' }]}
+                      name="customer_source_id"
+                      label="Nguồn gốc"
+                      rules={[{ required: true, message: 'Nguồn gốc không được bỏ trống!' }]}
                     >
-                      <Select options={companyFields} placeholder="Chọn lĩnh vực" />
+                      <Select options={customerSources} placeholder="Chọn nguồn gốc" />
                     </Form.Item>
                   </Col>
-
                   <Col span={8}>
                     <Form.Item
                       name="sale_process_id"

@@ -2,6 +2,7 @@ import DeleteIcon from '@app/assets/icon-components/DeleteIcon';
 import { Button } from '@app/components/common/buttons/Button/Button';
 import { Select } from '@app/components/common/selects/Select/Select';
 import { DataContext } from '@app/contexts/DataContext';
+import { useAppSelector } from '@app/hooks/reduxHooks';
 import { Col, Form, Row } from 'antd';
 import moment from 'moment';
 import React, { useContext, useState } from 'react';
@@ -11,7 +12,12 @@ import FilterText from './FilterText';
 interface IProps {
   option: { value: string; label: string; type: string }[];
   setParam: any;
-  initialValue: { field: string; operator: string; value: string }[];
+  initialValue: any[];
+}
+
+interface Item {
+  id: number;
+  name: string;
 }
 
 const Filter: React.FC<IProps> = ({ option, setParam, initialValue }) => {
@@ -21,13 +27,25 @@ const Filter: React.FC<IProps> = ({ option, setParam, initialValue }) => {
   const handleClickAddRow = () => {
     setListFilter([...listFilter, defaultNewFilter]);
   };
+  const dataFromTable = useAppSelector((state) => state.app.dataTable);
+  const [optionIncludesOperator, setOptionIncludesOperator] = useState<{ value: string; label: string }[]>([
+    { value: '', label: '' },
+  ]);
 
   const renderFilter = (name: number, index: number) => {
     switch (listFilter[index].field.type) {
       case 'datetime':
         return <FilterDateTime name={name} />;
       default:
-        return <FilterText name={name} />;
+        return (
+          <FilterText
+            name={name}
+            dataFromTable={dataFromTable}
+            dataField={listFilter[index].field}
+            optionIncludesOperator={optionIncludesOperator}
+            setOptionIncludesOperator={setOptionIncludesOperator}
+          />
+        );
     }
   };
 
@@ -36,10 +54,11 @@ const Filter: React.FC<IProps> = ({ option, setParam, initialValue }) => {
     values.filter.forEach((filter: any, i: any) => {
       f[`f[${i}][field]`] = filter.field;
       f[`f[${i}][operator]`] = filter.operator;
-      f[`f[${i}][value]`] =
-        typeof values.filter[i].value === 'string'
-          ? values.filter[i].value
-          : moment(new Date(filter.value).toUTCString()).format('YYYY/MM/DD');
+      if (moment.isMoment(values.filter[i].value)) {
+        f[`f[${i}][value]`] = moment(new Date(filter.value).toUTCString()).format('YYYY/MM/DD');
+      } else {
+        f[`f[${i}][value]`] = values.filter[i].value;
+      }
     });
     const param = Object.entries(f)
       .map(([key, value]: any) => `${key}=${value}`)
@@ -51,11 +70,34 @@ const Filter: React.FC<IProps> = ({ option, setParam, initialValue }) => {
   const onChangeField = (index: number) => (value: any) => {
     const foundItem = option.find((item: any) => item.value === value);
     listFilter.splice(index, 1, {
-      field: foundItem,
+      field: foundItem?.value,
       operator: listFilter[index].operator,
       value: listFilter[index].value,
     });
     setListFilter([...listFilter]);
+    // const optionIncludes = dataFromTable.map((item) => {
+    //   return { value: item[listFilter[index].field], label: item[listFilter[index].field] };
+    // });
+    if (listFilter[index].field.includes('.')) {
+      const [part1, part2] = listFilter[index].field.split('.');
+      const optionIncludes = dataFromTable.map((item: any) => {
+        return { value: item[part1]?.name, label: item[part1]?.name };
+      });
+      const uniqueArr: any = optionIncludes.reduce((acc: any, current: any) => {
+        const x = acc.find((item: any) => item.value === current.value);
+        if (!x) {
+          return acc.concat([current]);
+        } else {
+          console.log(acc);
+        }
+      }, []);
+      setOptionIncludesOperator(uniqueArr);
+    } else {
+      const optionIncludes = dataFromTable.map((item: any) => {
+        return { value: item[listFilter[index].field], label: item[listFilter[index].field] };
+      });
+      setOptionIncludesOperator(optionIncludes);
+    }
   };
 
   return (
