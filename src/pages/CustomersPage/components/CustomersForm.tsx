@@ -152,7 +152,7 @@ const CustomersForm: React.FC<IProps> = ({ isEditing }) => {
           <Form.Item
             name="phone_number"
             label="SĐT người đại diện"
-            rules={[{ max: 10, message: 'SĐT phải có độ dài tối đa 10 số!' }]}
+            rules={[{ len: 10, message: 'Số điện thoại phải có 10 số!' }]}
           >
             <Input placeholder="Nhập SĐT cá nhân" size="small" />
           </Form.Item>
@@ -163,7 +163,7 @@ const CustomersForm: React.FC<IProps> = ({ isEditing }) => {
             label="Số điện thoại tại trụ sở chính"
             rules={[
               { required: true, message: 'SĐT không được bỏ trống!' },
-              { max: 10, message: 'SĐT phải có độ dài tối đa 10 số!' },
+              { len: 10, message: 'Số điện thoại phải có 10 số!' },
             ]}
           >
             <Input placeholder="Nhập SĐT doanh nghiệp" size="small" />

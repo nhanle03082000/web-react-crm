@@ -362,7 +362,7 @@ const CreateFromLead: React.FC<IProps> = ({ titleButton, defaultValues }) => {
                   <Form.Item
                     label="SĐT người đại diện"
                     name="phone_number"
-                    rules={[{ max: 10, message: 'SĐT phải có độ dài tối đa 10 số!' }]}
+                    rules={[{ len: 10, message: 'Số điện thoại phải có 10 số!' }]}
                   >
                     <Input placeholder="Nhập SĐT người đại diện" size="small" />
                   </Form.Item>

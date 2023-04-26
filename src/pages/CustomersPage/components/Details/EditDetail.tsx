@@ -310,7 +310,7 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data }) => {
                   <Form.Item
                     label="SĐT người đại diện"
                     name="phone_number"
-                    rules={[{ max: 10, message: 'Số điện thoại phải có độ dài tối đa 10 số!' }]}
+                    rules={[{ len: 10, message: 'Số điện thoại phải có 10 số!' }]}
                   >
                     <Input placeholder="Nhập SĐT" size="small" />
                   </Form.Item>

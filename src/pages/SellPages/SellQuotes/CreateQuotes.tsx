@@ -284,7 +284,10 @@ const CreateQuotes: React.FC = () => {
                     <Form.Item
                       label="Số điện thoại khách hàng"
                       name="phone_number"
-                      rules={[{ required: true, message: 'Số điện thoại khách hàng không được bỏ trống!' }]}
+                      rules={[
+                        { required: true, message: 'Số điện thoại khách hàng không được bỏ trống!' },
+                        { len: 10, message: 'Số điện thoại phải có 10 số!' },
+                      ]}
                     >
                       <Input disabled placeholder="Nhập số điện thoại khách hàng" size="small" />
                     </Form.Item>
