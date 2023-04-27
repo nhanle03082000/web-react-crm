@@ -1,9 +1,10 @@
 import { UploadOutlined } from '@ant-design/icons';
 import { apiInstance } from '@app/api/app/api_core';
-import { Card } from '@app/components/common/Card/Card';
-import { Upload } from '@app/components/common/Upload/Upload';
 import { Button } from '@app/components/common/buttons/Button/Button';
+import { Card } from '@app/components/common/Card/Card';
+import { Popover } from '@app/components/common/Popover/Popover';
 import { H3 } from '@app/components/common/typography/H3/H3';
+import { Upload } from '@app/components/common/Upload/Upload';
 import Assign from '@app/components/customs/assign/Assign';
 import Create from '@app/components/customs/crud/Create';
 import ExportExcel from '@app/components/customs/exportexcel/ExportExcel';
@@ -12,15 +13,16 @@ import { columnLead } from '@app/components/customs/tables/columns';
 import { API_BASE_URL, API_URL } from '@app/configs/api-configs';
 import { filterLead } from '@app/configs/filter-configs';
 import { DataContext } from '@app/contexts/DataContext';
+import { useResponsive } from '@app/hooks/useResponsive';
 import { IRespApiSuccess } from '@app/interfaces/interfaces';
+import { selectLeadColumns, updateLeadColumnStatus } from '@app/store/slices/columnSlice';
 import { getRoleUser } from '@app/utils/redux.util';
 import { Col, Row, Space, Typography } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import CustomColumns from '../../components/customs/tables/CustomColumns';
 import LeadForm from './components/LeadForm';
 import Show from './components/Show';
-import { useSelector } from 'react-redux';
-import { selectLeadColumns, updateLeadColumnStatus } from '@app/store/slices/columnSlice';
 
 const Main: React.FC = () => {
   const { page, path } = useContext(DataContext);
@@ -32,6 +34,7 @@ const Main: React.FC = () => {
   const download = '/files/file_mau_import.xlsx';
   const [listIdLead, setListIdLead] = useState([]);
   const columns: any = useSelector(selectLeadColumns);
+  const { isDesktop } = useResponsive();
   const initialValue = [
     { field: 'tax_code', operator: 'contain', value: '' },
     { field: 'company_name', operator: 'contain', value: '' },
@@ -72,35 +75,72 @@ const Main: React.FC = () => {
     <Row gutter={[10, 10]}>
       <Col span={24}>
         <Card padding="1rem">
-          <Row justify={'space-between'}>
+          <Row justify={'space-between'} align="middle">
             <Col span={12}>
               <H3 className="typography-title">{page}</H3>
             </Col>
-            <Col span={12}>
-              <div style={{ display: 'flex', justifyContent: 'flex-end', columnGap: '5px' }}>
-                <CustomColumns columns={columns} update={updateLeadColumnStatus} />
-                {permission.import && (
-                  <>
-                    <Upload accept=".pdf,.doc,.docx,.xls,.xlsx" maxCount={1}>
-                      <Button type="primary" icon={<UploadOutlined />}>
-                        Nhập từ file
+            <Col span={12} xs={8} style={{ display: 'flex', flexDirection: 'column', alignItems: 'end' }}>
+              {isDesktop ? (
+                <div style={{ display: 'flex', justifyContent: 'flex-end', columnGap: '5px' }}>
+                  <CustomColumns columns={columns} update={updateLeadColumnStatus} />
+                  {permission.import && (
+                    <>
+                      <Upload accept=".pdf,.doc,.docx,.xls,.xlsx" maxCount={1}>
+                        <Button type="primary" icon={<UploadOutlined />}>
+                          Nhập từ file
+                        </Button>
+                      </Upload>
+                      <Button type="primary">
+                        <Typography.Link href={download} target="_blank">
+                          Tải file mẫu
+                        </Typography.Link>
                       </Button>
-                    </Upload>
-                    <Button type="primary">
-                      <Typography.Link href={download} target="_blank">
-                        Tải file mẫu
-                      </Typography.Link>
-                    </Button>
-                  </>
-                )}
-                {permission.assign && <Assign list={listIdLead} buttonName="Phân công" />}
-                {permission.create && (
-                  <Create>
-                    <LeadForm isEditing={false} />
-                  </Create>
-                )}
-                {permission.export && <ExportExcel param={param} />}
-              </div>
+                    </>
+                  )}
+                  {permission.assign && <Assign list={listIdLead} buttonName="Phân công" />}
+                  {permission.create && (
+                    <Create>
+                      <LeadForm isEditing={false} />
+                    </Create>
+                  )}
+                  {permission.export && <ExportExcel param={param} />}
+                </div>
+              ) : (
+                <Popover
+                  style={{ display: 'flex', justifyContent: 'flex-end' }}
+                  content={
+                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', gap: '5px' }}>
+                      <CustomColumns columns={columns} update={updateLeadColumnStatus} />
+                      {permission.import && (
+                        <>
+                          <Upload accept=".pdf,.doc,.docx,.xls,.xlsx" maxCount={1}>
+                            <Button type="primary" icon={<UploadOutlined />}>
+                              Nhập từ file
+                            </Button>
+                          </Upload>
+                          <Button type="primary">
+                            <Typography.Link href={download} target="_blank">
+                              Tải file mẫu
+                            </Typography.Link>
+                          </Button>
+                        </>
+                      )}
+                      {permission.assign && <Assign list={listIdLead} buttonName="Phân công" />}
+                      {permission.create && (
+                        <Create>
+                          <LeadForm isEditing={false} />
+                        </Create>
+                      )}
+                      {permission.export && <ExportExcel param={param} />}
+                    </div>
+                  }
+                  title="Hành động"
+                >
+                  <Button type="primary" style={{ width: 'fit-content' }}>
+                    Hành động
+                  </Button>
+                </Popover>
+              )}
             </Col>
           </Row>
           <Row style={{ marginTop: '10px' }}>
@@ -110,18 +150,18 @@ const Main: React.FC = () => {
           </Row>
           <Row style={{ marginTop: '10px' }}>
             <Col span={24}>
-              <Col>
-                <Space>Bước bán hàng: &nbsp;</Space>
+              <Row>
+                <Space>Bước bán hàng:</Space>
                 <Space>
                   <Button
                     onClick={() => onFilterChange(0, -1)}
                     className={`sale-button ${activeButtonSale === -1 ? 'sale-focus' : ''} `}
-                    style={{ borderRadius: '20px', marginRight: '8px' }}
+                    style={{ borderRadius: '20px', margin: '4px 8px' }}
                   >
                     Tất cả
                   </Button>
                 </Space>
-                <Space>
+                <Space style={{ flexWrap: 'wrap' }}>
                   {saleProcesses.map((item: any, index: number) => {
                     return (
                       <Button
@@ -138,7 +178,7 @@ const Main: React.FC = () => {
                     );
                   })}
                 </Space>
-              </Col>
+              </Row>
             </Col>
           </Row>
         </Card>

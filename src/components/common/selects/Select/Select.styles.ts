@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Select as AntSelect } from 'antd';
 import { Dimension } from 'interfaces/interfaces';
 import { normalizeProp } from 'utils/utils';
-import { FONT_WEIGHT, BORDER_RADIUS, FONT_SIZE } from '@app/styles/themes/constants';
+import { FONT_WEIGHT, BORDER_RADIUS, FONT_SIZE, media } from '@app/styles/themes/constants';
 
 export interface SelectProps {
   width?: Dimension;
@@ -15,7 +15,6 @@ export const Select = styled(AntSelect).withConfig({
   width: ${(props) => props.width && normalizeProp(props.width)};
 
   font-weight: ${FONT_WEIGHT.medium};
-
   box-shadow: ${(props) => props.shadow && 'var(--box-shadow)'};
 
   &.ant-select-borderless {
@@ -29,7 +28,19 @@ export const Select = styled(AntSelect).withConfig({
 
     color: var(--text-main-color);
   }
-
+  @media only screen and ${media.xs} {
+    .ant-select-selection-item {
+      font-size: 12px !important;
+    }
+  }
+  @media only screen and ${media.md} {
+    .ant-select-selection-item {
+      font-size: 16px !important;
+    }
+  }
+  &.ant-select {
+    font-size: 12px;
+  }
   .ant-select-arrow {
     color: var(--text-main-color);
   }
@@ -59,16 +70,16 @@ export const Select = styled(AntSelect).withConfig({
     color: var(--disabled-color);
   }
   &.ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
-    height: 34px;
+    height: unset;
     align-items: center;
   }
   &.ant-select-single .ant-select-selector .ant-select-selection-item {
-    line-height: 32px;
+    line-height: unset;
   }
   &.ant-select-single:not(.ant-select-customize-input) .ant-select-selector .ant-select-selection-search-input {
-    height: 32px;
+    height: unset;
   }
   &.ant-select-single:not(.ant-select-customize-input) .ant-select-selector::after {
-    line-height: 32px;
+    line-height: unset;
   }
 `;

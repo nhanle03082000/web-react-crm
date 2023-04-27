@@ -100,6 +100,7 @@ const Create: React.FC<IProps> = ({ children }) => {
         open={isModalOpen}
         onCancel={handleCancel}
         maskClosable={false}
+        centered
         size="large"
         footer={null}
       >

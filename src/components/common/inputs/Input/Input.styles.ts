@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Input as AntInput } from 'antd';
-import { FONT_WEIGHT, FONT_SIZE } from '@app/styles/themes/constants';
+import { FONT_WEIGHT, FONT_SIZE, media } from '@app/styles/themes/constants';
 
 export const Input = styled(AntInput)`
   .ant-input-group-addon:first-child,
@@ -9,6 +9,14 @@ export const Input = styled(AntInput)`
     color: var(--primary-color);
     font-weight: ${FONT_WEIGHT.semibold};
     font-size: ${FONT_SIZE.lg};
+  }
+
+  @media only screen and ${media.xs} {
+    font-size: 12px;
+  }
+
+  @media only screen and ${media.md} {
+    font-size: 16px !important;
   }
 
   .ant-input-group-addon .ant-select {

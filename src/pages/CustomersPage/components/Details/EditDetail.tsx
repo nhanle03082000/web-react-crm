@@ -188,8 +188,7 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data }) => {
                 <Col span={24}>
                   <H4 className="uppercase">Thông tin tổ chức</H4>
                 </Col>
-
-                <Col span={8}>
+                <Col span={8} xs={12}>
                   <Form.Item
                     label="Tên doanh nghiệp"
                     name="company_name"
@@ -198,7 +197,7 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data }) => {
                     <Input placeholder="Nhập tên doanh nghiệp" size="small" />
                   </Form.Item>
                 </Col>
-                <Col span={8}>
+                <Col span={8} xs={12}>
                   <Form.Item
                     label="Mã số thuế"
                     name="tax_code"
@@ -207,7 +206,7 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data }) => {
                     <Input placeholder="Nhập mã số thuế" size="small" disabled={true} />
                   </Form.Item>
                 </Col>
-                <Col span={8}>
+                <Col span={8} xs={12}>
                   <Form.Item
                     name="customer_source_id"
                     label="Nguồn gốc"
@@ -216,7 +215,7 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data }) => {
                     <Select options={customerSources} placeholder="Chọn nguồn gốc" />
                   </Form.Item>
                 </Col>
-                <Col span={8}>
+                <Col span={8} xs={12}>
                   <Form.Item
                     name="headquarters_phone"
                     label="SĐT doanh nghiệp"
@@ -228,7 +227,7 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data }) => {
                     <Input placeholder="Nhập SĐT doanh nghiệp" size="small" />
                   </Form.Item>
                 </Col>
-                <Col span={8}>
+                <Col span={8} xs={12}>
                   <Form.Item
                     label="Email doanh nghiệp"
                     name="headquarters_email"
@@ -237,7 +236,7 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data }) => {
                     <Input placeholder="Nhập email doanh nghiệp" size="small" />
                   </Form.Item>
                 </Col>
-                <Col span={8}>
+                <Col span={8} xs={12}>
                   <Form.Item
                     label="Lĩnh vực"
                     name="company_field_id"
@@ -247,7 +246,7 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data }) => {
                   </Form.Item>
                 </Col>
 
-                <Col span={8}>
+                <Col span={8} xs={12}>
                   <Form.Item
                     name="sale_process_id"
                     label="Quy trình bán hàng"
@@ -256,7 +255,7 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data }) => {
                     <Select options={saleProcesses} placeholder="Chọn quy trình bán hàng" />
                   </Form.Item>
                 </Col>
-                <Col span={8}>
+                <Col span={8} xs={12}>
                   <Form.Item
                     name="headquarters_province_id"
                     label="Tỉnh/TP"
@@ -265,7 +264,7 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data }) => {
                     <Select options={provinces} onChange={onChangeProvinces} placeholder="Chọn tỉnh/TP" />
                   </Form.Item>
                 </Col>
-                <Col span={8}>
+                <Col span={8} xs={12}>
                   <Form.Item
                     name="headquarters_district_id"
                     label="Quận/Huyện"
@@ -274,7 +273,7 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data }) => {
                     <Select options={districts} onChange={onChangeDistricts} placeholder="Chọn quận/Huyện" />
                   </Form.Item>
                 </Col>
-                <Col span={8}>
+                <Col span={8} xs={12}>
                   <Form.Item
                     name="headquarters_area_id"
                     label="Phường/Xã"
@@ -283,7 +282,7 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data }) => {
                     <Select options={areas} placeholder="Chọn phường/Xã" />
                   </Form.Item>
                 </Col>
-                <Col span={16}>
+                <Col span={16} xs={24}>
                   <Form.Item
                     name="headquarters_address"
                     label="Địa chỉ trụ sở chính"
@@ -297,7 +296,7 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data }) => {
                 <Col span={24}>
                   <H4 className="uppercase">Thông tin cá nhân</H4>
                 </Col>
-                <Col span={8}>
+                <Col span={8} xs={12}>
                   <Form.Item
                     name="name"
                     label="Họ tên người đại diện"
@@ -306,7 +305,7 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data }) => {
                     <Input placeholder="Nhập họ tên người đại diện" size="small" />
                   </Form.Item>
                 </Col>
-                <Col span={8}>
+                <Col span={8} xs={12}>
                   <Form.Item
                     label="SĐT người đại diện"
                     name="phone_number"
@@ -315,12 +314,12 @@ const EditDetail: React.FC<Iprops> = ({ setIsEdit, data }) => {
                     <Input placeholder="Nhập SĐT" size="small" />
                   </Form.Item>
                 </Col>
-                <Col span={8}>
+                <Col span={8} xs={12}>
                   <Form.Item name="email" label="Email người đại diện">
                     <Input placeholder="Nhập email" size="small" />
                   </Form.Item>
                 </Col>
-                <Col style={{ display: 'flex' }}>
+                <Col style={{ display: 'flex' }} xs={24}>
                   <Form.Item>
                     <Button type="ghost" onClick={() => setIsEdit(false)}>
                       Huỷ

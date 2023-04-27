@@ -3,7 +3,7 @@ import { Modal } from '@app/components/common/Modal/Modal';
 import { H4 } from '@app/components/common/typography/H4/H4';
 import { H5 } from '@app/components/common/typography/H5/H5';
 import { DataContext } from '@app/contexts/DataContext';
-import { Col, Form, Row, Tooltip, Typography } from 'antd';
+import { Col, Row, Tooltip, Typography } from 'antd';
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 
@@ -13,14 +13,12 @@ interface IProps {
 }
 
 const DetailModal: React.FC<IProps> = ({ id, contentButton }) => {
-  const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { path, page, state, setState } = useContext(DataContext);
 
   const onDataById = async () => {
     const dataById = await getDataById(id, path);
     setState(dataById);
-    form.setFieldsValue(dataById);
   };
 
   const showModal = async () => {
@@ -55,46 +53,46 @@ const DetailModal: React.FC<IProps> = ({ id, contentButton }) => {
           <Col span={24}>
             <H4 className="uppercase">Thông tin tổ chức</H4>
           </Col>
-          <Col span={8}>
+          <Col span={8} xs={12} style={{ whiteSpace: 'break-spaces' }}>
             <H5>Tên doanh nghiệp</H5>
-            <div>{state?.company_name}</div>
+            <Typography.Text>{state?.company_name}</Typography.Text>
           </Col>
-          <Col span={8}>
+          <Col span={8} xs={12} style={{ whiteSpace: 'break-spaces' }}>
             <H5>Mã số thuế</H5>
-            <div>{state?.tax_code}</div>
+            <Typography.Text>{state?.tax_code}</Typography.Text>
           </Col>
-          <Col span={8} style={{ whiteSpace: 'break-spaces' }}>
+          <Col span={8} xs={12} style={{ whiteSpace: 'break-spaces' }}>
             <H5>Địa chỉ doanh nghiệp</H5>
-            <div>{state?.headquarters_address}</div>
+            <Typography.Text>{state?.headquarters_address}</Typography.Text>
           </Col>
-          <Col span={8}>
-            <H5>SĐT doanh nhiệp</H5>
-            <div>{state?.headquarters_phone}</div>
+          <Col span={8} xs={12} style={{ whiteSpace: 'break-spaces' }}>
+            <H5>SĐT doanh nghiệp</H5>
+            <Typography.Text>{state?.headquarters_phone}</Typography.Text>
           </Col>
-          <Col span={8}>
-            <H5>Email doanh nhiệp</H5>
-            <div>{state?.headquarters_email}</div>
+          <Col span={8} xs={12} style={{ whiteSpace: 'break-spaces' }}>
+            <H5>Email doanh nghiệp</H5>
+            <Typography.Text>{state?.headquarters_email}</Typography.Text>
           </Col>
-          <Col span={8}>
+          <Col span={8} xs={12} style={{ whiteSpace: 'break-spaces' }}>
             <H5>Nguồn gốc</H5>
-            <div>{state?.customer_source?.name}</div>
+            <Typography.Text>{state?.customer_source?.name}</Typography.Text>
           </Col>
         </Row>
         <Row style={{ marginTop: '10px' }}>
           <Col span={24}>
             <H4 className="uppercase">Thông tin cá nhân</H4>
           </Col>
-          <Col span={8}>
+          <Col span={8} xs={12} style={{ whiteSpace: 'break-spaces' }}>
             <H5>Họ tên</H5>
-            <div>{state?.name}</div>
+            <Typography.Text>{state?.name}</Typography.Text>
           </Col>
-          <Col span={8}>
+          <Col span={8} xs={12} style={{ whiteSpace: 'break-spaces' }}>
             <H5>SĐT di động</H5>
-            <div>{state?.phone_number}</div>
+            <Typography.Text>{state?.phone_number}</Typography.Text>
           </Col>
-          <Col span={8}>
+          <Col span={8} xs={12} style={{ whiteSpace: 'break-spaces' }}>
             <H5>Email cá nhân</H5>
-            <div>{state?.email}</div>
+            <Typography.Text>{state?.email}</Typography.Text>
           </Col>
         </Row>
       </Modal>
