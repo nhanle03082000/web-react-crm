@@ -14,6 +14,7 @@ import DetailModal from '../../LeadsPage/components/Details/DetailModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { Column, selectLeadColumns, updateLeadColumnStatus } from '@app/store/slices/columnSlice';
 import { appActions } from '@app/store/slices/appSlice';
+import { H4 } from '@app/components/common/typography/H4/H4';
 
 interface IProps {
   param: string | null;
@@ -135,7 +136,7 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, permission }) =>
     }
   }, [dispatch]);
 
-  return (
+  return dataShow.length > 0 ? (
     <>
       <Table
         columns={columns.filter((column: any) => col.includes(column.title))}
@@ -153,6 +154,8 @@ const Show: React.FC<IProps> = ({ param, colums, setListIdLead, permission }) =>
         onPageChange={handlePageChange}
       />
     </>
+  ) : (
+    <H4>Chưa có dữ liệu</H4>
   );
 };
 

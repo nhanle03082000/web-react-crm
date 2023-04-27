@@ -127,28 +127,28 @@ const Detail: React.FC = () => {
                       <Col span={24}>
                         <H4>Thông tin chung</H4>
                       </Col>
-                      <Col span={8}>
+                      <Col span={8} xs={12}>
                         <H5>Tên DN</H5>
                         <div>{data?.company_name}</div>
                       </Col>
-                      <Col span={8}>
+                      <Col span={8} xs={10}>
                         <H5>Mã số thuế</H5>
                         <div>{data?.tax_code}</div>
                       </Col>
-                      <Col span={8}>
+                      <Col span={8} xs={2}>
                         <Button className="button-edit" onClick={onEdit}>
                           <EditOutlined style={{ fontSize: '24px', color: 'var(--primary-color)' }} />
                         </Button>
                       </Col>
-                      <Col span={8}>
+                      <Col span={8} xs={12}>
                         <H5>Họ tên người đại diện</H5>
                         <div>{data?.name}</div>
                       </Col>
-                      <Col span={8}>
+                      <Col span={8} xs={12}>
                         <H5>SĐT di động</H5>
                         <div>{data?.phone_number}</div>
                       </Col>
-                      <Col span={8}>
+                      <Col span={8} xs={12}>
                         <H5>Email cá nhân</H5>
                         <div>{data?.email}</div>
                       </Col>
@@ -157,24 +157,24 @@ const Detail: React.FC = () => {
                       <Col span={24}>
                         <H4>Thông tin tổ chức</H4>
                       </Col>
-                      <Col span={8}>
+                      <Col span={8} xs={12}>
                         <H5>Số điện thoại doanh nhiệp</H5>
                         <div>{data?.headquarters_phone}</div>
                       </Col>
-                      <Col span={8}>
+                      <Col span={8} xs={12}>
                         <H5>Email doanh nhiệp</H5>
                         <div>{data?.headquarters_email}</div>
                       </Col>
-                      <Col span={8}></Col>
-                      <Col span={8}>
+                      <Col span={8} xs={0}></Col>
+                      <Col span={8} xs={12}>
                         <H5>Lĩnh vực doanh nghiệp</H5>
                         <div>{data?.company_field?.name}</div>
                       </Col>
-                      <Col span={8}>
+                      <Col span={8} xs={12}>
                         <H5>Nguồn gốc</H5>
                         <div>{data?.customer_source?.name}</div>
                       </Col>
-                      <Col span={8}>
+                      <Col span={8} xs={12}>
                         <H5>Quy trình bán hàng</H5>
                         <div>{data?.sale_process?.name}</div>
                       </Col>
@@ -183,19 +183,19 @@ const Detail: React.FC = () => {
                       <Col span={24}>
                         <H4>Thông tin địa chỉ</H4>
                       </Col>
-                      <Col span={8}>
+                      <Col span={8} xs={12}>
                         <H5>Tỉnh/TP</H5>
                         <div>{data?.province?.name}</div>
                       </Col>
-                      <Col span={8}>
+                      <Col span={8} xs={12}>
                         <H5>Quận/Huyện</H5>
                         <div>{data?.district?.name}</div>
                       </Col>
-                      <Col span={8}>
+                      <Col span={8} xs={12}>
                         <H5>Phường/Xã</H5>
                         <div>{data?.area?.name}</div>
                       </Col>
-                      <Col span={24}>
+                      <Col span={24} xs={12}>
                         <H5>Địa chỉ</H5>
                         <div>{data?.headquarters_address}</div>
                       </Col>

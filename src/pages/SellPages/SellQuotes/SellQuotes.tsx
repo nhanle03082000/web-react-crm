@@ -71,11 +71,11 @@ const SellQuotes: React.FC = () => {
       <Row gutter={[10, 10]}>
         <Col span={24}>
           <Card padding="1rem">
-            <Row justify={'space-between'}>
-              <Col span={12}>
+            <Row justify="space-between" align="middle">
+              <Col span={4}>
                 <H3 className="typography-title">{page}</H3>
               </Col>
-              <Col span={12}>
+              <Col span={20}>
                 <div style={{ display: 'flex', justifyContent: 'flex-end', columnGap: '5px' }}>
                   <CustomColumns columns={columns} update={updateQuotesColumnStatus} />
                   <Button className="button-create" onClick={onCreate} type="primary">

@@ -318,6 +318,7 @@ export const UpdateModal: React.FC<IModal> = ({ path, page, getList, id, childre
         maskClosable={false}
         size="large"
         footer={null}
+        centered
       >
         <>
           {isLoading && <CustomLoading />}

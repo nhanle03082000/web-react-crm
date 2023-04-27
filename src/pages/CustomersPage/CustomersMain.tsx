@@ -20,17 +20,22 @@ import { filterLead } from '@app/configs/filter-configs';
 import { useSelector } from 'react-redux';
 import { selectCustomerColumns, updateCustomerColumnStatus } from '@app/store/slices/columnSlice';
 import CustomColumns from '../../components/customs/tables/CustomColumns';
+import { getRoleUser } from '@app/utils/redux.util';
+import { useResponsive } from '@app/hooks/useResponsive';
+import { Popover } from '@app/components/common/Popover/Popover';
 
 const CustomersMain: React.FC = () => {
-  // const userListPermission = JSON.parse(getRoleUser());
-  // const permission = userListPermission?.filter((item: any) => item.name === path.replace(/\//g, ''))[0].actions;
+  const { page, path } = useContext(DataContext);
+  const userListPermission = JSON.parse(getRoleUser());
+  const permission = userListPermission?.filter((item: any) => item.name === path.replace(/\//g, ''))[0].actions;
+  console.log('permission:', permission);
   const [saleProcesses, setSaleProcesses] = useState<any>([]);
-  const { page } = useContext(DataContext);
   const [param, setParam] = useState('');
   const [activeButtonSale, setActiveButtonSale] = useState<number>(-1);
   const columns: any = useSelector(selectCustomerColumns);
   const download = '/files/file_mau_import.xlsx';
   const [listIdLead, setListIdLead] = useState([]);
+  const { isDesktop } = useResponsive();
 
   const initialValue = [
     { field: 'tax_code', operator: 'contain', value: '' },
@@ -71,29 +76,72 @@ const CustomersMain: React.FC = () => {
     <Row gutter={[10, 10]}>
       <Col span={24}>
         <Card padding="1rem">
-          <Row justify={'space-between'}>
+          <Row justify={'space-between'} align="middle">
             <Col span={12}>
               <H3 className="typography-title">{page}</H3>
             </Col>
-            <Col span={12}>
-              <div style={{ display: 'flex', justifyContent: 'flex-end', columnGap: '5px' }}>
-                <CustomColumns columns={columns} update={updateCustomerColumnStatus} />
-                <Upload accept=".pdf,.doc,.docx,.xls,.xlsx" maxCount={1}>
-                  <Button type="primary" icon={<UploadOutlined />}>
-                    Nhập từ file
+            <Col span={12} xs={8} style={{ display: 'flex', flexDirection: 'column', alignItems: 'end' }}>
+              {isDesktop ? (
+                <div style={{ display: 'flex', justifyContent: 'flex-end', columnGap: '5px' }}>
+                  <CustomColumns columns={columns} update={updateCustomerColumnStatus} />
+                  {permission.create && (
+                    <>
+                      <Upload accept=".pdf,.doc,.docx,.xls,.xlsx" maxCount={1}>
+                        <Button type="primary" icon={<UploadOutlined />}>
+                          Nhập từ file
+                        </Button>
+                      </Upload>
+                      <Button type="primary">
+                        <Typography.Link href={download} target="_blank">
+                          Tải file mẫu
+                        </Typography.Link>
+                      </Button>
+                    </>
+                  )}
+                  <Assign list={listIdLead} buttonName="Phân công" />
+                  {permission.create && (
+                    <Create>
+                      <CustomersForm isEditing={false} />
+                    </Create>
+                  )}
+                  {permission.export && <ExportExcel param={param} />}
+                </div>
+              ) : (
+                <Popover
+                  style={{ display: 'flex', justifyContent: 'flex-end' }}
+                  content={
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', columnGap: '5px' }}>
+                      <CustomColumns columns={columns} update={updateCustomerColumnStatus} />
+                      {permission.create && (
+                        <>
+                          <Upload accept=".pdf,.doc,.docx,.xls,.xlsx" maxCount={1}>
+                            <Button type="primary" icon={<UploadOutlined />}>
+                              Nhập từ file
+                            </Button>
+                          </Upload>
+                          <Button type="primary">
+                            <Typography.Link href={download} target="_blank">
+                              Tải file mẫu
+                            </Typography.Link>
+                          </Button>
+                        </>
+                      )}
+                      <Assign list={listIdLead} buttonName="Phân công" />
+                      {permission.create && (
+                        <Create>
+                          <CustomersForm isEditing={false} />
+                        </Create>
+                      )}
+                      {permission.export && <ExportExcel param={param} />}
+                    </div>
+                  }
+                  title="Hành động"
+                >
+                  <Button type="primary" style={{ width: 'fit-content' }}>
+                    Hành động
                   </Button>
-                </Upload>
-                <Button type="primary">
-                  <Typography.Link href={download} target="_blank">
-                    Tải file mẫu
-                  </Typography.Link>
-                </Button>
-                <Assign list={listIdLead} buttonName="Phân công" />
-                <Create>
-                  <CustomersForm isEditing={false} />
-                </Create>
-                <ExportExcel param={param} />
-              </div>
+                </Popover>
+              )}
             </Col>
           </Row>
           <Row style={{ marginTop: '10px' }}>
@@ -138,9 +186,11 @@ const CustomersMain: React.FC = () => {
       </Col>
       <Col span={24}>
         <Card padding="1rem">
-          <Show param={param} colums={columnLead} setListIdLead={setListIdLead}>
-            <CustomersForm isEditing={true} />
-          </Show>
+          {permission.index && (
+            <Show param={param} colums={columnLead} setListIdLead={setListIdLead}>
+              <CustomersForm isEditing={true} />
+            </Show>
+          )}
         </Card>
       </Col>
     </Row>

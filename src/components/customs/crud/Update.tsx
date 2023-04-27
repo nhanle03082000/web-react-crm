@@ -91,6 +91,7 @@ const Update: React.FC<IProps> = ({ children, id }) => {
         open={isModalOpen}
         onCancel={handleCancel}
         maskClosable={false}
+        centered
         footer={null}
       >
         <>

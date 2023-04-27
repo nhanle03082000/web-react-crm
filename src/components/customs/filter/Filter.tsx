@@ -15,11 +15,6 @@ interface IProps {
   initialValue: any[];
 }
 
-interface Item {
-  id: number;
-  name: string;
-}
-
 const Filter: React.FC<IProps> = ({ option, setParam, initialValue }) => {
   const { setShow, show } = useContext(DataContext);
   const [listFilter, setListFilter] = useState<any>(initialValue);
@@ -79,6 +74,7 @@ const Filter: React.FC<IProps> = ({ option, setParam, initialValue }) => {
     //   return { value: item[listFilter[index].field], label: item[listFilter[index].field] };
     // });
     if (listFilter[index].field.includes('.')) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const [part1, part2] = listFilter[index].field.split('.');
       const optionIncludes = dataFromTable.map((item: any) => {
         return { value: item[part1]?.name, label: item[part1]?.name };
@@ -101,20 +97,20 @@ const Filter: React.FC<IProps> = ({ option, setParam, initialValue }) => {
   };
 
   return (
-    <Form onFinish={onFinsh} layout="inline" style={{ flexWrap: 'nowrap' }}>
+    <Form onFinish={onFinsh} layout={'horizontal'} style={{ flexWrap: 'nowrap' }}>
       <Form.List name="filter" initialValue={listFilter}>
         {(listFilter, { add, remove }) => (
-          <Row gutter={[10, 10]}>
+          <Row gutter={10}>
             {listFilter.map(({ key, name }, index) => (
               <Col span={24} key={key}>
-                <Row>
-                  <Col span={6}>
+                <Row gutter={[10, 10]}>
+                  <Col span={8}>
                     <Form.Item initialValue={option[0]} name={[name, 'field']}>
                       <Select options={option} placeholder="Lọc theo trường" onChange={onChangeField(index)} />
                     </Form.Item>
                   </Col>
-                  <Col span={12}>{renderFilter(name, index)}</Col>
-                  <Col span={6}>
+                  <Col span={14}>{renderFilter(name, index)}</Col>
+                  <Col span={2}>
                     <DeleteIcon onClick={() => remove(name)} />
                   </Col>
                 </Row>
@@ -132,7 +128,7 @@ const Filter: React.FC<IProps> = ({ option, setParam, initialValue }) => {
       </Form.List>
       <Row>
         <Col span={24}>
-          <Button type="primary" htmlType="submit" block>
+          <Button type="primary" htmlType="submit">
             Lọc
           </Button>
         </Col>
